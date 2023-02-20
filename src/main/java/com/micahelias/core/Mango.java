@@ -5,7 +5,6 @@ import com.micahelias.opengl.RenderAPI;
 import com.micahelias.scene.SceneManager;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL30.*;
 
 public final class Mango {
 
@@ -28,8 +27,8 @@ public final class Mango {
       timer.updateDeltaTime();
 
       glfwPollEvents();
-      glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT);
+
+      sceneManager.getActiveScene().clear();
 
       sceneManager.getActiveScene().update();
 

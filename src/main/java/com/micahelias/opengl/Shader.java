@@ -6,6 +6,8 @@ import static org.lwjgl.opengl.GL20.*;
 import java.io.*;
 import java.util.HashMap;
 
+import org.joml.Vector4f;
+
 public class Shader {
 
   String m_VertexPath;
@@ -97,6 +99,10 @@ public class Shader {
   // Set uniforms
   public void setUniform4f(String name, float v0, float v1, float v2, float v3) {
     glUniform4f(getUniformLocation(name), v0, v1, v2, v3);
+  }
+
+  public void setUniform4f(String name, Vector4f vector) {
+    glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
   }
 
   public int getUniformLocation(String name) {

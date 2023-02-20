@@ -19,6 +19,9 @@ public class MeshRenderer extends Component {
     model.vao.bind();
     model.shader.bind();
 
+    // Set model color
+    model.shader.setUniform4f("u_Color", model.color.toVector());
+
     if (model.ibo != null) {
       glDrawElements(GL_TRIANGLES, model.ibo.getCount(), GL_UNSIGNED_INT, 0);
     }

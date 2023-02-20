@@ -7,6 +7,7 @@ import com.micahelias.opengl.Shader;
 import com.micahelias.opengl.VertexArray;
 import com.micahelias.opengl.VertexBuffer;
 import com.micahelias.opengl.VertexBufferLayout;
+import com.micahelias.util.Color;
 
 public class ModelComponent extends Component {
 
@@ -16,6 +17,8 @@ public class ModelComponent extends Component {
   public IndexBuffer ibo;
   public Shader shader;
   public Matrix4f modelMatrix;
+
+  public Color color = new Color(0, 0, 0);
 
 
   // GETTERS
@@ -43,6 +46,10 @@ public class ModelComponent extends Component {
 
   public Matrix4f getModelMatrix() {
     return this.modelMatrix;
+  }
+
+  public Color getColor() {
+    return this.color;
   }
 
   // SETTERS
@@ -73,6 +80,10 @@ public class ModelComponent extends Component {
     this.modelMatrix = matrix;
   }
 
+  public ModelComponent setColor(Color color) {
+    this.color = color;
+    return this;
+  }
 
   public void init() {};
   public void update() {};
