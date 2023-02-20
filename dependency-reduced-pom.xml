@@ -51,7 +51,7 @@
   <properties>
     <maven.compiler.target>11</maven.compiler.target>
     <maven.compiler.source>11</maven.compiler.source>
-    <lwjgl.natives>natives-linux</lwjgl.natives>
+    <lwjgl.natives>natives-macos</lwjgl.natives>
     <lwjgl.version>3.3.1</lwjgl.version>
   </properties>
 </project>

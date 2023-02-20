@@ -13,8 +13,8 @@
   <maven.compiler.target>11</maven.compiler.target>
 
   <lwjgl.version>3.3.1</lwjgl.version>
-  <!-- <lwjgl.natives>natives-macos</lwjgl.natives> -->
-  <lwjgl.natives>natives-linux</lwjgl.natives>
+  <lwjgl.natives>natives-macos</lwjgl.natives>
+  <!-- <lwjgl.natives>natives-linux</lwjgl.natives> -->
 </properties>
 
 
@@ -91,6 +91,11 @@
     <groupId>org.lwjgl</groupId>
     <artifactId>lwjgl-stb</artifactId>
     <classifier>${lwjgl.natives}</classifier>
+  </dependency>
+  <dependency>
+    <groupId>org.joml</groupId>
+    <artifactId>joml</artifactId>
+    <version>1.10.5</version>
   </dependency>
 </dependencies>
 
