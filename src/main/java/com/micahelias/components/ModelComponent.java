@@ -16,7 +16,7 @@ public class ModelComponent extends Component {
   public VertexBufferLayout layout;
   public IndexBuffer ibo;
   public Shader shader;
-  public Matrix4f modelMatrix;
+  public Matrix4f modelMatrix = new Matrix4f().translate(0, 0, 0);
 
   public Color color = new Color(0, 0, 0);
 

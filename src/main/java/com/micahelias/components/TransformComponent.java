@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 
 public class TransformComponent extends Component {
 
-  Vector3f position;
+  public Vector3f position;
 
   public TransformComponent(float x, float y, float z) {
     position = new Vector3f(x, y, z);

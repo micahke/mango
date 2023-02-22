@@ -4,9 +4,12 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 import java.io.*;
+import java.nio.FloatBuffer;
 import java.util.HashMap;
 
+import org.joml.Matrix4f;
 import org.joml.Vector4f;
+import org.lwjgl.BufferUtils;
 
 public class Shader {
 
@@ -103,6 +106,16 @@ public class Shader {
 
   public void setUniform4f(String name, Vector4f vector) {
     glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
+
+  }
+
+  public void setUniformMat4f(String name, Matrix4f matrix) {
+    int location = getUniformLocation(name);
+    if (location != -1) {
+      FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+      matrix.get(buffer);
+      glUniformMatrix4fv(getUniformLocation(name), false, buffer);
+    }
   }
 
   public int getUniformLocation(String name) {
