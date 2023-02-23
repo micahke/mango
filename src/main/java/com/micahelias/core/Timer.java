@@ -10,6 +10,8 @@ public class Timer {
   private float deltaTime;
   private float lastFrame = 0;
 
+  private double timeDilation = 1;
+
   private Timer() {}
 
   public static Timer init() {
@@ -29,6 +31,9 @@ public class Timer {
     return (float)glfwGetTime();
   }
 
+  public void setTimeDilation(double timeDilation) {
+    this.timeDilation = timeDilation;
+  }
 
   void updateDeltaTime() {
     deltaTime = getTime() - lastFrame;
@@ -36,7 +41,7 @@ public class Timer {
   }
 
   public float deltaTime() {
-    return deltaTime;
+    return deltaTime * (float)timeDilation;
   }
 
 }
