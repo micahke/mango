@@ -2,7 +2,6 @@ package im
 
 import (
 	"github.com/go-gl/gl/v3.3-core/gl"
-	"github.com/go-gl/glfw/v3.3/glfw"
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/infinite-universe/mango/util"
 )
@@ -42,7 +41,7 @@ func Init() *IMMEDIATE_MODE {
 func (im *IMMEDIATE_MODE) NewFrame(deltaTime float32) {
 
   // Poll for events
-  glfw.PollEvents()
+  // glfw.PollEvents()
 
   // Clear the screen
   gl.ClearColor(0.0, 0.0, 0.0, 0.0)

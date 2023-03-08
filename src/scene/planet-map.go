@@ -5,6 +5,7 @@ import (
 
 	"github.com/micahke/infinite-universe/mango"
 	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/src/debug"
 )
 
 
@@ -19,24 +20,36 @@ type PlanetMap struct {
   xOffset float64
   yOffset float64
 
+  mapDebugPanel *debug.PlanetMapDebugPanel
+
+  showTileMap bool
+
+
 }
+
+
 
 func (planetMap *PlanetMap) Init() {
   planetMap.tileSize = 50
   planetMap.xTiles = planetMap.WINDOW_WIDTH / int(planetMap.tileSize)
   planetMap.yTiles = planetMap.WINDOW_HEIGHT / int(planetMap.tileSize)
+  planetMap.showTileMap = true
+  planetMap.mapDebugPanel = debug.NewPlanetMapDebugPanel(&planetMap.showTileMap, &planetMap.tileSize)
+
+  util.ImguiRegisterPanel("planetMap", planetMap.mapDebugPanel)
+  util.ImguiActivatePanel("planetMap")
+  
 }
 
 
 func (planetMap *PlanetMap) Update(deltaTime float32) {
-  planetMap.xOffset += 100.0 * float64(deltaTime)
-  planetMap.yOffset += 100.0 * float64(deltaTime)
 }
 
 func (planetMap *PlanetMap) Draw() {
 
-  // planetMap.drawDebugBG()
-  mango.IM.DrawCircle(0, 0, 100, 100, util.ELECTRON_BLUE)
+  if (planetMap.showTileMap) {
+    planetMap.drawDebugBG()
+  }
 
 }
 
@@ -57,5 +70,4 @@ func (planetMap *PlanetMap) drawDebugBG() {
     }
   }
 }
-
 

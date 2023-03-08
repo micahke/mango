@@ -4,6 +4,7 @@ import (
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/im"
+	"github.com/micahke/infinite-universe/mango/util"
 	"github.com/micahke/infinite-universe/mango/util/loaders"
 )
 
@@ -51,6 +52,10 @@ func CreateWindow(width, height int, title string) {
 		IM.InitProjectionMatrix(float32(width), float32(height))
 	}
 
+  // At this point, OpenGL is ready to be used anywhere in the program
+
+  util.InitImguiLayer(Engine.Window.Window)
+
 }
 
 // Starts the main game loop
@@ -63,16 +68,27 @@ func Start() {
 	Time = core.NewTimer()
 
 	for !Engine.Window.Window.ShouldClose() {
+    start := glfw.GetTime()
+  
+    glfw.PollEvents()
+
 		Time.Update()
+    util.ImguiNewFrame()
 
 		// Check the rendermode and do appropriate stuff
 		if Engine.RenderMode == core.RENDER_MODE_IM {
 			IM.NewFrame(Time.DeltaTime())
 		}
 
+    util.ImguiRender()
+
 		Engine.Window.Window.SwapBuffers()
 
+    end := glfw.GetTime()
+    Time.UpdateFrameData(start, end)
 	}
+
+  // util.ImguiDestroy()
 
 	glfw.Terminate()
 
