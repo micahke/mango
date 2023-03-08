@@ -20,6 +20,7 @@ type IMMEDIATE_MODE struct {
   // Renderers
   quadRenderer *QuadRenderer
   spriteRenderer *SpriteRenderer
+  circleRenderer *CircleRenderer
 
 
 }
@@ -73,6 +74,7 @@ func (im *IMMEDIATE_MODE) InitProjectionMatrix(width, height float32) {
 func (im *IMMEDIATE_MODE) setupRenderers() {
   im.quadRenderer = InitQuadRenderer()
   im.spriteRenderer = InitSpriteRenderer()
+  im.circleRenderer = InitCircleRenderer()
 }
 
 
@@ -93,3 +95,11 @@ func (im *IMMEDIATE_MODE) DrawSprite(x, y, width, height float32, texturePath st
   im.spriteRenderer.RenderSprite(x, y, width, height, texturePath, im.projectionMatrix, im.viewMatrix)
 
 }
+
+
+
+func (im *IMMEDIATE_MODE) DrawCircle(x, y, width, height float32, color util.Color) {
+  im.circleRenderer.RenderCircle(x, y, width, height, color.Vec4, im.projectionMatrix, im.viewMatrix)
+}
+
+

@@ -4,20 +4,27 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/infinite-universe/mango/opengl"
+	"github.com/micahke/infinite-universe/mango/util"
 )
 
-type Sprite struct {
+
+
+
+type Ellipse struct {
+
+
   x float32
   y float32
   width float32
   height float32
 
-  texturePath string
-  color glm.Vec4
+  Color util.Color
+
 }
 
 
-type SpriteRenderer struct {
+type CircleRenderer struct {
+
 
   vao *opengl.VertexArray
   vbo *opengl.VertexBuffer
@@ -30,29 +37,27 @@ type SpriteRenderer struct {
 
 }
 
-// We can use the quad positions from the quad renderer
-// TODO: be less lazy about this next time
 
-var sprite_positions []float32 = []float32{
+var circle_positions []float32 = []float32{
   0.0, 0.0, 0.0, 0.0,
   0.0, 1.0, 0.0, 1.0,
   1.0, 1.0, 1.0, 1.0,
   1.0, 0.0, 1.0, 0.0,
 }
 
+func InitCircleRenderer() *CircleRenderer {
 
-func InitSpriteRenderer() *SpriteRenderer {
-  renderer := new(SpriteRenderer)
-  
+  renderer := new(CircleRenderer)
+
   renderer.vao = opengl.NewVertexArray()
-  renderer.vbo = opengl.NewVertexBuffer(sprite_positions)
+  renderer.vbo = opengl.NewVertexBuffer(circle_positions)
   renderer.layout = opengl.NewVertexBufferLayout()
   renderer.layout.Pushf(2)
   renderer.layout.Pushf(2)
   renderer.vao.AddBuffer(*renderer.vbo, *renderer.layout)
 
   renderer.ibo = opengl.NewIndexBuffer(quad_indeces)
-  renderer.shader = opengl.NewShader("SpriteVertex.glsl", "SpriteFragment.glsl")
+  renderer.shader = opengl.NewShader("CircleVertex.glsl", "CircleFragment.glsl")
 
   renderer.modelMatrix = glm.Ident4()
 
@@ -60,11 +65,8 @@ func InitSpriteRenderer() *SpriteRenderer {
 
 }
 
+func (renderer *CircleRenderer) RenderCircle(x, y, width, height float32, color glm.Vec4, projectionMatrix, viewMatrix glm.Mat4) {
 
-func (renderer *SpriteRenderer) RenderSprite(x, y, width, height float32, texturePath string, projectionMatrix, viewMatrix glm.Mat4) {
-
-  texture := getTexture(texturePath)
-  texture.Bind(0)
 
   translation := glm.Translate3D(x, y, 0)
   scale := glm.Scale3D(width, height, 1.0)
@@ -74,7 +76,7 @@ func (renderer *SpriteRenderer) RenderSprite(x, y, width, height float32, textur
   renderer.shader.SetUniformMat4f("projection", projectionMatrix)
   renderer.shader.SetUniformMat4f("view", viewMatrix)
   renderer.shader.SetUniformMat4f("model", model)
-  renderer.shader.SetUniform1i("uTexture", 0)
+  renderer.shader.SetUniform4f("uColor", color.X(), color.Y(), color.Z(), color.W())
   
 
   renderer.vao.Bind()
