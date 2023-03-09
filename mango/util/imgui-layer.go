@@ -86,6 +86,7 @@ func ImguiActivatePanel(name string) {
 
 }
 
+
 func ImguiDeactivatePanel(name string) {
 
   for i := 0; i < len(imgui_layer.panels); i++ {
@@ -95,6 +96,15 @@ func ImguiDeactivatePanel(name string) {
     } 
   }
 
+}
+
+func ImguiPanelStatus(name string) *bool {
+  for i := 0; i < len(imgui_layer.panels); i++ {
+    if imgui_layer.panels[i].name == name {
+      return &imgui_layer.panels[i].active
+    } 
+  }
+  return nil
 }
 
 

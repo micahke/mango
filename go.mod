@@ -13,6 +13,6 @@ require golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
 
 require (
 	github.com/AllenDang/imgui-go v1.12.1-0.20221124025851-59b862ca5a0c
-	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3
+	github.com/aquilax/go-perlin v1.1.0
 	github.com/micahke/glfw_imgui_backend v0.0.0-20230308164351-0b5674c98765
 )
