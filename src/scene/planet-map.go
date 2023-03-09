@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/micahke/infinite-universe/mango"
+	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/util"
 	"github.com/micahke/infinite-universe/src/debug"
 )
@@ -38,11 +39,19 @@ func (planetMap *PlanetMap) Init() {
 
   util.ImguiRegisterPanel("planetMap", planetMap.mapDebugPanel)
   util.ImguiActivatePanel("planetMap")
-  
+
 }
 
 
 func (planetMap *PlanetMap) Update(deltaTime float32) {
+  if input.MouseRightPressed {
+    util.ImguiActivatePanel("planetMap")
+  }
+
+  if input.MouseLeftPressed {
+    clickedX = float32(input.MouseX)
+    clickedY = float32(input.MouseY)
+  }
 }
 
 func (planetMap *PlanetMap) Draw() {
@@ -53,6 +62,10 @@ func (planetMap *PlanetMap) Draw() {
 
 }
 
+var (
+  clickedX float32
+  clickedY float32
+)
 
 func (planetMap *PlanetMap) drawDebugBG() {
   xOffsetBlocks := math.Floor(planetMap.xOffset / float64(planetMap.tileSize))
@@ -66,7 +79,14 @@ func (planetMap *PlanetMap) drawDebugBG() {
       finalX := xCoord * int64(planetMap.tileSize)
       finalY := yCoord * int64(planetMap.tileSize)
 
-      mango.IM.FillRect(float32(finalX) - float32(planetMap.xOffset) + 1, float32(finalY) - float32(planetMap.yOffset) + 1, planetMap.tileSize - 2, planetMap.tileSize - 2, util.NewColorRGBf(0.5, 0.5, 0.5))
+      color := util.NewColorRGBf(0.5, 0.5, 0.5)
+
+      if float32(clickedX) >= float32(x) * planetMap.tileSize  && float32(clickedX) <= float32(x) * planetMap.tileSize + planetMap.tileSize {
+        if float32(clickedY) >= float32(y) * planetMap.tileSize && float32(clickedY) <= float32(y) * planetMap.tileSize + planetMap.tileSize {
+          color = util.MINT_GREEN
+        }
+      }
+      mango.IM.FillRect(float32(finalX) - float32(planetMap.xOffset) + 1, float32(finalY) - float32(planetMap.yOffset) + 1, planetMap.tileSize - 2, planetMap.tileSize - 2, color)
     }
   }
 }

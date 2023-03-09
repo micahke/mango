@@ -4,6 +4,7 @@ import (
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/im"
+	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/util"
 	"github.com/micahke/infinite-universe/mango/util/loaders"
 )
@@ -48,13 +49,16 @@ func CreateWindow(width, height int, title string) {
 
 	Engine.Window = core.CreateWindow(width, height, title, true)
 
+	Engine.Window.SetCursorPosCallback(input.CursorCallback)
+	Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)
+
 	if Engine.RenderMode == core.RENDER_MODE_IM {
 		IM.InitProjectionMatrix(float32(width), float32(height))
 	}
 
-  // At this point, OpenGL is ready to be used anywhere in the program
+	// At this point, OpenGL is ready to be used anywhere in the program
 
-  util.InitImguiLayer(Engine.Window.Window)
+	util.InitImguiLayer(Engine.Window.Window)
 
 }
 
@@ -68,27 +72,31 @@ func Start() {
 	Time = core.NewTimer()
 
 	for !Engine.Window.Window.ShouldClose() {
-    start := glfw.GetTime()
-  
-    glfw.PollEvents()
+		start := glfw.GetTime()
+
+	Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)
+		glfw.PollEvents()
 
 		Time.Update()
-    util.ImguiNewFrame()
+		util.ImguiNewFrame()
 
 		// Check the rendermode and do appropriate stuff
 		if Engine.RenderMode == core.RENDER_MODE_IM {
 			IM.NewFrame(Time.DeltaTime())
 		}
 
-    util.ImguiRender()
+		util.ImguiRender()
+
+    // Input handler reset
+    input.MouseInputCleanup()
 
 		Engine.Window.Window.SwapBuffers()
 
-    end := glfw.GetTime()
-    Time.UpdateFrameData(start, end)
+		end := glfw.GetTime()
+		Time.UpdateFrameData(start, end)
 	}
 
-  // util.ImguiDestroy()
+	// util.ImguiDestroy()
 
 	glfw.Terminate()
 

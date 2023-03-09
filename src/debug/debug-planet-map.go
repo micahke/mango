@@ -1,8 +1,11 @@
 package debug
 
 import (
-  "github.com/AllenDang/imgui-go"
-  "github.com/micahke/infinite-universe/mango/util"
+	"fmt"
+
+	"github.com/AllenDang/imgui-go"
+	"github.com/micahke/infinite-universe/mango"
+	"github.com/micahke/infinite-universe/mango/util"
 )
 
 
@@ -29,10 +32,13 @@ func NewPlanetMapDebugPanel(showTileMap *bool, tileSize *float32) *PlanetMapDebu
 
 func (panel *PlanetMapDebugPanel) RenderPanel() {
 
-  // str := fmt.Sprint("Frametime: ", fmt.Sprintf("%.2f", mango.Time.FrameTime() * 1000)) + "ms"
-  // str += fmt.Sprint(", ", fmt.Sprintf("%.2f", mango.Time.FPS())) + " FPS"
+  fpsCounter := fmt.Sprint("Frametime: ", fmt.Sprintf("%.2f", mango.Time.FrameTime() * 1000)) + "ms"
+  fpsCounter += fmt.Sprint(", ", fmt.Sprintf("%.2f", mango.Time.FPS())) + " FPS"
 
   imgui.Begin("Debug")
+  {
+    imgui.Text(fpsCounter)
+  }
   {
     imgui.Checkbox("Show Tile Map", panel.showTileMap)
     imgui.SameLine()
