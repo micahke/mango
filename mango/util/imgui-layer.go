@@ -44,6 +44,12 @@ func InitImguiLayer(window *glfw.Window) {
 
 }
 
+func GetImguiLayer() *ImguiLayer {
+  return imgui_layer
+}
+
+
+
 
 func ImguiNewFrame() {
   imgui_layer.impl.NewFrame()
@@ -111,4 +117,10 @@ func ImguiPanelStatus(name string) *bool {
 func ImguiDestroy() {
   imgui_layer.context.Destroy()
   imgui_layer.impl.Shutdown()
+}
+
+func ImguiWantsMouse() bool {
+
+  return imgui_layer.io.WantCaptureMouse() == true
+
 }

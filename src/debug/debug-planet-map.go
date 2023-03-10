@@ -64,6 +64,7 @@ func (panel *PlanetMapDebugPanel) RenderPanel() {
     imgui.SliderFloat("Beta", &galaxy.GALAXY_BETA, 0, 3)
     imgui.SliderInt("Iterations", &galaxy.GALAXY_N, 1, 10)
     imgui.InputInt("Seed", &galaxy.GALAXY_SEED)
+    imgui.SliderInt("System Frequency", &galaxy.SYSTEM_GENERATION_THRESHOLD, 0, 20)
 
       galaxy.Rebuild()
 

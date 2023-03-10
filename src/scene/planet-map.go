@@ -44,53 +44,63 @@ func (planetMap *PlanetMap) Update(deltaTime float32) {
 		util.ImguiActivatePanel("planetMap")
 	}
 
-	if input.MouseLeftPressed {
-		clickedX = float32(input.MouseX)
-		clickedY = float32(input.MouseY)
-	}
-
   // planetMap.xOffset += 50.0 * float64(deltaTime)
 
 	planetMap.xTiles = planetMap.WINDOW_WIDTH / int(planetMap.tileSize)
 	planetMap.yTiles = planetMap.WINDOW_HEIGHT / int(planetMap.tileSize)
 
+  planetMap.xOffset += 50.0 * float64(deltaTime)
+
 }
 
 func (planetMap *PlanetMap) Draw() {
+  xOffsetBlocks := math.Floor(planetMap.xOffset / float64(planetMap.tileSize))
+  yOffsetBlocks := math.Floor(planetMap.yOffset / float64(planetMap.tileSize))
 
-	if planetMap.showTileMap {
-		planetMap.drawDebugBG()
-	}
+
+  for x := 0; x < planetMap.xTiles+2; x++ {
+    for y := 0; y < planetMap.yTiles+2; y++ {
+      xCoord := int64(x) + int64(xOffsetBlocks)
+      yCoord := int64(y) + int64(yOffsetBlocks)
+      // finalX := xCoord * int64(planetMap.tileSize)
+      // finalY := yCoord * int64(planetMap.tileSize)
+      finalX := int64(math.Floor(float64(xCoord) * float64(planetMap.tileSize)))
+      finalY := int64(math.Floor(float64(yCoord) * float64(planetMap.tileSize)))
+
+      if planetMap.showTileMap {
+        planetMap.drawDebugBG(float32(finalX), float32(finalY), xCoord, yCoord)
+      }
+
+      system := galaxy.NewSystem(xCoord, yCoord)
+
+      if system.Exists() {
+
+      systemSize := system.Size() * planetMap.tileSize
+        xOff := system.Offset()[0] * planetMap.tileSize
+        yOff := system.Offset()[1] * planetMap.tileSize
+
+        mango.IM.DrawCircle(float32(finalX) - float32(planetMap.xOffset) + xOff, float32(finalY) - float32(planetMap.yOffset) + yOff, systemSize, systemSize, util.PINK_GLAMOUR)
+      }
+
+    }
+  }
+
+
 
 }
 
-var (
-	clickedX float32
-	clickedY float32
-)
-
-func (planetMap *PlanetMap) drawDebugBG() {
-	xOffsetBlocks := math.Floor(planetMap.xOffset / float64(planetMap.tileSize))
-	yOffsetBlocks := math.Floor(planetMap.yOffset / float64(planetMap.tileSize))
-
-	for x := 0; x < planetMap.xTiles+2; x++ {
-		for y := 0; y < planetMap.yTiles+2; y++ {
-			xCoord := int64(x) + int64(xOffsetBlocks)
-			yCoord := int64(y) + int64(yOffsetBlocks)
 
 
-			finalX := xCoord * int64(planetMap.tileSize)
-			finalY := yCoord * int64(planetMap.tileSize)
+func (planetMap *PlanetMap) drawDebugBG(x, y float32, xCoord, yCoord int64) {
 
-      normedPValue := galaxy.PerlinValueAtCoords(xCoord, yCoord, true)
-			color := util.NewColorRGBf(float32(normedPValue), float32(normedPValue), float32(normedPValue))
 
-			if float32(clickedX) >= float32(x)*planetMap.tileSize && float32(clickedX) <= float32(x)*planetMap.tileSize+planetMap.tileSize {
-				if float32(clickedY) >= float32(y)*planetMap.tileSize && float32(clickedY) <= float32(y)*planetMap.tileSize+planetMap.tileSize {
-					color = util.MINT_GREEN
-				}
-			}
-			mango.IM.FillRect(float32(finalX)-float32(planetMap.xOffset)+1, float32(finalY)-float32(planetMap.yOffset)+1, planetMap.tileSize-2, planetMap.tileSize-2, color)
-		}
-	}
+  normedPValue := galaxy.PerlinValueAtCoords(xCoord, yCoord, true)
+  color := util.NewColorRGBf(float32(normedPValue), float32(normedPValue), float32(normedPValue))
+
+
+
+  mango.IM.FillRect(x - float32(planetMap.xOffset) + 1, y - float32(planetMap.yOffset) + 1, planetMap.tileSize-2, planetMap.tileSize-2, color)
+
+
+
 }

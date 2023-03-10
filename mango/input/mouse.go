@@ -1,8 +1,8 @@
 package input
 
 import (
-
 	"github.com/go-gl/glfw/v3.3/glfw"
+	"github.com/micahke/infinite-universe/mango/util"
 )
 
 // +++++++++++ EXPORTED +++++++++++++++++++
@@ -36,6 +36,10 @@ func CursorCallback(window *glfw.Window, xpos float64, ypos float64) {
 }
 
 func MouseButtonCallback(w *glfw.Window, button glfw.MouseButton, action glfw.Action, mods glfw.ModifierKey) {
+
+  if util.ImguiWantsMouse() {
+    return
+  }
 
   if button == glfw.MouseButtonLeft {
     if action == glfw.Press {
