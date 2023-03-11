@@ -39,7 +39,6 @@ func InitImguiLayer(window *glfw.Window) {
   imgui_layer.context = imgui.CreateContext(nil)
   imgui_layer.io = imgui.CurrentIO()
 
-
   imgui_layer.impl = glfw_imgui_backend.ImguiGlfw3Init(window, imgui_layer.io)
 
 }

@@ -1,55 +1,70 @@
 package scene
 
 import (
-	"math"
+  "math"
 
-	"github.com/micahke/infinite-universe/mango"
-	"github.com/micahke/infinite-universe/mango/input"
-	"github.com/micahke/infinite-universe/mango/util"
-	"github.com/micahke/infinite-universe/src/debug"
-	"github.com/micahke/infinite-universe/src/galaxy"
+  "github.com/micahke/infinite-universe/mango"
+  "github.com/micahke/infinite-universe/mango/input"
+  "github.com/micahke/infinite-universe/mango/util"
+  "github.com/micahke/infinite-universe/src/debug"
+  "github.com/micahke/infinite-universe/src/galaxy"
 )
 
 type PlanetMap struct {
-	WINDOW_WIDTH  int
-	WINDOW_HEIGHT int
+  WINDOW_WIDTH  int
+  WINDOW_HEIGHT int
 
-	tileSize float32
-	xTiles   int
-	yTiles   int
+  tileSize float32
+  xTiles   int
+  yTiles   int
 
-	xOffset float64
-	yOffset float64
+  xOffset float64
+  yOffset float64
 
-	mapDebugPanel *debug.PlanetMapDebugPanel
+  mapDebugPanel *debug.PlanetMapDebugPanel
 
-	showTileMap bool
+  cameraSpeed float32
+
+  showTileMap bool
+  renderPlanets bool
+  renderCrosshair bool
+  renderShip bool
+
+  bgColor util.Color
 }
 
 func (planetMap *PlanetMap) Init() {
   galaxy.Init()
-	planetMap.tileSize = 50.0
-	planetMap.xTiles = planetMap.WINDOW_WIDTH / int(planetMap.tileSize)
-	planetMap.yTiles = planetMap.WINDOW_HEIGHT / int(planetMap.tileSize)
-	planetMap.showTileMap = true
-	planetMap.mapDebugPanel = debug.NewPlanetMapDebugPanel(&planetMap.showTileMap, &planetMap.tileSize)
+  planetMap.tileSize = 50.0
+  planetMap.xTiles = planetMap.WINDOW_WIDTH / int(planetMap.tileSize)
+  planetMap.yTiles = planetMap.WINDOW_HEIGHT / int(planetMap.tileSize)
+  planetMap.showTileMap = false
+  planetMap.renderPlanets = true
+  planetMap.renderCrosshair = true
+  planetMap.renderShip = true
+  planetMap.cameraSpeed = 50.0
+  planetMap.bgColor = util.NewColorRGBi(30, 26, 29)
 
-	util.ImguiRegisterPanel("planetMap", planetMap.mapDebugPanel)
-	util.ImguiActivatePanel("planetMap")
+  mango.IM.SetBackgroundColor(planetMap.bgColor)
+
+  // Debug
+  planetMap.mapDebugPanel = debug.NewPlanetMapDebugPanel(&planetMap.showTileMap, &planetMap.tileSize, &planetMap.renderPlanets, &planetMap.renderCrosshair, &planetMap.renderShip)
+
+  util.ImguiRegisterPanel("planetMap", planetMap.mapDebugPanel)
 
 }
 
 func (planetMap *PlanetMap) Update(deltaTime float32) {
-	if input.MouseRightPressed {
-		util.ImguiActivatePanel("planetMap")
-	}
+  if input.MouseRightPressed {
+    util.ImguiActivatePanel("planetMap")
+  }
 
   // planetMap.xOffset += 50.0 * float64(deltaTime)
 
-	planetMap.xTiles = planetMap.WINDOW_WIDTH / int(planetMap.tileSize)
-	planetMap.yTiles = planetMap.WINDOW_HEIGHT / int(planetMap.tileSize)
+  planetMap.xTiles = planetMap.WINDOW_WIDTH / int(planetMap.tileSize)
+  planetMap.yTiles = planetMap.WINDOW_HEIGHT / int(planetMap.tileSize)
 
-  planetMap.xOffset += 50.0 * float64(deltaTime)
+  planetMap.xOffset += float64(planetMap.cameraSpeed) * float64(deltaTime)
 
 }
 
@@ -71,21 +86,33 @@ func (planetMap *PlanetMap) Draw() {
         planetMap.drawDebugBG(float32(finalX), float32(finalY), xCoord, yCoord)
       }
 
-      system := galaxy.NewSystem(xCoord, yCoord)
+      system := galaxy.NewSystem(xCoord, yCoord, false)
 
       if system.Exists() {
 
-      systemSize := system.Size() * planetMap.tileSize
+        systemSize := system.Size() * planetMap.tileSize
         xOff := system.Offset()[0] * planetMap.tileSize
         yOff := system.Offset()[1] * planetMap.tileSize
 
-        mango.IM.DrawCircle(float32(finalX) - float32(planetMap.xOffset) + xOff, float32(finalY) - float32(planetMap.yOffset) + yOff, systemSize, systemSize, util.PINK_GLAMOUR)
+        if planetMap.renderPlanets {
+          mango.IM.DrawCircle(float32(finalX) - float32(planetMap.xOffset) + xOff, float32(finalY) - float32(planetMap.yOffset) + yOff, systemSize, systemSize, system.Color())
+        }
       }
 
     }
   }
 
+  transWhite := util.NewColorRGBAf(1.0, 1.0, 1.0, 0.5)
 
+  if planetMap.renderCrosshair {
+
+    mango.IM.FillRect(0, float32(input.MouseY), float32(planetMap.WINDOW_WIDTH), 0.5, transWhite)
+    mango.IM.FillRect(float32(input.MouseX), 0, 0.5, float32(planetMap.WINDOW_HEIGHT), transWhite)
+  }
+
+  if planetMap.renderShip {
+    mango.IM.DrawSprite((float32(planetMap.WINDOW_WIDTH) / 2.0) - (planetMap.tileSize / 2.0), (float32(planetMap.WINDOW_HEIGHT) / 2.0) - (planetMap.tileSize / 2), planetMap.tileSize, planetMap.tileSize, "tie-fighter.png")
+  }
 
 }
 

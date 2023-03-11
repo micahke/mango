@@ -29,6 +29,10 @@ const (
 
 func CursorCallback(window *glfw.Window, xpos float64, ypos float64) {
 
+  if util.ImguiWantsMouse() {
+    return
+  }
+
   _, height := window.GetSize()
   MouseX = xpos
   MouseY = float64(height) - ypos
