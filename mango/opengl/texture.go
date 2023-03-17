@@ -54,8 +54,8 @@ func NewTexture(path string) *Texture {
 }
 
 func NewTextureFromData(path string, data *image.NRGBA) *Texture {
-  texture := new(Texture)
-  texture.m_FilePath = path
+	texture := new(Texture)
+	texture.m_FilePath = path
 	texture.m_BPP = 0
 
 	flippedImage := data
@@ -73,9 +73,8 @@ func NewTextureFromData(path string, data *image.NRGBA) *Texture {
 	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, texture.m_Width, texture.m_Height, 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Ptr(&texture.m_LocalBuffer[0]))
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 
-  return texture
+	return texture
 }
-
 
 func (texture *Texture) Bind(slot uint32) {
 	gl.ActiveTexture(gl.TEXTURE0 + slot)

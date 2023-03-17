@@ -89,7 +89,6 @@ func (shader *Shader) CreateShader(vertexShader string, fragmentShader string) {
 	shader.m_Renderer_ID = program
 }
 
-
 func (shader *Shader) SetUniform1i(name string, value int32) {
 	// location := gl.GetUniformLocation(shader.m_Renderer_ID, gl.Str(name+"\x00"))
 	gl.Uniform1i(shader.GetUniformLocation(name), value)
@@ -114,16 +113,16 @@ func (shader *Shader) SetUniformMat4f(name string, matrix mgl32.Mat4) {
 }
 
 func (shader *Shader) SetUniform3f(name string, v0 float32, v1 float32, v2 float32) {
-  gl.Uniform3f(shader.GetUniformLocation(name), v0, v1, v2)
+	gl.Uniform3f(shader.GetUniformLocation(name), v0, v1, v2)
 }
 
 // TODO: write a util function that converts booleans to integer
 func (shader *Shader) SetUniformBoolean(name string, value bool) {
-  var b int32 = 0
-  if (value == false) {
-    b = 1
-  }
-  gl.Uniform1i(shader.GetUniformLocation(name), b)
+	var b int32 = 0
+	if value == false {
+		b = 1
+	}
+	gl.Uniform1i(shader.GetUniformLocation(name), b)
 }
 
 func (shader *Shader) GetUniformLocation(name string) int32 {

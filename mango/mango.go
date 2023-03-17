@@ -51,6 +51,10 @@ func CreateWindow(width, height int, title string) {
 
 	Engine.Window.SetCursorPosCallback(input.CursorCallback)
 	Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)
+	Engine.Window.SetKeyCallback(input.KeyCallback)
+
+	// Initialize the keyboard input system
+	input.InitKeyboardInput(Engine.Window)
 
 	if Engine.RenderMode == core.RENDER_MODE_IM {
 		IM.InitProjectionMatrix(float32(width), float32(height))
@@ -74,7 +78,8 @@ func Start() {
 	for !Engine.Window.Window.ShouldClose() {
 		start := glfw.GetTime()
 
-	Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)
+		Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)
+		Engine.Window.SetKeyCallback(input.KeyCallback)
 		glfw.PollEvents()
 
 		Time.Update()
@@ -87,8 +92,9 @@ func Start() {
 
 		util.ImguiRender()
 
-    // Input handler reset
-    input.MouseInputCleanup()
+		// Input handler reset
+		input.MouseInputCleanup()
+		input.ResetKeyInput()
 
 		Engine.Window.Window.SwapBuffers()
 

@@ -26,4 +26,3 @@ func (ib *IndexBuffer) Unbind() {
 func (ib *IndexBuffer) GetCount() int {
 	return ib.m_Count
 }
-

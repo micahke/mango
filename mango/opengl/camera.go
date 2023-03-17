@@ -140,7 +140,3 @@ func (camera *Camera) LookAtCursor(x float32, y float32) {
 	direction[2] = float32(math.Sin(float64(glm.DegToRad(camera.yaw))) * math.Cos(float64(glm.DegToRad(camera.pitch))))
 	camera.front = direction.Normalize()
 }
-
-
-
-
