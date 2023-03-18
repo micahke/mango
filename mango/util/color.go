@@ -1,6 +1,10 @@
 package util
 
-import glm "github.com/go-gl/mathgl/mgl32"
+import (
+	"math"
+
+	glm "github.com/go-gl/mathgl/mgl32"
+)
 
 type Color struct {
 	glm.Vec4
@@ -62,4 +66,21 @@ func NewColorRGBAi(red, green, blue int, alpha float32) Color {
 	color.Vec4 = glm.Vec4{color.red, color.green, color.blue, alpha}
 
 	return color
+}
+
+
+func DarkenColor(color Color, amount float32) Color {
+  red := color.red * (1.0 - amount)
+  rFinal := math.Max(0.0, math.Min(1.0, float64(red)))  
+
+  green := color.green * (1.0 - amount)
+  gFinal := math.Max(0.0, math.Min(1.0, float64(green)))  
+
+  blue := color.blue * (1.0 - amount)
+  bFinal := math.Max(0.0, math.Min(1.0, float64(blue)))  
+
+
+  return NewColorRGBAf(float32(rFinal), float32(gFinal), float32(bFinal), color.alpha)
+
+
 }

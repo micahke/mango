@@ -78,3 +78,28 @@ func (renderer *SpriteRenderer) RenderSprite(x, y, width, height float32, textur
 	gl.DrawElements(gl.TRIANGLES, int32(renderer.ibo.GetCount()), gl.UNSIGNED_INT, nil)
 
 }
+
+
+// Renders a sprite based on a map of UV colors
+func (renderer *SpriteRenderer) RenderUVSprite(x, y, width, height float32, texturePath string, projectionMatrix, viewMatrix glm.Mat4) {
+
+	texture := getTexture(texturePath)
+	texture.Bind(0)
+
+	translation := glm.Translate3D(x, y, 0)
+	scale := glm.Scale3D(width, height, 1.0)
+	model := translation.Mul4(scale).Mul4(renderer.modelMatrix)
+
+	renderer.shader.Bind()
+	renderer.shader.SetUniformMat4f("projection", projectionMatrix)
+	renderer.shader.SetUniformMat4f("view", viewMatrix)
+	renderer.shader.SetUniformMat4f("model", model)
+	renderer.shader.SetUniform1i("uTexture", 0)
+
+	renderer.vao.Bind()
+	renderer.ibo.Bind()
+
+	// Draw the sprite
+	gl.DrawElements(gl.TRIANGLES, int32(renderer.ibo.GetCount()), gl.UNSIGNED_INT, nil)
+
+}

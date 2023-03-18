@@ -12,8 +12,8 @@ func init() {
 	runtime.LockOSThread()
 }
 
-var WINDOW_WIDTH int = 800
-var WINDOW_HEIGHT int = 600
+var WINDOW_WIDTH int = 1300
+var WINDOW_HEIGHT int = 800
 
 func main() {
 
