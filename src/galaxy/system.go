@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	SYSTEM_GENERATION_THRESHOLD int32 = 0
+	SYSTEM_GENERATION_THRESHOLD int32 = 1
 )
 
 type System struct {

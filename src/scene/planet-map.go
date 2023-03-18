@@ -3,6 +3,7 @@ package scene
 import (
 	"math"
 
+	"github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/infinite-universe/mango"
 	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/util"
@@ -21,9 +22,6 @@ type PlanetMap struct {
 	xOffset float64
 	yOffset float64
 
-  bgOffsetX float64
-  bgOffsetY float64
-
 	mapDebugPanel *debug.PlanetMapDebugPanel
 
 	cameraSpeed float32
@@ -34,7 +32,6 @@ type PlanetMap struct {
 	renderShip      bool
 
 	bgColor util.Color
-
 }
 
 func (planetMap *PlanetMap) Init() {
@@ -49,8 +46,6 @@ func (planetMap *PlanetMap) Init() {
 	planetMap.cameraSpeed = 500.0
 	planetMap.bgColor = util.NewColorRGBi(30, 26, 29)
 
-
-
 	// mango.IM.SetBackgroundColor(planetMap.bgColor)
 
 	// Debug
@@ -62,7 +57,7 @@ func (planetMap *PlanetMap) Init() {
 
 func (planetMap *PlanetMap) Update(deltaTime float32) {
 
-	planetMap.controlShip()
+  planetMap.controlShip()
 
 	if input.MouseRightPressed {
 		util.ImguiActivatePanel("planetMap")
@@ -73,19 +68,16 @@ func (planetMap *PlanetMap) Update(deltaTime float32) {
 	planetMap.xTiles = planetMap.WINDOW_WIDTH / int(planetMap.tileSize)
 	planetMap.yTiles = planetMap.WINDOW_HEIGHT / int(planetMap.tileSize)
 
+
 }
 
 func (planetMap *PlanetMap) Draw() {
-
-
-
 	xOffsetBlocks := math.Floor(planetMap.xOffset / float64(planetMap.tileSize))
 	yOffsetBlocks := math.Floor(planetMap.yOffset / float64(planetMap.tileSize))
 
   if !planetMap.showTileMap {
     planetMap.drawBG()
   }
-
 
 	for x := 0; x < planetMap.xTiles+2; x++ {
 		for y := 0; y < planetMap.yTiles+2; y++ {
@@ -100,14 +92,31 @@ func (planetMap *PlanetMap) Draw() {
 				planetMap.drawDebugBG(float32(finalX), float32(finalY), xCoord, yCoord)
 			} 
 
+
 			system := galaxy.NewSystem(xCoord, yCoord, false)
 
 			if system.Exists() {
 
 				systemSize := system.Size() * planetMap.tileSize
+				xOff := system.Offset()[0] * planetMap.tileSize
+				yOff := system.Offset()[1] * planetMap.tileSize
+
+        screenX := float32(finalX)-float32(planetMap.xOffset)
+        screenY := float32(finalY)-float32(planetMap.yOffset)
+
+        coords := planetMap.calculateScreenDistance(screenX, screenY)
+        coords = coords.Mul(0.8)
+
+        if planetMap.showTileMap {
+          coords = coords.Mul(0)
+        }
+
 
 				if planetMap.renderPlanets {
-          mango.IM.DrawSprite(float32(finalX) - float32(planetMap.xOffset), float32(finalY) - float32(planetMap.yOffset), systemSize, systemSize, "pixel-system.png")
+					// mango.IM.DrawCircle(float32(finalX) - float32(planetMap.xOffset) + xOff, float32(finalY) - float32(planetMap.yOffset) + yOff, systemSize, systemSize, system.Color())
+					// mango.IM.DrawCircle(screenX+xOff - coords[0], screenY+yOff-coords[1], systemSize, systemSize, system.Color())
+					mango.IM.DrawSprite(screenX+xOff - coords[0], screenY+yOff-coords[1], systemSize, systemSize, "pixel-system.png")
+          // mango.IM.DrawSprite(float32(finalX)-float32(planetMap.xOffset)+xOff, float32(finalY)-float32(planetMap.yOffset)+yOff, systemSize, systemSize, system.Color())
 				}
 			}
 
@@ -128,26 +137,33 @@ func (planetMap *PlanetMap) Draw() {
 
 }
 
+
 func (planetMap *PlanetMap) drawBG() {
+	xOffsetBlocks := math.Floor(planetMap.xOffset / float64(planetMap.tileSize))
+	yOffsetBlocks := math.Floor(planetMap.yOffset / float64(planetMap.tileSize))
 
-	bgXOffsetBlocks := math.Floor(planetMap.bgOffsetX / float64(planetMap.tileSize))
-	bgYOffsetBlocks := math.Floor(planetMap.bgOffsetY / float64(planetMap.tileSize))
 
-	for x := 0; x < planetMap.xTiles+2; x++ {
-		for y := 0; y < planetMap.yTiles+2; y++ {
-
-			bgXCoord := int64(x) + int64(bgXOffsetBlocks)
-			bgYCoord := int64(y) + int64(bgYOffsetBlocks)
-      
-			finalBgX := int64(math.Floor(float64(bgXCoord) * float64(planetMap.tileSize)))
-			finalBgY := int64(math.Floor(float64(bgYCoord) * float64(planetMap.tileSize)))
-
-				alpha := float32(galaxy.PerlinValueAtCoords(bgXCoord, bgYCoord, true))
-				bgTileColor := util.NewColorRGBAf(planetMap.bgColor.X(), planetMap.bgColor.Y(), planetMap.bgColor.Z(), alpha)
-				mango.IM.FillRect(float32(finalBgX)-float32(planetMap.bgOffsetX), float32(finalBgY)-float32(planetMap.bgOffsetY), planetMap.tileSize, planetMap.tileSize, bgTileColor)
-
+  for x := 0; x < planetMap.xTiles+2; x++ {
+    for y := 0; y < planetMap.yTiles+2; y++ {
+      xCoord := int64(x) + int64(xOffsetBlocks)
+      yCoord := int64(y) + int64(yOffsetBlocks)
+      // finalX := xCoord * int64(planetMap.tileSize)
+      // finalY := yCoord * int64(planetMap.tileSize)
+      finalX := int64(math.Floor(float64(xCoord) * float64(planetMap.tileSize)))
+      finalY := int64(math.Floor(float64(yCoord) * float64(planetMap.tileSize)))
+      alpha := float32(galaxy.PerlinValueAtCoords(xCoord, yCoord, true))
+      bgTileColor := util.NewColorRGBAf(planetMap.bgColor.X(), planetMap.bgColor.Y(), planetMap.bgColor.Z(), alpha)
+      mango.IM.FillRect(float32(finalX) - float32(planetMap.xOffset), float32(finalY) - float32(planetMap.yOffset), planetMap.tileSize, planetMap.tileSize, bgTileColor)
     }
   }
+}
+
+func (planetMap *PlanetMap) calculateScreenDistance(x, y float32) mgl32.Vec2 {
+  distanceX := float32(planetMap.WINDOW_WIDTH / 2.0) - x
+  distanceY := float32(planetMap.WINDOW_HEIGHT / 2.0) - y
+
+  return mgl32.Vec2{distanceX, distanceY}
+
 }
 
 func (planetMap *PlanetMap) drawDebugBG(x, y float32, xCoord, yCoord int64) {
@@ -159,23 +175,20 @@ func (planetMap *PlanetMap) drawDebugBG(x, y float32, xCoord, yCoord int64) {
 
 }
 
+
 func (planetMap *PlanetMap) controlShip() {
-	change := float64(planetMap.cameraSpeed) * float64(mango.Time.DeltaTime())
-  parallax := 0.6
-	if input.GetKey(input.KEY_A) {
-		planetMap.xOffset -= change
-		planetMap.bgOffsetX -= change * parallax
-	}
-	if input.GetKey(input.KEY_D) {
-		planetMap.xOffset += change
-    planetMap.bgOffsetX += change * parallax
-	}
-	if input.GetKey(input.KEY_W) {
-		planetMap.yOffset += change
-		planetMap.bgOffsetY += change * parallax
-	}
-	if input.GetKey(input.KEY_S) {
-		planetMap.yOffset -= change
-		planetMap.bgOffsetY -= change * parallax
-	}
+  change := float64(planetMap.cameraSpeed) * float64(mango.Time.DeltaTime())
+  if input.GetKey(input.KEY_A) {
+    planetMap.xOffset -= change 
+  }
+  if input.GetKey(input.KEY_D) {
+    planetMap.xOffset += change
+  }
+  if input.GetKey(input.KEY_W) {
+    planetMap.yOffset += change
+  }
+  if input.GetKey(input.KEY_S) {
+    planetMap.yOffset -= change
+  }
 }
+
