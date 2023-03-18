@@ -4,6 +4,7 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/infinite-universe/mango/opengl"
+	"github.com/micahke/infinite-universe/mango/util"
 )
 
 type Sprite struct {
@@ -23,6 +24,7 @@ type SpriteRenderer struct {
 
 	ibo    *opengl.IndexBuffer
 	shader *opengl.Shader
+	uvShader *opengl.Shader
 
 	modelMatrix glm.Mat4
 }
@@ -49,6 +51,7 @@ func InitSpriteRenderer() *SpriteRenderer {
 
 	renderer.ibo = opengl.NewIndexBuffer(quad_indeces)
 	renderer.shader = opengl.NewShader("SpriteVertex.glsl", "SpriteFragment.glsl")
+	renderer.uvShader = opengl.NewShader("SpriteVertex.glsl", "UVFragment.glsl")
 
 	renderer.modelMatrix = glm.Ident4()
 
@@ -81,7 +84,7 @@ func (renderer *SpriteRenderer) RenderSprite(x, y, width, height float32, textur
 
 
 // Renders a sprite based on a map of UV colors
-func (renderer *SpriteRenderer) RenderUVSprite(x, y, width, height float32, texturePath string, projectionMatrix, viewMatrix glm.Mat4) {
+func (renderer *SpriteRenderer) RenderUVSprite(x, y, width, height float32, texturePath string, uv util.UVSpriteMap,projectionMatrix, viewMatrix glm.Mat4) {
 
 	texture := getTexture(texturePath)
 	texture.Bind(0)
@@ -90,11 +93,15 @@ func (renderer *SpriteRenderer) RenderUVSprite(x, y, width, height float32, text
 	scale := glm.Scale3D(width, height, 1.0)
 	model := translation.Mul4(scale).Mul4(renderer.modelMatrix)
 
-	renderer.shader.Bind()
-	renderer.shader.SetUniformMat4f("projection", projectionMatrix)
-	renderer.shader.SetUniformMat4f("view", viewMatrix)
-	renderer.shader.SetUniformMat4f("model", model)
-	renderer.shader.SetUniform1i("uTexture", 0)
+	renderer.uvShader.Bind()
+	renderer.uvShader.SetUniformMat4f("projection", projectionMatrix)
+	renderer.uvShader.SetUniformMat4f("view", viewMatrix)
+	renderer.uvShader.SetUniformMat4f("model", model)
+
+	renderer.uvShader.SetUniform1i("uTexture", 0)
+  renderer.uvShader.SetUniform4f("whiteChannel", uv.White().X(), uv.White().Y(), uv.White().Z(), uv.White().W())
+  renderer.uvShader.SetUniform4f("blackChannel", uv.Black().X(), uv.Black().Y(), uv.Black().Z(), uv.Black().W())
+  
 
 	renderer.vao.Bind()
 	renderer.ibo.Bind()

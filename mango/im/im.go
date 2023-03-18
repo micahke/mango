@@ -92,6 +92,12 @@ func (im *IMMEDIATE_MODE) DrawSprite(x, y, width, height float32, texturePath st
 
 }
 
+func (im *IMMEDIATE_MODE) DrawUVSprite(x, y, width, height float32, texturePath string, uv util.UVSpriteMap) {
+
+	im.spriteRenderer.RenderUVSprite(x, y, width, height, texturePath, uv, im.projectionMatrix, im.viewMatrix)
+
+}
+
 func (im *IMMEDIATE_MODE) DrawCircle(x, y, width, height float32, color util.Color) {
 	im.circleRenderer.RenderCircle(x, y, width, height, color.Vec4, im.projectionMatrix, im.viewMatrix)
 }

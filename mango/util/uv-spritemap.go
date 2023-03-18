@@ -8,7 +8,13 @@ type UVSpriteMap struct {
 
 }
 
+func (uv *UVSpriteMap) SetWhiteChannel(color Color) {
+  uv.whiteChannel = color
+}
 
+func (uv *UVSpriteMap) SetBlackChannel(color Color) {
+  uv.blackChannel = color
+}
 
 func (uv *UVSpriteMap) White() Color {
   return uv.whiteChannel

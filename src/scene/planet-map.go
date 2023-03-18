@@ -1,6 +1,7 @@
 package scene
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/go-gl/mathgl/mgl32"
@@ -45,6 +46,7 @@ func (planetMap *PlanetMap) Init() {
 	planetMap.renderShip = true
 	planetMap.cameraSpeed = 500.0
 	planetMap.bgColor = util.NewColorRGBi(30, 26, 29)
+  
 
 	// mango.IM.SetBackgroundColor(planetMap.bgColor)
 
@@ -113,10 +115,15 @@ func (planetMap *PlanetMap) Draw() {
 
 
 				if planetMap.renderPlanets {
-					// mango.IM.DrawCircle(float32(finalX) - float32(planetMap.xOffset) + xOff, float32(finalY) - float32(planetMap.yOffset) + yOff, systemSize, systemSize, system.Color())
-					// mango.IM.DrawCircle(screenX+xOff - coords[0], screenY+yOff-coords[1], systemSize, systemSize, system.Color())
-					mango.IM.DrawSprite(screenX+xOff - coords[0], screenY+yOff-coords[1], systemSize, systemSize, "pixel-system.png")
-          // mango.IM.DrawSprite(float32(finalX)-float32(planetMap.xOffset)+xOff, float32(finalY)-float32(planetMap.yOffset)+yOff, systemSize, systemSize, system.Color())
+
+          darkerColor := util.DarkenColor(system.Color(), 0.5)
+          fmt.Println(system.Color().Vec4)
+          fmt.Println(darkerColor.Vec4)
+
+          uvMap := util.UVSpriteMap{}
+          uvMap.SetWhiteChannel(system.Color())
+          uvMap.SetBlackChannel(darkerColor)
+					mango.IM.DrawUVSprite(screenX+xOff - coords[0], screenY+yOff-coords[1], systemSize, systemSize, "pixel-system.png", uvMap)
 				}
 			}
 

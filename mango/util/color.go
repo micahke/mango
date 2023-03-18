@@ -28,6 +28,7 @@ func NewColorRGBf(red, green, blue float32) Color {
 	color.red = red
 	color.green = green
 	color.blue = blue
+  color.alpha = 1.0
 	color.Vec4 = glm.Vec4{red, green, blue, 1.0}
 
 	return color
@@ -51,6 +52,7 @@ func NewColorRGBi(red, green, blue int) Color {
 	color.red = float32(red) / 255.0
 	color.green = float32(green) / 255.0
 	color.blue = float32(blue) / 255.0
+  color.alpha = 1.0
 	color.Vec4 = glm.Vec4{color.red, color.green, color.blue, 1.0}
 
 	return color
