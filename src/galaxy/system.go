@@ -18,6 +18,8 @@ type System struct {
 	size   float32
 	offset glm.Vec2
 	color  util.Color
+
+  parallaxEffect float32
 }
 
 type SystemClass int
@@ -65,6 +67,8 @@ func NewSystem(xCoord, yCoord int64, fullGeneration bool) *System {
 
 	system.Classify()
 	system.GenerateSize()
+
+  system.parallaxEffect = rand.Float32()
 
 	if !fullGeneration {
 		return system
@@ -159,4 +163,8 @@ func (system *System) Offset() glm.Vec2 {
 }
 func (system *System) Color() util.Color {
 	return system.color
+}
+
+func (system *System) ParallaxEffect() float32 {
+  return system.parallaxEffect
 }

@@ -1,7 +1,6 @@
 package scene
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/go-gl/mathgl/mgl32"
@@ -22,6 +21,10 @@ type PlanetMap struct {
 
 	xOffset float64
 	yOffset float64
+
+  xVelo float64
+  yVelo float64
+  
 
 	mapDebugPanel *debug.PlanetMapDebugPanel
 
@@ -45,7 +48,10 @@ func (planetMap *PlanetMap) Init() {
 	planetMap.renderCrosshair = false
 	planetMap.renderShip = true
 	planetMap.cameraSpeed = 500.0
-	planetMap.bgColor = util.NewColorRGBi(30, 26, 29)
+	// planetMap.bgColor = util.NewColorRGBi(30, 26, 29)
+	planetMap.bgColor = util.NewColorRGBi(60, 52, 58)
+	planetMap.bgColor = util.NewColorRGBi(48, 42, 47)
+	// planetMap.bgColor = util.PINK_GLAMOUR
   
 
 	// mango.IM.SetBackgroundColor(planetMap.bgColor)
@@ -57,7 +63,7 @@ func (planetMap *PlanetMap) Init() {
 
 }
 
-func (planetMap *PlanetMap) Update(deltaTime float32) {
+func (planetMap *PlanetMap) Update(deltaTime float64) {
 
   planetMap.controlShip()
 
@@ -107,7 +113,7 @@ func (planetMap *PlanetMap) Draw() {
         screenY := float32(finalY)-float32(planetMap.yOffset)
 
         coords := planetMap.calculateScreenDistance(screenX, screenY)
-        coords = coords.Mul(0.8)
+        coords = coords.Mul(system.ParallaxEffect())
 
         if planetMap.showTileMap {
           coords = coords.Mul(0)
@@ -117,8 +123,6 @@ func (planetMap *PlanetMap) Draw() {
 				if planetMap.renderPlanets {
 
           darkerColor := util.DarkenColor(system.Color(), 0.5)
-          fmt.Println(system.Color().Vec4)
-          fmt.Println(darkerColor.Vec4)
 
           uvMap := util.UVSpriteMap{}
           uvMap.SetWhiteChannel(system.Color())
@@ -159,7 +163,7 @@ func (planetMap *PlanetMap) drawBG() {
       finalX := int64(math.Floor(float64(xCoord) * float64(planetMap.tileSize)))
       finalY := int64(math.Floor(float64(yCoord) * float64(planetMap.tileSize)))
       alpha := float32(galaxy.PerlinValueAtCoords(xCoord, yCoord, true))
-      bgTileColor := util.NewColorRGBAf(planetMap.bgColor.X(), planetMap.bgColor.Y(), planetMap.bgColor.Z(), alpha)
+      bgTileColor := util.NewColorRGBAf(planetMap.bgColor.X(), planetMap.bgColor.Y(), planetMap.bgColor.Z(), float32(alpha))
       mango.IM.FillRect(float32(finalX) - float32(planetMap.xOffset), float32(finalY) - float32(planetMap.yOffset), planetMap.tileSize, planetMap.tileSize, bgTileColor)
     }
   }
@@ -175,27 +179,42 @@ func (planetMap *PlanetMap) calculateScreenDistance(x, y float32) mgl32.Vec2 {
 
 func (planetMap *PlanetMap) drawDebugBG(x, y float32, xCoord, yCoord int64) {
 
-	normedPValue := galaxy.PerlinValueAtCoords(xCoord, yCoord, true)
-	color := util.NewColorRGBf(float32(normedPValue), float32(normedPValue), float32(normedPValue))
+  normedPValue := galaxy.PerlinValueAtCoords(xCoord, yCoord, true)
+  color := util.NewColorRGBf(float32(normedPValue), float32(normedPValue), float32(normedPValue))
 
-	mango.IM.FillRect(x-float32(planetMap.xOffset)+1, y-float32(planetMap.yOffset)+1, planetMap.tileSize-2, planetMap.tileSize-2, color)
+  mango.IM.FillRect(x-float32(planetMap.xOffset)+1, y-float32(planetMap.yOffset)+1, planetMap.tileSize-2, planetMap.tileSize-2, color)
 
 }
 
 
 func (planetMap *PlanetMap) controlShip() {
-  change := float64(planetMap.cameraSpeed) * float64(mango.Time.DeltaTime())
+  // change := float64(planetMap.cameraSpeed) * float64(mango.Time.DeltaTime())
+  thrust := 2.5
   if input.GetKey(input.KEY_A) {
-    planetMap.xOffset -= change 
+    // planetMap.xOffset -= change 
+    planetMap.xVelo -= thrust
   }
   if input.GetKey(input.KEY_D) {
-    planetMap.xOffset += change
+    // planetMap.xOffset += change
+    planetMap.xVelo += thrust
   }
   if input.GetKey(input.KEY_W) {
-    planetMap.yOffset += change
+    // planetMap.yOffset += change
+    planetMap.yVelo += thrust
   }
   if input.GetKey(input.KEY_S) {
-    planetMap.yOffset -= change
+    // planetMap.yOffset -= change
+    planetMap.yVelo -= thrust
   }
+
+
+  planetMap.xVelo = math.Max(float64(-1.0 * planetMap.cameraSpeed), math.Min(float64(planetMap.cameraSpeed), planetMap.xVelo))
+  planetMap.yVelo = math.Max(float64(-1.0 * planetMap.cameraSpeed), math.Min(float64(planetMap.cameraSpeed), planetMap.yVelo))
+  
+  planetMap.xOffset += planetMap.xVelo * mango.Time.DeltaTime()
+  planetMap.yOffset += planetMap.yVelo * mango.Time.DeltaTime()
+
+
+
 }
 

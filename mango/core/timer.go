@@ -3,9 +3,9 @@ package core
 import "github.com/go-gl/glfw/v3.3/glfw"
 
 type Timer struct {
-	programTime  float32
-	deltaTime    float32
-	timeDilation float32
+	programTime  float64
+	deltaTime    float64
+	timeDilation float64
 
 	frameTime float64
 	fps       float64
@@ -13,25 +13,25 @@ type Timer struct {
 
 func NewTimer() *Timer {
 	timer := new(Timer)
-	timer.programTime = float32(glfw.GetTime())
+	timer.programTime = glfw.GetTime()
 	return timer
 }
 
-func (timer *Timer) SetTimeDilation(dilation float32) {
+func (timer *Timer) SetTimeDilation(dilation float64) {
 	timer.timeDilation = dilation
 }
 
-func (timer *Timer) ProgramTime() float32 {
+func (timer *Timer) ProgramTime() float64 {
 	return timer.programTime
 }
 
-func (timer *Timer) DeltaTime() float32 {
+func (timer *Timer) DeltaTime() float64 {
 	return timer.deltaTime
 }
 
 // Should only be called from the engine
 func (timer *Timer) Update() {
-	now := float32(glfw.GetTime())
+	now := glfw.GetTime()
 	timer.deltaTime = now - timer.programTime
 	timer.programTime = now
 }

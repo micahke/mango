@@ -45,9 +45,9 @@ func Init(renderMode core.RenderMode) {
 }
 
 // Creates a new window
-func CreateWindow(width, height int, title string) {
+func CreateWindow(width, height int, title string, vsync bool) {
 
-	Engine.Window = core.CreateWindow(width, height, title, true)
+	Engine.Window = core.CreateWindow(width, height, title, vsync)
 
 	Engine.Window.SetCursorPosCallback(input.CursorCallback)
 	Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)

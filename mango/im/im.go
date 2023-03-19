@@ -32,7 +32,7 @@ func Init() *IMMEDIATE_MODE {
 
 // Starts a new frame in IMMEDIATE MODE
 // This function should only be used internally by the engine
-func (im *IMMEDIATE_MODE) NewFrame(deltaTime float32) {
+func (im *IMMEDIATE_MODE) NewFrame(deltaTime float64) {
 
 	// Poll for events
 	// glfw.PollEvents()
