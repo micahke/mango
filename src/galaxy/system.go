@@ -3,7 +3,7 @@ package galaxy
 import (
 	"math/rand"
 
-	glm "github.com/go-gl/mathgl/mgl32"
+	glm "github.com/go-gl/mathgl/mgl64"
 	"github.com/micahke/infinite-universe/mango/util"
 )
 
@@ -15,7 +15,7 @@ type System struct {
 	systemType SystemClass
 	exists     bool
 
-	size   float32
+	size   float64
 	offset glm.Vec2
 	color  util.Color
 
@@ -44,7 +44,7 @@ var (
 	CLASS_M_COLOR util.Color = util.NewColorRGBi(255, 49, 46)
 )
 
-func NewSystem(xCoord, yCoord int64, fullGeneration bool) *System {
+func NewSystem(xCoord, yCoord int, fullGeneration bool) *System {
 	system := new(System)
 
 	perlinValue := PerlinValueAtCoords(xCoord, yCoord, true)
@@ -55,7 +55,7 @@ func NewSystem(xCoord, yCoord int64, fullGeneration bool) *System {
 	}
 
 	seed := (xCoord&0xFFFF)<<16 | (yCoord & 0xFFFF)
-	rand.Seed(seed)
+	rand.Seed(int64(seed))
 
 	if rand.Int31n(20) > SYSTEM_GENERATION_THRESHOLD {
 		system.exists = false
@@ -140,13 +140,14 @@ func (system *System) GenerateSize() {
 		upperBound = 50
 	}
 
-	var size float32 = (float32(rand.Intn(upperBound-lowerBound)) + float32(lowerBound)) / 100.0
+	// var size float32 = (float32(rand.Intn(upperBound-lowerBound)) + float32(lowerBound)) / 100.0
+  var size float64 = (float64(rand.Intn(upperBound - lowerBound)) + float64(lowerBound)) / 100.0
 	system.size = size
 
 	maxOffset := 1 - system.size
 
-	system.offset[0] = rand.Float32() * maxOffset
-	system.offset[1] = rand.Float32() * maxOffset
+	system.offset[0] = rand.Float64() * float64(maxOffset)
+	system.offset[1] = rand.Float64() * float64(maxOffset)
 
 }
 
@@ -154,7 +155,7 @@ func (system *System) Exists() bool {
 	return system.exists
 }
 
-func (system *System) Size() float32 {
+func (system *System) Size() float64 {
 	return system.size
 }
 

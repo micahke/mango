@@ -101,13 +101,13 @@ func (planetMap *PlanetMap) Draw() {
 			} 
 
 
-			system := galaxy.NewSystem(xCoord, yCoord, false)
+			system := galaxy.NewSystem(int(xCoord), int(yCoord), false)
 
 			if system.Exists() {
 
-				systemSize := system.Size() * planetMap.tileSize
-				xOff := system.Offset()[0] * planetMap.tileSize
-				yOff := system.Offset()[1] * planetMap.tileSize
+				systemSize := system.Size() * float64(planetMap.tileSize)
+				xOff := system.Offset()[0] * float64(planetMap.tileSize)
+				yOff := system.Offset()[1] * float64(planetMap.tileSize)
 
         screenX := float32(finalX)-float32(planetMap.xOffset)
         screenY := float32(finalY)-float32(planetMap.yOffset)
@@ -127,7 +127,7 @@ func (planetMap *PlanetMap) Draw() {
           uvMap := util.UVSpriteMap{}
           uvMap.SetWhiteChannel(system.Color())
           uvMap.SetBlackChannel(darkerColor)
-					mango.IM.DrawUVSprite(screenX+xOff - coords[0], screenY+yOff-coords[1], systemSize, systemSize, "pixel-system.png", uvMap)
+					mango.IM.DrawUVSprite(screenX+float32(xOff) - coords[0], screenY+float32(yOff)-coords[1], float32(systemSize), float32(systemSize), "pixel-system.png", uvMap)
 				}
 			}
 
@@ -162,7 +162,7 @@ func (planetMap *PlanetMap) drawBG() {
       // finalY := yCoord * int64(planetMap.tileSize)
       finalX := int64(math.Floor(float64(xCoord) * float64(planetMap.tileSize)))
       finalY := int64(math.Floor(float64(yCoord) * float64(planetMap.tileSize)))
-      alpha := float32(galaxy.PerlinValueAtCoords(xCoord, yCoord, true))
+      alpha := float32(galaxy.PerlinValueAtCoords(int(xCoord), int(yCoord), true))
       bgTileColor := util.NewColorRGBAf(planetMap.bgColor.X(), planetMap.bgColor.Y(), planetMap.bgColor.Z(), float32(alpha))
       mango.IM.FillRect(float32(finalX) - float32(planetMap.xOffset), float32(finalY) - float32(planetMap.yOffset), planetMap.tileSize, planetMap.tileSize, bgTileColor)
     }
@@ -174,12 +174,11 @@ func (planetMap *PlanetMap) calculateScreenDistance(x, y float32) mgl32.Vec2 {
   distanceY := float32(planetMap.WINDOW_HEIGHT / 2.0) - y
 
   return mgl32.Vec2{distanceX, distanceY}
-
 }
 
 func (planetMap *PlanetMap) drawDebugBG(x, y float32, xCoord, yCoord int64) {
 
-  normedPValue := galaxy.PerlinValueAtCoords(xCoord, yCoord, true)
+  normedPValue := galaxy.PerlinValueAtCoords(int(xCoord), int(yCoord), true)
   color := util.NewColorRGBf(float32(normedPValue), float32(normedPValue), float32(normedPValue))
 
   mango.IM.FillRect(x-float32(planetMap.xOffset)+1, y-float32(planetMap.yOffset)+1, planetMap.tileSize-2, planetMap.tileSize-2, color)

@@ -66,6 +66,10 @@ func CreateWindow(width, height int, title string, vsync bool) {
 
 }
 
+func GetWindow() *core.Window {
+  return Engine.Window
+}
+
 // Starts the main game loop
 func Start() {
 

@@ -25,7 +25,7 @@ func Init() {
 	Rebuild()
 }
 
-func PerlinValueAtCoords(x, y int64, normalized bool) float64 {
+func PerlinValueAtCoords(x, y int, normalized bool) float64 {
 
 	value := galaxy.perlinGenerator.Noise2D(float64(x)/float64(GALAXY_FREQ), float64(y)/float64(GALAXY_FREQ))
 
