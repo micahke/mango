@@ -6,6 +6,7 @@ import (
 	"github.com/AllenDang/imgui-go"
 	"github.com/micahke/infinite-universe/mango"
 	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/src/galaxy"
 )
 
 
@@ -18,6 +19,8 @@ type GalaxyMapDebugPanel struct {
   RenderPlanets bool
   RenderTilemap bool
 
+  LiveRebuild bool
+
 }
 
 
@@ -29,6 +32,7 @@ func InitGMDebugPanel(galaxyMap *GalaxyMap) *GalaxyMapDebugPanel {
   panel.RenderBackground = true
   panel.RenderPlanets = true
   panel.RenderTilemap = true
+  panel.LiveRebuild = false
 
   return panel
 
@@ -63,6 +67,22 @@ func (panel *GalaxyMapDebugPanel) RenderPanel() {
 		imgui.TreePop()
 	}
 
+	if imgui.TreeNode("Galaxy Settings") {
+    imgui.Checkbox("Live Rebuild", &panel.LiveRebuild)
+		imgui.SliderFloat("Alpha", &galaxy.GALAXY_ALPHA, 0, 5)
+		imgui.SliderFloat("Beta", &galaxy.GALAXY_BETA, 0, 3)
+		imgui.SliderInt("Iterations", &galaxy.GALAXY_N, 1, 10)
+		imgui.InputInt("Seed", &galaxy.GALAXY_SEED)
+		imgui.SliderInt("System Frequency", &galaxy.SYSTEM_GENERATION_THRESHOLD, 0, 20)
+		imgui.SliderFloat("System Scaling", &galaxy.GALAXY_FREQ, 0, 20)
+
+
+    if panel.LiveRebuild {
+      galaxy.Rebuild()
+    }
+
+    imgui.TreePop()
+  }
 
   imgui.End()
 

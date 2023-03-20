@@ -1,6 +1,7 @@
 package mango
 
 import (
+
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/im"
@@ -88,6 +89,8 @@ func Start() {
 
 		Time.Update()
 		util.ImguiNewFrame()
+
+    // Engine.Window.SetTitle(Engine.Window.GetTitle() + ": " + fmt.Sprint(int(Time.FPS())) + " FPS")
 
 		// Check the rendermode and do appropriate stuff
 		if Engine.RenderMode == core.RENDER_MODE_IM {

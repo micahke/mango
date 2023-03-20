@@ -52,7 +52,6 @@ func InitTilemap(width, height int) *Tilemap {
 
 
 func (t *Tilemap) Update() {
-
   t.tileSize = float64(t.proxyTileSize)
 
   tilemap.offset[0] += 50.0 * mango.Time.DeltaTime()

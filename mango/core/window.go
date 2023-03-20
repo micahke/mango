@@ -52,3 +52,7 @@ func CreateWindow(width, height int, title string, vsync bool) *Window {
 	return window
 
 }
+
+func (w *Window) GetTitle() string {
+  return w.title
+} 
