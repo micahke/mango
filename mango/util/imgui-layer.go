@@ -80,6 +80,15 @@ func ImguiActivatePanel(name string) {
 
 }
 
+func ImguiTogglePanel(name string) {
+	for i := 0; i < len(imgui_layer.panels); i++ {
+		if imgui_layer.panels[i].name == name {
+			imgui_layer.panels[i].active = !imgui_layer.panels[i].active
+			break
+		}
+	}
+}
+
 func ImguiDeactivatePanel(name string) {
 
 	for i := 0; i < len(imgui_layer.panels); i++ {
@@ -109,4 +118,14 @@ func ImguiWantsMouse() bool {
 
 	return imgui_layer.io.WantCaptureMouse() == true
 
+}
+
+
+func ImguiWantsTextInput() bool {
+  return imgui_layer.io.WantTextInput()
+}
+
+
+func ImguiWantsKeyInput() bool {
+  return imgui_layer.io.WantCaptureKeyboard()
 }

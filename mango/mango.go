@@ -6,6 +6,7 @@ import (
 	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/im"
 	"github.com/micahke/infinite-universe/mango/input"
+	"github.com/micahke/infinite-universe/mango/logging"
 	"github.com/micahke/infinite-universe/mango/util"
 	"github.com/micahke/infinite-universe/mango/util/loaders"
 )
@@ -13,6 +14,8 @@ import (
 type Mango struct {
 	RenderMode core.RenderMode // The currently set render mode
 	Window     *core.Window
+  LogPanel *logging.LogPanel
+  
 }
 
 // The main engine instance
@@ -64,6 +67,8 @@ func CreateWindow(width, height int, title string, vsync bool) {
 	// At this point, OpenGL is ready to be used anywhere in the program
 
 	util.InitImguiLayer(Engine.Window.Window)
+  Engine.LogPanel = logging.InitLogPanel(width, height)
+  util.ImguiRegisterPanel("logPanel", Engine.LogPanel)
 
 }
 
@@ -80,17 +85,21 @@ func Start() {
 
 	Time = core.NewTimer()
 
+
 	for !Engine.Window.Window.ShouldClose() {
 		start := glfw.GetTime()
 
 		Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)
 		Engine.Window.SetKeyCallback(input.KeyCallback)
+
+
 		glfw.PollEvents()
 
 		Time.Update()
 		util.ImguiNewFrame()
 
-    // Engine.Window.SetTitle(Engine.Window.GetTitle() + ": " + fmt.Sprint(int(Time.FPS())) + " FPS")
+
+    update()
 
 		// Check the rendermode and do appropriate stuff
 		if Engine.RenderMode == core.RENDER_MODE_IM {
@@ -113,4 +122,12 @@ func Start() {
 
 	glfw.Terminate()
 
+}
+
+
+func update() {
+
+  if input.GetKeyDown(input.KEY_LEFT_CTRL) {
+    util.ImguiTogglePanel("logPanel")
+  }
 }

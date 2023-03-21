@@ -42,7 +42,7 @@ func (gm *GalaxyMap) Init() {
 func (gm *GalaxyMap) Update(deltaTime float64) {
 
   if input.MouseRightPressed {
-    util.ImguiActivatePanel("galaxyMap")
+    util.ImguiTogglePanel("galaxyMap")
   }
 
   tilemap.Update()
