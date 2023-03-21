@@ -19,6 +19,7 @@ type IMMEDIATE_MODE struct {
 	quadRenderer   *QuadRenderer
 	spriteRenderer *SpriteRenderer
 	circleRenderer *CircleRenderer
+  lineRenderer *LineRenderer
 }
 
 func Init() *IMMEDIATE_MODE {
@@ -66,6 +67,7 @@ func (im *IMMEDIATE_MODE) setupRenderers() {
 	im.quadRenderer = InitQuadRenderer()
 	im.spriteRenderer = InitSpriteRenderer()
 	im.circleRenderer = InitCircleRenderer()
+  im.lineRenderer = InitLineRenderer()
 }
 
 func (im *IMMEDIATE_MODE) SetBackgroundColor(color util.Color) {
@@ -100,4 +102,14 @@ func (im *IMMEDIATE_MODE) DrawUVSprite(x, y, width, height float32, texturePath 
 
 func (im *IMMEDIATE_MODE) DrawCircle(x, y, width, height float32, color util.Color) {
 	im.circleRenderer.RenderCircle(x, y, width, height, color.Vec4, im.projectionMatrix, im.viewMatrix)
+}
+
+
+func (im *IMMEDIATE_MODE) DrawLine(x1, y1, x2, y2 float32, color util.Color) {
+
+  p1 := glm.Vec2{x1, y1} 
+  p2 := glm.Vec2{x2, y2} 
+
+  im.lineRenderer.RenderLine(p1, p2, color, im.projectionMatrix, im.viewMatrix)
+
 }

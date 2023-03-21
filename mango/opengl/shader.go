@@ -10,6 +10,7 @@ import (
 type Shader struct {
 	m_VertexPath           string
 	m_FragmentPath         string
+  m_GeometryPath         string
 	m_Renderer_ID          uint32
 	m_UniformLocationCache map[string]int32
 }
@@ -27,6 +28,12 @@ func NewShader(vertexPath string, fragmentPath string) *Shader {
 
 	return &shader
 
+}
+
+func (shader *Shader) AddGeometryShader(geomPath string) {
+  geometryShader = shader.ParseShader(geomPath)
+
+  shader.CreateGeometryShader()
 }
 
 func (shader *Shader) Bind() {
@@ -73,6 +80,7 @@ func (shader *Shader) CompileShader(source string, shaderType uint32) uint32 {
 	return shaderID
 }
 
+
 func (shader *Shader) CreateShader(vertexShader string, fragmentShader string) {
 	program := gl.CreateProgram()
 	vs := shader.CompileShader(vertexShader, gl.VERTEX_SHADER)
@@ -88,6 +96,8 @@ func (shader *Shader) CreateShader(vertexShader string, fragmentShader string) {
 
 	shader.m_Renderer_ID = program
 }
+
+
 
 func (shader *Shader) SetUniform1i(name string, value int32) {
 	// location := gl.GetUniformLocation(shader.m_Renderer_ID, gl.Str(name+"\x00"))
