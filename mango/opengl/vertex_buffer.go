@@ -23,3 +23,8 @@ func (vb *VertexBuffer) Bind() {
 func (vb *VertexBuffer) Unbind() {
 	gl.BindBuffer(gl.ARRAY_BUFFER, 0)
 }
+
+func (vb *VertexBuffer) SetData(data []float32) {
+	vb.Bind()
+	gl.BufferSubData(gl.ARRAY_BUFFER, 0, 4*len(data), gl.Ptr(&(data[0])))
+}

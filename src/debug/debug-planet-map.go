@@ -17,9 +17,9 @@ type PlanetMapDebugPanel struct {
 	renderCrosshair *bool
 	renderShip      *bool
 	tileSize        *float32
-  cameraSpeed *float32
+	cameraSpeed     *float32
 
-  liveRebuild bool
+	liveRebuild bool
 }
 
 func NewPlanetMapDebugPanel(showTileMap *bool, tileSize *float32, renderPlanets *bool, renderCrosshair *bool, renderShip *bool, cameraSpeed *float32) *PlanetMapDebugPanel {
@@ -30,8 +30,8 @@ func NewPlanetMapDebugPanel(showTileMap *bool, tileSize *float32, renderPlanets 
 	panel.renderPlanets = renderPlanets
 	panel.renderCrosshair = renderCrosshair
 	panel.renderShip = renderShip
-  panel.cameraSpeed = cameraSpeed
-  panel.liveRebuild = false
+	panel.cameraSpeed = cameraSpeed
+	panel.liveRebuild = false
 
 	return panel
 
@@ -63,13 +63,13 @@ func (panel *PlanetMapDebugPanel) RenderPanel() {
 			*panel.tileSize = 50
 		}
 		imgui.SliderFloat("Tile Size", panel.tileSize, 1, 100)
-    imgui.SliderFloat("Max Ship Speed", panel.cameraSpeed, 0.0, 1000.0)
+		imgui.SliderFloat("Max Ship Speed", panel.cameraSpeed, 0.0, 1000.0)
 
 		imgui.TreePop()
 	}
 
 	if imgui.TreeNode("Galaxy Settings") {
-    imgui.Checkbox("Live Rebuild", &panel.liveRebuild)
+		imgui.Checkbox("Live Rebuild", &panel.liveRebuild)
 		imgui.SliderFloat("Alpha", &galaxy.GALAXY_ALPHA, 0, 5)
 		imgui.SliderFloat("Beta", &galaxy.GALAXY_BETA, 0, 3)
 		imgui.SliderInt("Iterations", &galaxy.GALAXY_N, 1, 10)
@@ -77,10 +77,9 @@ func (panel *PlanetMapDebugPanel) RenderPanel() {
 		imgui.SliderInt("System Frequency", &galaxy.SYSTEM_GENERATION_THRESHOLD, 0, 20)
 		imgui.SliderFloat("System Scaling", &galaxy.GALAXY_FREQ, 0, 20)
 
-
-    if panel.liveRebuild {
-      galaxy.Rebuild()
-    }
+		if panel.liveRebuild {
+			galaxy.Rebuild()
+		}
 
 		imgui.TreePop()
 	}

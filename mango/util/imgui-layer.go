@@ -120,12 +120,10 @@ func ImguiWantsMouse() bool {
 
 }
 
-
 func ImguiWantsTextInput() bool {
-  return imgui_layer.io.WantTextInput()
+	return imgui_layer.io.WantTextInput()
 }
 
-
 func ImguiWantsKeyInput() bool {
-  return imgui_layer.io.WantCaptureKeyboard()
+	return imgui_layer.io.WantCaptureKeyboard()
 }

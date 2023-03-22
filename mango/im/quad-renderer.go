@@ -74,5 +74,4 @@ func (renderer *QuadRenderer) RenderQuad(x, y, width, height float32, color util
 
 	gl.DrawElements(gl.TRIANGLES, int32(renderer.ibo.GetCount()), gl.UNSIGNED_INT, nil)
 
-
 }

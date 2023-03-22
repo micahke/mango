@@ -55,7 +55,7 @@ func (panel *LogPanel) RenderPanel() {
 	{
 
 		if imgui.Button("Clear") {
-      _log = []*LogItem{}
+			_log = []*LogItem{}
 		}
 
 		imgui.SameLine()
@@ -91,11 +91,11 @@ func (panel *LogPanel) RenderPanel() {
 			//   imgui.Text(logStr)
 			//   imgui.TreePop()
 			// }
-      if len(panel.filter) > 0 {
-        if !panel.containsSearchTerm(logStr) {
-          continue
-        }
-      }
+			if len(panel.filter) > 0 {
+				if !panel.containsSearchTerm(logStr) {
+					continue
+				}
+			}
 			if panel.showGameLogs && logItem.source == APP {
 				imgui.Text(logStr)
 			}
@@ -118,9 +118,9 @@ func (panel *LogPanel) RenderPanel() {
 
 func (panel *LogPanel) containsSearchTerm(log string) bool {
 
-  return strings.Contains(log, panel.filter)
+	return strings.Contains(log, panel.filter)
 
-} 
+}
 
 func constructLogString(item *LogItem) string {
 

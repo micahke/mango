@@ -1,7 +1,6 @@
 package mango
 
 import (
-
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/im"
@@ -14,8 +13,7 @@ import (
 type Mango struct {
 	RenderMode core.RenderMode // The currently set render mode
 	Window     *core.Window
-  LogPanel *logging.LogPanel
-  
+	LogPanel   *logging.LogPanel
 }
 
 // The main engine instance
@@ -67,13 +65,13 @@ func CreateWindow(width, height int, title string, vsync bool) {
 	// At this point, OpenGL is ready to be used anywhere in the program
 
 	util.InitImguiLayer(Engine.Window.Window)
-  Engine.LogPanel = logging.InitLogPanel(width, height)
-  util.ImguiRegisterPanel("logPanel", Engine.LogPanel)
+	Engine.LogPanel = logging.InitLogPanel(width, height)
+	util.ImguiRegisterPanel("logPanel", Engine.LogPanel)
 
 }
 
 func GetWindow() *core.Window {
-  return Engine.Window
+	return Engine.Window
 }
 
 // Starts the main game loop
@@ -85,21 +83,18 @@ func Start() {
 
 	Time = core.NewTimer()
 
-
 	for !Engine.Window.Window.ShouldClose() {
 		start := glfw.GetTime()
 
 		Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)
 		Engine.Window.SetKeyCallback(input.KeyCallback)
 
-
 		glfw.PollEvents()
 
 		Time.Update()
 		util.ImguiNewFrame()
 
-
-    update()
+		update()
 
 		// Check the rendermode and do appropriate stuff
 		if Engine.RenderMode == core.RENDER_MODE_IM {
@@ -124,10 +119,9 @@ func Start() {
 
 }
 
-
 func update() {
 
-  if input.GetKeyDown(input.KEY_LEFT_CTRL) {
-    util.ImguiTogglePanel("logPanel")
-  }
+	if input.GetKeyDown(input.KEY_LEFT_CTRL) {
+		util.ImguiTogglePanel("logPanel")
+	}
 }

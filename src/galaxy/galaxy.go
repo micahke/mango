@@ -15,7 +15,7 @@ var (
 	GALAXY_BETA  float32 = 2
 	GALAXY_N     int32   = 3
 	GALAXY_SEED  int32   = 100
-	GALAXY_FREQ float32 = 13.6 
+	GALAXY_FREQ  float32 = 13.6
 )
 
 func Init() {

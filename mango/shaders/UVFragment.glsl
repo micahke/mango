@@ -12,7 +12,7 @@ void main() {
 
   vec4 color = texture(uTexture, TexCoord);
 
-  if (color.x >= 0.5) {
+  if (color.x > 0.5) {
     FragColor = whiteChannel;
   } else if (color.x < 0.5 && color.a != 0.0) {
     FragColor = blackChannel;

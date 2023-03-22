@@ -19,7 +19,7 @@ type System struct {
 	offset glm.Vec2
 	color  util.Color
 
-  parallaxEffect float32
+	parallaxEffect float32
 }
 
 type SystemClass int
@@ -68,7 +68,7 @@ func NewSystem(xCoord, yCoord int, fullGeneration bool) *System {
 	system.Classify()
 	system.GenerateSize()
 
-  system.parallaxEffect = rand.Float32()
+	system.parallaxEffect = rand.Float32()
 
 	if !fullGeneration {
 		return system
@@ -141,7 +141,7 @@ func (system *System) GenerateSize() {
 	}
 
 	// var size float32 = (float32(rand.Intn(upperBound-lowerBound)) + float32(lowerBound)) / 100.0
-  var size float64 = (float64(rand.Intn(upperBound - lowerBound)) + float64(lowerBound)) / 100.0
+	var size float64 = (float64(rand.Intn(upperBound-lowerBound)) + float64(lowerBound)) / 100.0
 	system.size = size
 
 	maxOffset := 1 - system.size
@@ -167,5 +167,5 @@ func (system *System) Color() util.Color {
 }
 
 func (system *System) ParallaxEffect() float32 {
-  return system.parallaxEffect
+	return system.parallaxEffect
 }
