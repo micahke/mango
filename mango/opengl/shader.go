@@ -30,11 +30,24 @@ func NewShader(vertexPath string, fragmentPath string) *Shader {
 
 }
 
-func (shader *Shader) AddGeometryShader(geomPath string) {
-  geometryShader = shader.ParseShader(geomPath)
+func NewShaderG(vertexPath string, fragmentPath string, geometryPath string) *Shader {
+	shader := Shader{}
+	vertexShader := shader.ParseShader(vertexPath)
+	fragmentShader := shader.ParseShader(fragmentPath)
+	geometryShader := shader.ParseShader(geometryPath)
 
-  shader.CreateGeometryShader()
+	shader.CreateShaderG(vertexShader, fragmentShader, geometryShader)
+
+	shader.m_VertexPath = vertexPath
+	shader.m_FragmentPath = fragmentPath
+	shader.m_GeometryPath = geometryPath
+	shader.m_UniformLocationCache = make(map[string]int32)
+
+	return &shader
+
 }
+
+
 
 func (shader *Shader) Bind() {
 	gl.UseProgram(shader.m_Renderer_ID)
@@ -78,6 +91,25 @@ func (shader *Shader) CompileShader(source string, shaderType uint32) uint32 {
 		return 0
 	}
 	return shaderID
+}
+
+func (shader *Shader) CreateShaderG(vertexShader string, fragmentShader string, geometryShader string) {
+	program := gl.CreateProgram()
+	vs := shader.CompileShader(vertexShader, gl.VERTEX_SHADER)
+	fs := shader.CompileShader(fragmentShader, gl.FRAGMENT_SHADER)
+	gs := shader.CompileShader(geometryShader, gl.GEOMETRY_SHADER)
+
+	gl.AttachShader(program, vs)
+	gl.AttachShader(program, fs)
+  gl.AttachShader(program, gs)
+	gl.LinkProgram(program)
+	gl.ValidateProgram(program)
+
+	gl.DeleteShader(vs)
+	gl.DeleteShader(fs)
+	gl.DeleteShader(gs)
+
+	shader.m_Renderer_ID = program
 }
 
 

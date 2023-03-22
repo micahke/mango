@@ -37,7 +37,8 @@ func InitLineRenderer() *LineRenderer {
 
   renderer.vao.AddBuffer(*renderer.vbo, *renderer.layout)
 
-  renderer.shader = opengl.NewShader("LineVertex.glsl", "LineFragment.glsl")
+  renderer.shader = opengl.NewShaderG("LineVertex.glsl", "LineFragment.glsl", "LineGeometry.glsl")
+  // renderer.shader = opengl.NewShader("LineVertex.glsl", "LineFragment.glsl")
   
   renderer.modelMatrix = glm.Ident4()
 
@@ -61,6 +62,9 @@ func (renderer *LineRenderer) RenderLine(p1, p2 glm.Vec2, color util.Color, proj
 	renderer.shader.SetUniformMat4f("view", viewMatrix)
 	renderer.shader.SetUniformMat4f("model", renderer.modelMatrix)
 
+  tk := 2.0 / float32(1300)
+
+  renderer.shader.SetUniform1f("thickness", tk)
   
 	renderer.shader.SetUniform4f("uColor", color.Vec4[0], color.Vec4[1], color.Vec4[2], color.Vec4[3])
 
