@@ -73,6 +73,8 @@ func (gm *GalaxyMap) Draw() {
 		// mango.IM.DrawLine(xp2, yp2, xp, yp, util.WHITE, 1.0)
 	}
 
+  mango.IM.DrawSprite(0, 0, 300, 300, "BitmapFont.png")
+
 }
 
 func getLinePoints(p1, p2 []float32, dist float32) (float32, float32) {
