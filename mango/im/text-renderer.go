@@ -1,8 +1,11 @@
 package im
 
 import (
+	"strings"
+
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
+	"github.com/micahke/infinite-universe/mango/logging"
 	"github.com/micahke/infinite-universe/mango/opengl"
 )
 
@@ -49,21 +52,45 @@ func InitTextRenderer() *TextRenderer {
 }
 
 
-func (renderer *TextRenderer) RenderText(x, y, size float32, projectionMatrix, viewMatrix glm.Mat4) {
+func (renderer *TextRenderer) RenderText(x, y, size float32, text string, projectionMatrix, viewMatrix glm.Mat4) {
+  
+  xOffset := x
 
-  renderer.vbo.SetData([]float32{
-    0.0, 0.0, 0.125, 0.125, 
-    0.0, 1.0, 0.125, 0.250,
-    1.0, 1.0, 0.250, 0.250,
-    1.0, 0.0, 0.250, 0.125,
-  })
+
+  // Loop through the letters in text
+  
+  for _, letter := range text {
+
+    // if letter is a letter uppercase it
+    character := _atlas[strings.ToUpper(string(letter))]
+    logging.DebugLog(character)
+  
 
 	texture := getTexture("BitmapFont.png", true)
+
+  texturePositions := glm.Vec4{
+    float32(character.x) / float32(texture.GetWidth()), // X
+    float32(character.y) / float32(texture.GetHeight()), // Y
+    float32(character.width) / float32(texture.GetWidth()), // WIDTH
+    float32(FONT_SIZE) / float32(texture.GetHeight()), // HEIGHT
+  }
+
+  logging.DebugLog(texturePositions)
+
 	texture.Bind(1)
-  texture.UpdateSubImage(32, 32, 32, 32)
+  texture.UpdateSubImage(character.x, character.y, character.width, FONT_SIZE)
+
+  renderer.vbo.SetData([]float32{
+    0.0, 0.0, texturePositions[0], texturePositions[1], 
+    0.0, 1.0, texturePositions[0], texturePositions[1] + texturePositions[3],
+    1.0, 1.0, texturePositions[0] + texturePositions[2], texturePositions[1] + texturePositions[3],
+    1.0, 0.0, texturePositions[0] + texturePositions[2], texturePositions[1],
+  })
 
 
-	translation := glm.Translate3D(x, y, 0)
+
+
+	translation := glm.Translate3D(xOffset, y, 0)
 	scale := glm.Scale3D(size, size, 1.0)
 	model := translation.Mul4(scale).Mul4(renderer.modelMatrix)
 
@@ -79,6 +106,9 @@ func (renderer *TextRenderer) RenderText(x, y, size float32, projectionMatrix, v
 
 	// Draw the sprite
 	gl.DrawElements(gl.TRIANGLES, int32(renderer.ibo.GetCount()), gl.UNSIGNED_INT, nil)
+
+    xOffset += float32(character.width)
+  }
 
 }
 

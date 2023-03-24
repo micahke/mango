@@ -27,6 +27,7 @@ func Init() *IMMEDIATE_MODE {
 	im_mode := new(IMMEDIATE_MODE)
 
 	InitTextureCache()
+  InitFontAtlas()
 	im_mode.viewMatrix = glm.Ident4()
 
 	return im_mode
@@ -116,6 +117,6 @@ func (im *IMMEDIATE_MODE) DrawLine(x1, y1, x2, y2 float32, color util.Color, thi
 }
 
 
-func (im *IMMEDIATE_MODE) DrawText(x, y, size float32) {
-  im.textRenderer.RenderText(x, y, size, im.projectionMatrix, im.viewMatrix)
+func (im *IMMEDIATE_MODE) DrawText(x, y, size float32, text string) {
+  im.textRenderer.RenderText(x, y, size, text, im.projectionMatrix, im.viewMatrix)
 }
