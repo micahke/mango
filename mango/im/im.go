@@ -20,6 +20,7 @@ type IMMEDIATE_MODE struct {
 	spriteRenderer *SpriteRenderer
 	circleRenderer *CircleRenderer
 	lineRenderer   *LineRenderer
+  textRenderer   *TextRenderer
 }
 
 func Init() *IMMEDIATE_MODE {
@@ -68,6 +69,7 @@ func (im *IMMEDIATE_MODE) setupRenderers() {
 	im.spriteRenderer = InitSpriteRenderer()
 	im.circleRenderer = InitCircleRenderer()
 	im.lineRenderer = InitLineRenderer()
+  im.textRenderer = InitTextRenderer()
 }
 
 func (im *IMMEDIATE_MODE) SetBackgroundColor(color util.Color) {
@@ -111,4 +113,9 @@ func (im *IMMEDIATE_MODE) DrawLine(x1, y1, x2, y2 float32, color util.Color, thi
 
 	im.lineRenderer.RenderLine(p1, p2, color, thickness, im.projectionMatrix, im.viewMatrix)
 
+}
+
+
+func (im *IMMEDIATE_MODE) DrawText(x, y, size float32) {
+  im.textRenderer.RenderText(x, y, size, im.projectionMatrix, im.viewMatrix)
 }

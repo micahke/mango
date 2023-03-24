@@ -73,7 +73,7 @@ func (gm *GalaxyMap) Draw() {
 		// mango.IM.DrawLine(xp2, yp2, xp, yp, util.WHITE, 1.0)
 	}
 
-  mango.IM.DrawSprite(0, 0, 300, 300, "BitmapFont.png")
+  mango.IM.DrawText(0, 0, 75)
 
 }
 

@@ -14,7 +14,7 @@ func InitTextureCache() {
 }
 
 // Get the texture assigned a a specific path
-func getTexture(texturePath string) *opengl.Texture {
+func getTexture(texturePath string, deferred bool) *opengl.Texture {
 	// If we find the texture, return it
 	if texture, ok := textureCache[texturePath]; ok {
 		return texture
@@ -22,7 +22,7 @@ func getTexture(texturePath string) *opengl.Texture {
 
 	// Otherwise, create a texture with the image date from the png loader
 	imageData := loaders.LoadPNG(texturePath)
-	texture := opengl.NewTextureFromData(texturePath, imageData)
+	texture := opengl.NewTextureFromData(texturePath, imageData, deferred)
 
 	// cache the data
 	textureCache[texturePath] = texture

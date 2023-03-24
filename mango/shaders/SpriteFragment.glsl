@@ -7,13 +7,8 @@ uniform sampler2D uTexture;
 
 void main() {
 
-  vec4 clr = texture(uTexture, TexCoord);
+  FragColor = texture(uTexture, TexCoord);
 
-  if (clr.a == 0.0) {
-    FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-  } else {
-    FragColor = clr;
-  }
 
 }
 

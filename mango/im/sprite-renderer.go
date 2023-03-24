@@ -61,7 +61,7 @@ func InitSpriteRenderer() *SpriteRenderer {
 
 func (renderer *SpriteRenderer) RenderSprite(x, y, width, height float32, texturePath string, projectionMatrix, viewMatrix glm.Mat4) {
 
-	texture := getTexture(texturePath)
+	texture := getTexture(texturePath, false)
 	texture.Bind(0)
 
 	translation := glm.Translate3D(x, y, 0)
@@ -85,7 +85,7 @@ func (renderer *SpriteRenderer) RenderSprite(x, y, width, height float32, textur
 // Renders a sprite based on a map of UV colors
 func (renderer *SpriteRenderer) RenderUVSprite(x, y, width, height float32, texturePath string, uv util.UVSpriteMap, projectionMatrix, viewMatrix glm.Mat4) {
 
-	texture := getTexture(texturePath)
+	texture := getTexture(texturePath, false)
 	texture.Bind(0)
 
 	translation := glm.Translate3D(x, y, 0)

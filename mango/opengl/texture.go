@@ -52,10 +52,11 @@ func NewTexture(path string) *Texture {
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 
 
+
 	return texture
 }
 
-func NewTextureFromData(path string, data *image.NRGBA) *Texture {
+func NewTextureFromData(path string, data *image.NRGBA, deferredLoading bool) *Texture {
 	texture := new(Texture)
 	texture.m_FilePath = path
 	texture.m_BPP = 0
@@ -72,23 +73,30 @@ func NewTextureFromData(path string, data *image.NRGBA) *Texture {
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
 
-	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, texture.m_Width, texture.m_Height, 0, gl.RGBA, gl.UNSIGNED_BYTE, nil)
-	gl.BindTexture(gl.TEXTURE_2D, 0)
+  ptr := gl.Ptr(&texture.m_LocalBuffer[0])
 
-texture.Bind(0)
-  texture.UpdateSubImage(0, 0, 32, 32, texture.m_LocalBuffer)
-texture.Unbind()
+  if deferredLoading {
+    ptr = nil
+  }
+
+  gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, texture.m_Width, texture.m_Height, 0, gl.RGBA, gl.UNSIGNED_BYTE, ptr)
+
 
 	return texture
 }
 
-// CHECKPOINT
-func (texture *Texture) UpdateSubImage(x, y, width, height int, pixels []uint8) {
-  rightPixels := pixels
-	gl.BindTexture(gl.TEXTURE_2D, texture.m_RendererID)
-	gl.PixelStorei(gl.UNPACK_ROW_LENGTH, int32(texture.m_Width))
-  gl.TexSubImage2D(gl.TEXTURE_2D, 0, 0, 0, int32(width), int32(height), gl.RGBA, gl.UNSIGNED_BYTE, gl.Ptr(&rightPixels[128]))
-	gl.BindTexture(gl.TEXTURE_2D, 0)
+
+
+
+func (texture *Texture) UpdateSubImage(x, y, width, height int) {
+  pixels := texture.m_LocalBuffer
+  gl.BindTexture(gl.TEXTURE_2D, texture.m_RendererID)
+  gl.PixelStorei(gl.UNPACK_ROW_LENGTH, int32(texture.m_Width))
+
+  // Calculate the starting index of the buffer based on the x and y position
+  startIndex := (y * int(texture.m_Width) + x) * 4
+
+  gl.TexSubImage2D(gl.TEXTURE_2D, 0, int32(x), int32(y), int32(width), int32(height), gl.RGBA, gl.UNSIGNED_BYTE, gl.Ptr(&pixels[startIndex]))
 }
 
 
@@ -107,4 +115,8 @@ func (texture *Texture) GetWidth() int32 {
 
 func (texture *Texture) GetHeight() int32 {
 	return texture.m_Height
+}
+
+func (texture *Texture) GetID() uint32 {
+  return texture.m_RendererID
 }
