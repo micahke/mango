@@ -55,6 +55,8 @@ func InitTextRenderer() *TextRenderer {
 func (renderer *TextRenderer) RenderText(x, y, size float32, text string, projectionMatrix, viewMatrix glm.Mat4) {
   
   xOffset := x
+	texture := getTexture("BitmapFont.png", true)
+	texture.Bind(1)
 
 
   // Loop through the letters in text
@@ -66,7 +68,6 @@ func (renderer *TextRenderer) RenderText(x, y, size float32, text string, projec
     logging.DebugLog(character)
   
 
-	texture := getTexture("BitmapFont.png", true)
 
   texturePositions := glm.Vec4{
     float32(character.x) / float32(texture.GetWidth()), // X
@@ -77,7 +78,6 @@ func (renderer *TextRenderer) RenderText(x, y, size float32, text string, projec
 
   logging.DebugLog(texturePositions)
 
-	texture.Bind(1)
   texture.UpdateSubImage(character.x, character.y, character.width, FONT_SIZE)
 
   renderer.vbo.SetData([]float32{

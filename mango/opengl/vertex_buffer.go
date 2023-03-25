@@ -12,7 +12,7 @@ func NewVertexBuffer(data []float32) *VertexBuffer {
 	var vb uint32
 	gl.GenBuffers(1, &vb)
 	gl.BindBuffer(gl.ARRAY_BUFFER, vb)
-	gl.BufferData(gl.ARRAY_BUFFER, 4*len(data), gl.Ptr(&(data[0])), gl.STATIC_DRAW)
+	gl.BufferData(gl.ARRAY_BUFFER, 4*len(data), gl.Ptr(&(data[0])), gl.DYNAMIC_DRAW)
 	return &VertexBuffer{m_RendererID: vb}
 }
 
