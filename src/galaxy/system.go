@@ -15,6 +15,8 @@ type System struct {
 	systemType SystemClass
 	exists     bool
 
+  coordinates [2]int
+
 	size   float64
 	offset glm.Vec2
 	color  util.Color
@@ -69,6 +71,7 @@ func NewSystem(xCoord, yCoord int, fullGeneration bool) *System {
 	system.GenerateSize()
 
 	system.parallaxEffect = rand.Float32()
+  system.coordinates = [2]int{xCoord, yCoord}
 
 	if !fullGeneration {
 		return system
@@ -168,4 +171,11 @@ func (system *System) Color() util.Color {
 
 func (system *System) ParallaxEffect() float32 {
 	return system.parallaxEffect
+}
+
+
+func (system *System) GetCoords() [2]int {
+
+  return system.coordinates
+
 }

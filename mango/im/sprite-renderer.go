@@ -77,6 +77,8 @@ func (renderer *SpriteRenderer) RenderSprite(x, y, width, height float32, textur
 	renderer.vao.Bind()
 	renderer.ibo.Bind()
 
+  // gl.PolygonMode(gl.FRONT_AND_BACK, gl.LINE)
+
 	// Draw the sprite
 	gl.DrawElements(gl.TRIANGLES, int32(renderer.ibo.GetCount()), gl.UNSIGNED_INT, nil)
 

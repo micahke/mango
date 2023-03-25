@@ -98,3 +98,4 @@ func (t *Tilemap) calculateNumberOfTiles() {
 	t.numTiles[0] = int(math.Ceil(float64(t.width) / t.tileSize))
 	t.numTiles[1] = int(math.Ceil(float64(t.height) / t.tileSize))
 }
+

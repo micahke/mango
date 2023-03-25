@@ -107,7 +107,11 @@ func (renderer *TextRenderer) RenderText(x, y, size float32, text string, projec
 	// Draw the sprite
 	gl.DrawElements(gl.TRIANGLES, int32(renderer.ibo.GetCount()), gl.UNSIGNED_INT, nil)
 
-    xOffset += float32(character.width)
+    spacing := 12
+    if character.char == " " {
+      spacing = int(float32(spacing) * 2.5)
+    }
+    xOffset += float32(character.width - spacing)
   }
 
 }
