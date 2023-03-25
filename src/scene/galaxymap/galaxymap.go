@@ -71,8 +71,11 @@ func (gm *GalaxyMap) Draw() {
 	}
 
   closestSystem := CLOSEST_GALAXY_TO_MOUSE.system
-  str := "x: " + fmt.Sprint(closestSystem.GetCoords()[0]) + ", y: " + fmt.Sprint(closestSystem.GetCoords()[1])
-  mango.IM.DrawText(0, float32(height) - 30, 30, str)
+  str := "x:" + fmt.Sprint(closestSystem.GetCoords()[0]) + ", y:" + fmt.Sprint(closestSystem.GetCoords()[1])
+  if DEBUG_PANEL.RenderCoordinates {
+  mango.IM.DrawText(10, float32(height) - 30, 30, "Infinite Universe")
+  mango.IM.DrawText(10, float32(height) - 60, 30, str)
+  }
 
 }
 

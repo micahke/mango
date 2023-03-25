@@ -11,7 +11,7 @@ func NewIndexBuffer(data []uint32) *IndexBuffer {
 	var ib uint32
 	gl.GenBuffers(1, &ib)
 	gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib)
-	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, 4*len(data), gl.Ptr(data), gl.STATIC_DRAW)
+	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, 4*len(data), gl.Ptr(data), gl.DYNAMIC_DRAW)
 	return &IndexBuffer{m_RendererID: ib, m_Count: len(data)}
 }
 
@@ -25,4 +25,10 @@ func (ib *IndexBuffer) Unbind() {
 
 func (ib *IndexBuffer) GetCount() int {
 	return ib.m_Count
+}
+
+
+func (ib *IndexBuffer) SetData(data []uint32) {
+	ib.Bind()
+	gl.BufferSubData(gl.ARRAY_BUFFER, 0, 4*len(data), gl.Ptr(&(data[0])))
 }

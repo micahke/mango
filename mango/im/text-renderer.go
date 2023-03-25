@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
-	"github.com/micahke/infinite-universe/mango/logging"
 	"github.com/micahke/infinite-universe/mango/opengl"
 )
 
@@ -20,6 +19,7 @@ type TextRenderer struct {
   ibo *opengl.IndexBuffer
   shader *opengl.Shader
 
+  texture *opengl.Texture
 
   modelMatrix glm.Mat4
 
@@ -42,6 +42,8 @@ func InitTextRenderer() *TextRenderer {
 
   renderer.shader = opengl.NewShader("TextVertex.glsl", "TextFragment.glsl")
 
+  renderer.texture = getTexture("BitmapFont.png", true)
+
   renderer.modelMatrix = glm.Ident4()
 
   // build font atlas
@@ -55,8 +57,7 @@ func InitTextRenderer() *TextRenderer {
 func (renderer *TextRenderer) RenderText(x, y, size float32, text string, projectionMatrix, viewMatrix glm.Mat4) {
   
   xOffset := x
-	texture := getTexture("BitmapFont.png", true)
-	texture.Bind(1)
+	renderer.texture.Bind(1)
 
 
   // Loop through the letters in text
@@ -65,20 +66,18 @@ func (renderer *TextRenderer) RenderText(x, y, size float32, text string, projec
 
     // if letter is a letter uppercase it
     character := _atlas[strings.ToUpper(string(letter))]
-    logging.DebugLog(character)
   
 
 
   texturePositions := glm.Vec4{
-    float32(character.x) / float32(texture.GetWidth()), // X
-    float32(character.y) / float32(texture.GetHeight()), // Y
-    float32(character.width) / float32(texture.GetWidth()), // WIDTH
-    float32(FONT_SIZE) / float32(texture.GetHeight()), // HEIGHT
+    float32(character.x) / float32(renderer.texture.GetWidth()), // X
+    float32(character.y) / float32(renderer.texture.GetHeight()), // Y
+    float32(character.width) / float32(renderer.texture.GetWidth()), // WIDTH
+    float32(FONT_SIZE) / float32(renderer.texture.GetHeight()), // HEIGHT
   }
 
-  logging.DebugLog(texturePositions)
 
-  texture.UpdateSubImage(character.x, character.y, character.width, FONT_SIZE)
+  renderer.texture.UpdateSubImage(character.x, character.y, character.width, FONT_SIZE)
 
   renderer.vbo.SetData([]float32{
     0.0, 0.0, texturePositions[0], texturePositions[1], 
@@ -107,13 +106,8 @@ func (renderer *TextRenderer) RenderText(x, y, size float32, text string, projec
 	// Draw the sprite
 	gl.DrawElements(gl.TRIANGLES, int32(renderer.ibo.GetCount()), gl.UNSIGNED_INT, nil)
 
-    spacing := 12
-    if character.char == " " {
-      spacing = int(float32(spacing) * 2.5)
-    }
-    xOffset += float32(character.width - spacing)
+    xOffset += float32(character.width - 12)
   }
 
 }
-
 

@@ -90,7 +90,7 @@ func NewTextureFromData(path string, data *image.NRGBA, deferredLoading bool) *T
 
 func (texture *Texture) UpdateSubImage(x, y, width, height int) {
   pixels := texture.m_LocalBuffer
-  gl.BindTexture(gl.TEXTURE_2D, texture.m_RendererID)
+  // gl.BindTexture(gl.TEXTURE_2D, texture.m_RendererID)
   gl.PixelStorei(gl.UNPACK_ROW_LENGTH, int32(texture.m_Width))
 
   // Calculate the starting index of the buffer based on the x and y position
