@@ -56,58 +56,72 @@ func InitTextRenderer() *TextRenderer {
 
 func (renderer *TextRenderer) RenderText(x, y, size float32, text string, projectionMatrix, viewMatrix glm.Mat4) {
   
-  xOffset := x
-	renderer.texture.Bind(1)
+	// renderer.texture.Bind(0)
+
+
+	renderer.vao.Bind()
+	renderer.ibo.Bind()
+	renderer.shader.Bind()
+
+  dimensions := glm.Vec2{0.0, FONT_SIZE}
+
+  pixelBuffer := []uint8{}
+
 
 
   // Loop through the letters in text
   
   for _, letter := range text {
 
+
     // if letter is a letter uppercase it
     character := _atlas[strings.ToUpper(string(letter))]
-  
+
+    dimensions[0] += float32(character.width)
 
 
-  texturePositions := glm.Vec4{
-    float32(character.x) / float32(renderer.texture.GetWidth()), // X
-    float32(character.y) / float32(renderer.texture.GetHeight()), // Y
-    float32(character.width) / float32(renderer.texture.GetWidth()), // WIDTH
-    float32(FONT_SIZE) / float32(renderer.texture.GetHeight()), // HEIGHT
+    pixelBuffer = append(pixelBuffer, renderer.texture.GetSubtextureData(character.x, character.y, character.width, FONT_SIZE)...)
+
   }
 
 
-  renderer.texture.UpdateSubImage(character.x, character.y, character.width, FONT_SIZE)
+  // texturePositions := glm.Vec4{
+  //   0, // X
+  //   0, // Y
+  //   textureDimension[0], // WIDTH
+  //   textureDimension[1], // HEIGHT
+  // }
 
-  renderer.vbo.SetData([]float32{
-    0.0, 0.0, texturePositions[0], texturePositions[1], 
-    0.0, 1.0, texturePositions[0], texturePositions[1] + texturePositions[3],
-    1.0, 1.0, texturePositions[0] + texturePositions[2], texturePositions[1] + texturePositions[3],
-    1.0, 0.0, texturePositions[0] + texturePositions[2], texturePositions[1],
-  })
+  texture := opengl.NewDataTexture(int32(dimensions[0]), int32(dimensions[1]), pixelBuffer)
+  texture.Bind(1)
 
 
 
+  // renderer.texture.UpdateSubImage(character.x, character.y, character.width, FONT_SIZE)
 
-	translation := glm.Translate3D(xOffset, y, 0)
-	scale := glm.Scale3D(size, size, 1.0)
+  // renderer.vbo.SetData([]float32{
+  //   0.0, 0.0, texturePositions[0], texturePositions[1], 
+  //   0.0, 1.0, texturePositions[0], texturePositions[1] + texturePositions[3],
+  //   1.0, 1.0, texturePositions[0] + texturePositions[2], texturePositions[1] + texturePositions[3],
+  //   1.0, 0.0, texturePositions[0] + texturePositions[2], texturePositions[1],
+  // })
+
+
+	translation := glm.Translate3D(x, y, 0)
+	scale := glm.Scale3D(float32(dimensions[0]), FONT_SIZE, 1.0)
 	model := translation.Mul4(scale).Mul4(renderer.modelMatrix)
 
-	renderer.shader.Bind()
 	renderer.shader.SetUniformMat4f("projection", projectionMatrix)
 	renderer.shader.SetUniformMat4f("view", viewMatrix)
 	renderer.shader.SetUniformMat4f("model", model)
 	renderer.shader.SetUniform1i("uTexture", 1)
 
 
-	renderer.vao.Bind()
-	renderer.ibo.Bind()
 
 	// Draw the sprite
 	gl.DrawElements(gl.TRIANGLES, int32(renderer.ibo.GetCount()), gl.UNSIGNED_INT, nil)
 
-    xOffset += float32(character.width - 12)
-  }
+    // xOffset += float32(character.width - 12)
 
 }
 
