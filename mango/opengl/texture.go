@@ -120,3 +120,7 @@ func (texture *Texture) GetHeight() int32 {
 func (texture *Texture) GetID() uint32 {
   return texture.m_RendererID
 }
+
+func (texture *Texture) GetData() []uint8 {
+  return texture.m_LocalBuffer
+}
