@@ -1,7 +1,7 @@
 package galaxymap
 
 import (
-
+	"fmt"
 	glm "github.com/go-gl/mathgl/mgl32"
 	glm64 "github.com/go-gl/mathgl/mgl64"
 	"github.com/micahke/infinite-universe/mango"
@@ -69,12 +69,16 @@ func (gm *GalaxyMap) Draw() {
 		// mango.IM.DrawLine(xp2, yp2, xp, yp, util.WHITE, 1.0)
 	}
 
-  // closestSystem := CLOSEST_GALAXY_TO_MOUSE.system
-  // str := "x:" + fmt.Sprint(closestSystem.GetCoords()[0]) + ", y:" + fmt.Sprint(closestSystem.GetCoords()[1])
-  // if DEBUG_PANEL.RenderCoordinates {
-  // mango.IM.DrawText(10, float32(height) - 30, 30, "Infinite Universe")
-  // mango.IM.DrawText(10, float32(height) - 60, 30, str)
-  // }
+	closestSystem := CLOSEST_GALAXY_TO_MOUSE.system
+	str := "x:" + fmt.Sprint(closestSystem.GetCoords()[0]) + ", y:" + fmt.Sprint(closestSystem.GetCoords()[1])
+	if !DEBUG_PANEL.BatchText {
+		mango.IM.DrawWorldText(10, float32(height)-30, 30, "Infinite Universe")
+		mango.IM.DrawWorldText(10, float32(height)-60, 30, str)
+	} else {
+
+  mango.IM.DrawText("Infinite Universe", 10, float32(height) - 30)
+  mango.IM.DrawText(str, 10, float32(height) - 60)
+  }
+
 
 }
-

@@ -19,7 +19,7 @@ type GalaxyMapDebugPanel struct {
 
 	LiveRebuild bool
 
-  RenderCoordinates bool
+  BatchText bool
 }
 
 func InitGMDebugPanel(galaxyMap *GalaxyMap) *GalaxyMapDebugPanel {
@@ -30,7 +30,7 @@ func InitGMDebugPanel(galaxyMap *GalaxyMap) *GalaxyMapDebugPanel {
 	panel.RenderPlanets = true
 	panel.RenderTilemap = true
 	panel.LiveRebuild = false
-	panel.RenderCoordinates = true
+	panel.BatchText = true
 
 	return panel
 
@@ -57,7 +57,7 @@ func (panel *GalaxyMapDebugPanel) RenderPanel() {
 		imgui.Checkbox("Render Perlin Layer", &panel.RenderPerlinNoise)
 		imgui.Checkbox("Render Background", &panel.RenderBackground)
 		imgui.Checkbox("Render Planets", &panel.RenderPlanets)
-		imgui.Checkbox("Render Coordinates", &panel.RenderCoordinates)
+		imgui.Checkbox("Bacth Render Text", &panel.BatchText)
 		imgui.SliderFloat("Tile Size", &tilemap.proxyTileSize, 5.0, 100.0)
 
 		imgui.TreePop()

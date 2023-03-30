@@ -37,7 +37,7 @@ func InitTextRenderer() *TextRenderer {
 
 	renderer.shader = opengl.NewShader("TextVertex.glsl", "TextFragment.glsl")
 
-	renderer.texture = getTexture("BitmapFont.png", true)
+	renderer.texture = getTexture("BitmapFontDebug.png", true)
 
 	renderer.modelMatrix = glm.Ident4()
 

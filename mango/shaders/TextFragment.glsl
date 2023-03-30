@@ -9,15 +9,15 @@ void main() {
 
   vec4 clr = texture(uTexture, TexCoord);
 
-  // if (clr.a == 0.0){
-  //   FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-  // } else {
-  //   // FragColor = clr;
-  //   FragColor = vec4(1.0, 1.0, 1.0, clr.x);
-  // }
+  if (clr.a == 0.0){
+    FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  } else {
+    // FragColor = clr;
+    FragColor = vec4(1.0, 1.0, 1.0, clr.x);
+  }
 
-  FragColor = clr;
-  // FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  // FragColor = clr;
+  // // FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 
 }
 
