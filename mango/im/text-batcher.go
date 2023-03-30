@@ -10,6 +10,13 @@ import (
 )
 
 type TextBatcher struct {
+
+  vao *opengl.VertexArray
+  vbo *opengl.VertexBuffer
+  layout *opengl.VertexBufferLayout
+
+  ibo *opengl.IndexBuffer
+
 	vertices []float32
 	indeces []uint32
 
@@ -88,23 +95,40 @@ func (batch *TextBatcher) AddText(text string, x, y float32) {
 
 }
 
+
 func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 
-  if (batch.num_vertices < 4) {
-    return
-  }
+	if batch.num_vertices < 4 {
+		return
+	}
 
 	texture := getTexture("BitmapFont.png", false)
 	texture.Bind(1)
 
-	vao := opengl.NewVertexArray()
-	vbo := opengl.NewVertexBuffer(batch.vertices)
-	layout := opengl.NewVertexBufferLayout()
-	layout.Pushf(2)
-	layout.Pushf(2)
-	vao.AddBuffer(*vbo, *layout)
+	// Reuse existing vertex buffer if it exists, otherwise create a new one
+	if batch.vbo == nil {
+		batch.vbo = opengl.NewVertexBuffer(batch.vertices)
+	} else {
+		batch.vbo.SetData(batch.vertices)
+	}
 
-	ibo := opengl.NewIndexBuffer(batch.indeces)
+	// Reuse existing index buffer if it exists, otherwise create a new one
+	if batch.ibo == nil {
+		batch.ibo = opengl.NewIndexBuffer(batch.indeces)
+	} else {
+		batch.ibo.SetData(batch.indeces)
+	}
+
+	// Reuse existing vertex array object if it exists, otherwise create a new one
+	if batch.vao == nil {
+		batch.vao = opengl.NewVertexArray()
+		batch.layout = opengl.NewVertexBufferLayout()
+		batch.layout.Pushf(2)
+		batch.layout.Pushf(2)
+		batch.vao.AddBuffer(*batch.vbo, *batch.layout)
+	} else {
+		batch.vao.Bind()
+	}
 
 	batch.shader.Bind()
 	batch.shader.SetUniformMat4f("projection", projectionMatrix)
@@ -113,13 +137,14 @@ func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 	batch.shader.SetUniform1i("uTexture", 1)
 
 	// logging.DebugLog("Vertices: ", batch.num_vertices)
-	logging.DebugLog("Indeces: ", batch.indeces)
+	logging.DebugLog("Indices: ", batch.indeces)
 
-	ibo.Bind()
-	vao.Bind()
+	batch.ibo.Bind()
+	batch.vao.Bind()
 
 	gl.DrawElements(gl.TRIANGLES, int32(len(batch.indeces)), gl.UNSIGNED_INT, nil)
 
 	batch.num_vertices = 0
 
 }
+
