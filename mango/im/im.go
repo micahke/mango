@@ -53,9 +53,9 @@ func (im *IMMEDIATE_MODE) NewFrame(deltaTime float64) {
 	scene.Draw()
 
   im.textBatcher.InitBatch()
-  // im.textBatcher.AddCharacter("T", 0, 0)
-  // im.textBatcher.AddCharacter("J", 0, 0)
-  im.textBatcher.AddCharacter("W", 100, 100)
+  im.textBatcher.AddCharacter("T", 0, 0)
+  im.textBatcher.AddCharacter("9", 100, 100)
+  // im.textBatcher.AddCharacter("W", 100, 100)
   im.textBatcher.FlushBatch(im.projectionMatrix, im.viewMatrix)
 
 }

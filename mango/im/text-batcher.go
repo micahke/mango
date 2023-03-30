@@ -16,6 +16,8 @@ type TextBatcher struct {
 	layout *opengl.VertexBufferLayout
 	ibo    *opengl.IndexBuffer
 
+  indeces []uint32
+
 	shader  *opengl.Shader
 
 	BATCH_SIZE   int
@@ -47,6 +49,7 @@ func InitTextBatcher() *TextBatcher {
 func (batch *TextBatcher) InitBatch() {
 
 	batch.vertices = []float32{}
+  batch.indeces = []uint32{}
 
 }
 
@@ -67,7 +70,15 @@ func (batch *TextBatcher) AddCharacter(char string, x, y float32) {
 		fEndX, fy, charInfo.texturePositions[2], charInfo.texturePositions[1],
 	}
 
+  fOff := uint32(batch.num_vertices)
+
+  indeces := []uint32{
+    0 + fOff, 1 + fOff, 2 + fOff,
+    2 + fOff, 3 + fOff, 0 + fOff,
+  }
+
 	batch.vertices = append(batch.vertices, quad...)
+  batch.indeces = append(batch.indeces, indeces...)
 
 	batch.num_vertices += 4
 
@@ -76,10 +87,17 @@ func (batch *TextBatcher) AddCharacter(char string, x, y float32) {
 
 func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 
-  texture := getTexture("BitmapFont.png", false)
+  texture := getTexture("BitmapFontDebug.png", false)
 	texture.Bind(1)
 
-	batch.vbo.SetData(batch.vertices)
+  vao := opengl.NewVertexArray()
+  vbo := opengl.NewVertexBuffer(batch.vertices)
+  layout := opengl.NewVertexBufferLayout()
+  layout.Pushf(2)
+  layout.Pushf(2)
+  vao.AddBuffer(*vbo, *layout)
+
+  ibo := opengl.NewIndexBuffer(batch.indeces)
 
 	batch.shader.Bind()
 	batch.shader.SetUniformMat4f("projection", projectionMatrix)
@@ -87,14 +105,14 @@ func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 	batch.shader.SetUniformMat4f("model", glm.Ident4())
   batch.shader.SetUniform1i("uTexture", 1)
 
+  // logging.DebugLog("Vertices: ", batch.num_vertices)
+  logging.DebugLog("Indeces: ", batch.indeces)
 
-	batch.vao.Bind()
-  batch.ibo.Bind()
+  ibo.Bind()
+	vao.Bind()
 
-  indeces := (batch.num_vertices / 4) * 6
-  logging.DebugLog(batch.vertices)
 
-	gl.DrawElements(gl.TRIANGLES, int32(indeces), gl.UNSIGNED_INT, nil)
+	gl.DrawElements(gl.TRIANGLES, int32(len(batch.indeces)), gl.UNSIGNED_INT, nil)
 
 	batch.num_vertices = 0
 

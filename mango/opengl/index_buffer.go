@@ -30,5 +30,6 @@ func (ib *IndexBuffer) GetCount() int {
 
 func (ib *IndexBuffer) SetData(data []uint32) {
 	ib.Bind()
-	gl.BufferSubData(gl.ARRAY_BUFFER, 0, 4*len(data), gl.Ptr(&(data[0])))
+	gl.BufferSubData(gl.ELEMENT_ARRAY_BUFFER, 0, 4*len(data), gl.Ptr(&data[0]))
+  ib.m_Count = len(data)
 }
