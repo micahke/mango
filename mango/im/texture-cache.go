@@ -1,7 +1,7 @@
 package im
 
 import (
-	"github.com/micahke/infinite-universe/mango/logging"
+	// "github.com/micahke/infinite-universe/mango/logging"
 	"github.com/micahke/infinite-universe/mango/opengl"
 	"github.com/micahke/infinite-universe/mango/util/loaders"
 )
@@ -18,7 +18,7 @@ func InitTextureCache() {
 func getTexture(texturePath string, deferred bool) *opengl.Texture {
 	// If we find the texture, return it
 	if texture, ok := textureCache[texturePath]; ok {
-    logging.DebugLog("Found texture!")
+    // logging.DebugLog("Found texture!")
 		return texture
 	}
 

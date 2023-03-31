@@ -10,17 +10,17 @@ import (
 )
 
 type TextBatcher struct {
+	vao    *opengl.VertexArray
+	vbo    *opengl.VertexBuffer
+	layout *opengl.VertexBufferLayout
 
-  vao *opengl.VertexArray
-  vbo *opengl.VertexBuffer
-  layout *opengl.VertexBufferLayout
-
-  ibo *opengl.IndexBuffer
+	ibo *opengl.IndexBuffer
 
 	vertices []float32
-	indeces []uint32
+	indeces  []uint32
 
-	shader *opengl.Shader
+	shader  *opengl.Shader
+	texture *opengl.Texture
 
 	BATCH_SIZE   int
 	num_vertices int
@@ -33,6 +33,7 @@ func InitTextBatcher() *TextBatcher {
 	batcher.num_vertices = 0
 
 	batcher.shader = opengl.NewShader("TextVertex.glsl", "TextFragment.glsl")
+	batcher.texture = getTexture("BitmapFont.png", false)
 
 	return batcher
 
@@ -95,40 +96,23 @@ func (batch *TextBatcher) AddText(text string, x, y float32) {
 
 }
 
-
 func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 
 	if batch.num_vertices < 4 {
 		return
 	}
 
-	texture := getTexture("BitmapFont.png", false)
-	texture.Bind(1)
+	batch.texture.Bind(1)
+
+	batch.vao = opengl.NewVertexArray()
+	batch.vbo = opengl.NewVertexBuffer(batch.vertices)
+	batch.layout = opengl.NewVertexBufferLayout()
+	batch.layout.Pushf(2)
+	batch.layout.Pushf(2)
+	batch.vao.AddBuffer(*batch.vbo, *batch.layout)
 
 	// Reuse existing vertex buffer if it exists, otherwise create a new one
-	if batch.vbo == nil {
-		batch.vbo = opengl.NewVertexBuffer(batch.vertices)
-	} else {
-		batch.vbo.SetData(batch.vertices)
-	}
-
-	// Reuse existing index buffer if it exists, otherwise create a new one
-	if batch.ibo == nil {
-		batch.ibo = opengl.NewIndexBuffer(batch.indeces)
-	} else {
-		batch.ibo.SetData(batch.indeces)
-	}
-
-	// Reuse existing vertex array object if it exists, otherwise create a new one
-	if batch.vao == nil {
-		batch.vao = opengl.NewVertexArray()
-		batch.layout = opengl.NewVertexBufferLayout()
-		batch.layout.Pushf(2)
-		batch.layout.Pushf(2)
-		batch.vao.AddBuffer(*batch.vbo, *batch.layout)
-	} else {
-		batch.vao.Bind()
-	}
+	batch.ibo = opengl.NewIndexBuffer(batch.indeces)
 
 	batch.shader.Bind()
 	batch.shader.SetUniformMat4f("projection", projectionMatrix)
@@ -137,7 +121,7 @@ func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 	batch.shader.SetUniform1i("uTexture", 1)
 
 	// logging.DebugLog("Vertices: ", batch.num_vertices)
-	logging.DebugLog("Indices: ", batch.indeces)
+	// logging.DebugLog("Indices: ", batch.indeces)
 
 	batch.ibo.Bind()
 	batch.vao.Bind()
@@ -147,4 +131,3 @@ func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 	batch.num_vertices = 0
 
 }
-
