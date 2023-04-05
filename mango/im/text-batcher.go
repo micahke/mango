@@ -22,56 +22,100 @@ type TextBatcher struct {
 	shader  *opengl.Shader
 	texture *opengl.Texture
 
-	BATCH_SIZE   int
 	num_vertices int
 }
 
+const (
+	t_BATCH_SIZE  int = 200
+	t_VERTEX_SIZE int = 4
+)
+
 func InitTextBatcher() *TextBatcher {
-	batcher := new(TextBatcher)
 
-	batcher.BATCH_SIZE = 100
-	batcher.num_vertices = 0
+	batch := new(TextBatcher)
 
-	batcher.shader = opengl.NewShader("TextVertex.glsl", "TextFragment.glsl")
-	batcher.texture = getTexture("BitmapFont.png", false)
+	batch.num_vertices = 0
 
-	return batcher
+	batch.vertices = make([]float32, t_BATCH_SIZE*t_VERTEX_SIZE)
+
+	batch.vao = opengl.NewVertexArray()
+	batch.vbo = opengl.NewVertexBuffer(batch.vertices)
+	batch.layout = opengl.NewVertexBufferLayout()
+	batch.layout.Pushf(2)
+	batch.layout.Pushf(2)
+	batch.vao.AddBuffer(*batch.vbo, *batch.layout)
+
+	batch.generateIndexBuffer()
+
+	batch.shader = opengl.NewShader("TextVertex.glsl", "TextFragment.glsl")
+	batch.texture = getTexture("BitmapFont.png", false)
+
+	return batch
 
 }
 
-func (batch *TextBatcher) InitBatch() {
+func (batch *TextBatcher) generateIndexBuffer() {
 
-	batch.vertices = []float32{}
-	batch.indeces = []uint32{}
+	batch.indeces = make([]uint32, t_BATCH_SIZE*6)
 
+	for i := 0; i < t_BATCH_SIZE; i++ {
+
+		offset := uint32(i * 4)
+
+		batch.indeces[i*6+0] = 0 + offset
+		batch.indeces[i*6+1] = 1 + offset
+		batch.indeces[i*6+2] = 2 + offset
+
+		batch.indeces[i*6+3] = 2 + offset
+		batch.indeces[i*6+4] = 3 + offset
+		batch.indeces[i*6+5] = 0 + offset
+
+	}
+
+	logging.DebugLog(batch.indeces)
+	batch.ibo = opengl.NewIndexBuffer(batch.indeces)
 }
 
 func (batch *TextBatcher) AddCharacter(char *FontAtlasItem, x, y float32) {
+
+	if (batch.num_vertices + 4) > t_BATCH_SIZE*t_VERTEX_SIZE {
+		logging.DebugLog("Batch is full, should flush...")
+	}
+
+	numVerts := batch.num_vertices * 4
 
 	fx := x
 	fy := y
 	fEndX := float32(char.width) + fx
 	fEndY := float32(FONT_SIZE) + fy
 
-	quad := []float32{
+	// Bottom left
+	batch.vertices[numVerts+0] = fx
+	batch.vertices[numVerts+1] = fy
+	batch.vertices[numVerts+2] = char.texturePositions[0]
+	batch.vertices[numVerts+3] = char.texturePositions[1]
 
-		fx, fy, char.texturePositions[0], char.texturePositions[1],
-		fx, fEndY, char.texturePositions[0], char.texturePositions[3],
-		fEndX, fEndY, char.texturePositions[2], char.texturePositions[3],
-		fEndX, fy, char.texturePositions[2], char.texturePositions[1],
-	}
+	// Top left
+	batch.vertices[numVerts+4] = fx
+	batch.vertices[numVerts+5] = fEndY
+	batch.vertices[numVerts+6] = char.texturePositions[0]
+	batch.vertices[numVerts+7] = char.texturePositions[3]
 
-	fOff := uint32(batch.num_vertices)
+	// Top right
+	batch.vertices[numVerts+8] = fEndX
+	batch.vertices[numVerts+9] = fEndY
+	batch.vertices[numVerts+10] = char.texturePositions[2]
+	batch.vertices[numVerts+11] = char.texturePositions[3]
 
-	indeces := []uint32{
-		0 + fOff, 1 + fOff, 2 + fOff,
-		2 + fOff, 3 + fOff, 0 + fOff,
-	}
-
-	batch.vertices = append(batch.vertices, quad...)
-	batch.indeces = append(batch.indeces, indeces...)
+	// Bottom right
+	batch.vertices[numVerts+12] = fEndX
+	batch.vertices[numVerts+13] = fy
+	batch.vertices[numVerts+14] = char.texturePositions[2]
+	batch.vertices[numVerts+15] = char.texturePositions[1]
 
 	batch.num_vertices += 4
+
+	// logging.DebugLog(batch.vertices)
 
 }
 
@@ -98,21 +142,10 @@ func (batch *TextBatcher) AddText(text string, x, y float32) {
 
 func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 
-	if batch.num_vertices < 4 {
-		return
-	}
-
 	batch.texture.Bind(1)
 
-	batch.vao = opengl.NewVertexArray()
-	batch.vbo = opengl.NewVertexBuffer(batch.vertices)
-	batch.layout = opengl.NewVertexBufferLayout()
-	batch.layout.Pushf(2)
-	batch.layout.Pushf(2)
-	batch.vao.AddBuffer(*batch.vbo, *batch.layout)
-
-	// Reuse existing vertex buffer if it exists, otherwise create a new one
-	batch.ibo = opengl.NewIndexBuffer(batch.indeces)
+	batch.vbo.Bind()
+	gl.BufferSubData(gl.ARRAY_BUFFER, 0, 4*len(batch.vertices), gl.Ptr(&batch.vertices[0]))
 
 	batch.shader.Bind()
 	batch.shader.SetUniformMat4f("projection", projectionMatrix)
@@ -120,13 +153,14 @@ func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 	batch.shader.SetUniformMat4f("model", glm.Ident4())
 	batch.shader.SetUniform1i("uTexture", 1)
 
-	// logging.DebugLog("Vertices: ", batch.num_vertices)
-	// logging.DebugLog("Indices: ", batch.indeces)
-
 	batch.ibo.Bind()
 	batch.vao.Bind()
 
-	gl.DrawElements(gl.TRIANGLES, int32(len(batch.indeces)), gl.UNSIGNED_INT, nil)
+	indeces := (batch.num_vertices / 4) * 6
+
+	gl.DrawElements(gl.TRIANGLES, int32(indeces), gl.UNSIGNED_INT, nil)
+
+	// logging.DebugLog("Drawing", batch.num_vertices, "vertices")
 
 	batch.num_vertices = 0
 

@@ -20,15 +20,15 @@ type IMMEDIATE_MODE struct {
 	spriteRenderer *SpriteRenderer
 	circleRenderer *CircleRenderer
 	lineRenderer   *LineRenderer
-  textRenderer   *TextRenderer
-  textBatcher   *TextBatcher
+	textRenderer   *TextRenderer
+	textBatcher    *TextBatcher
 }
 
 func Init() *IMMEDIATE_MODE {
 	im_mode := new(IMMEDIATE_MODE)
 
 	InitTextureCache()
-  InitFontAtlas()
+	InitFontAtlas()
 	im_mode.viewMatrix = glm.Ident4()
 
 	return im_mode
@@ -51,13 +51,9 @@ func (im *IMMEDIATE_MODE) NewFrame(deltaTime float64) {
 	}
 	scene.Update(deltaTime)
 
-  im.textBatcher.InitBatch()
-
 	scene.Draw()
 
-  im.textBatcher.FlushBatch(im.projectionMatrix, im.viewMatrix)
-
-
+	im.textBatcher.FlushBatch(im.projectionMatrix, im.viewMatrix)
 
 }
 
@@ -78,8 +74,8 @@ func (im *IMMEDIATE_MODE) setupRenderers() {
 	im.spriteRenderer = InitSpriteRenderer()
 	im.circleRenderer = InitCircleRenderer()
 	im.lineRenderer = InitLineRenderer()
-  im.textRenderer = InitTextRenderer()
-  im.textBatcher = InitTextBatcher()
+	im.textRenderer = InitTextRenderer()
+	im.textBatcher = InitTextBatcher()
 }
 
 func (im *IMMEDIATE_MODE) SetBackgroundColor(color util.Color) {
@@ -125,12 +121,10 @@ func (im *IMMEDIATE_MODE) DrawLine(x1, y1, x2, y2 float32, color util.Color, thi
 
 }
 
-
 func (im *IMMEDIATE_MODE) DrawWorldText(x, y, size float32, text string) {
-  im.textRenderer.RenderText(x, y, size, text, im.projectionMatrix, im.viewMatrix)
+	im.textRenderer.RenderText(x, y, size, text, im.projectionMatrix, im.viewMatrix)
 }
 
-
 func (im *IMMEDIATE_MODE) DrawText(text string, x, y float32) {
-  im.textBatcher.AddText(text, x, y)
+	im.textBatcher.AddText(text, x, y)
 }

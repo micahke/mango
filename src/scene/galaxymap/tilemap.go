@@ -49,8 +49,8 @@ func InitTilemap(width, height int) *Tilemap {
 func (t *Tilemap) Update() {
 	t.tileSize = float64(t.proxyTileSize)
 
-	tilemap.offset[0] += 50.0 * mango.Time.DeltaTime()
-	tilemap.offset[1] += 50.0 * mango.Time.DeltaTime()
+	tilemap.offset[0] -= 50.0 * mango.Time.DeltaTime()
+	tilemap.offset[1] -= 50.0 * mango.Time.DeltaTime()
 
 	// Reset the tile data
 	t.tilePositions = []*TileData{}
@@ -98,4 +98,3 @@ func (t *Tilemap) calculateNumberOfTiles() {
 	t.numTiles[0] = int(math.Ceil(float64(t.width) / t.tileSize))
 	t.numTiles[1] = int(math.Ceil(float64(t.height) / t.tileSize))
 }
-
