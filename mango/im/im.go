@@ -86,32 +86,37 @@ func (im *IMMEDIATE_MODE) SetBackgroundColor(color util.Color) {
 
 }
 
-// API FOR DRAWING QUADA
-
+// Draw a quad to the screen
 func (im *IMMEDIATE_MODE) DrawRect(x, y, width, height float32) {
 	im.quadRenderer.RenderQuad(x, y, width, height, util.WHITE, im.projectionMatrix, im.viewMatrix)
 }
 
+// Draw a filled rectangle to the screen
 func (im *IMMEDIATE_MODE) FillRect(x, y, width, height float32, color util.Color) {
 	im.quadRenderer.RenderQuad(x, y, width, height, color, im.projectionMatrix, im.viewMatrix)
 }
 
+// Draw a sprite to the screen
 func (im *IMMEDIATE_MODE) DrawSprite(x, y, width, height float32, texturePath string) {
 
 	im.spriteRenderer.RenderSprite(x, y, width, height, texturePath, im.projectionMatrix, im.viewMatrix)
 
 }
 
+// Draw a UV sprite to the screen defined by a UV spritemap
 func (im *IMMEDIATE_MODE) DrawUVSprite(x, y, width, height float32, texturePath string, uv util.UVSpriteMap) {
 
 	im.spriteRenderer.RenderUVSprite(x, y, width, height, texturePath, uv, im.projectionMatrix, im.viewMatrix)
 
 }
 
+// Draw a circle to the screen
+// Centered at bottom left
 func (im *IMMEDIATE_MODE) DrawCircle(x, y, width, height float32, color util.Color) {
 	im.circleRenderer.RenderCircle(x, y, width, height, color.Vec4, im.projectionMatrix, im.viewMatrix)
 }
 
+// Draw a line to the screen
 func (im *IMMEDIATE_MODE) DrawLine(x1, y1, x2, y2 float32, color util.Color, thickness float32) {
 
 	p1 := glm.Vec2{x1, y1}
@@ -121,10 +126,15 @@ func (im *IMMEDIATE_MODE) DrawLine(x1, y1, x2, y2 float32, color util.Color, thi
 
 }
 
+// Draw text within the world space
+// This is not batch optimized
 func (im *IMMEDIATE_MODE) DrawWorldText(x, y, size float32, text string) {
 	im.textRenderer.RenderText(x, y, size, text, im.projectionMatrix, im.viewMatrix)
 }
 
+
+// Draw text to the screen layer
+// This is batch renedered and optimized
 func (im *IMMEDIATE_MODE) DrawText(text string, x, y float32) {
-	im.textBatcher.AddText(text, x, y)
+	im.textBatcher.AddText(text, x, y, im.projectionMatrix, im.viewMatrix)
 }

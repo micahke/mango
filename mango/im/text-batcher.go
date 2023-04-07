@@ -26,7 +26,7 @@ type TextBatcher struct {
 }
 
 const (
-	t_BATCH_SIZE  int = 200
+	t_BATCH_SIZE  int = 100 // Basically "max quads"
 	t_VERTEX_SIZE int = 4
 )
 
@@ -36,7 +36,7 @@ func InitTextBatcher() *TextBatcher {
 
 	batch.num_vertices = 0
 
-	batch.vertices = make([]float32, t_BATCH_SIZE*t_VERTEX_SIZE)
+	batch.vertices = make([]float32, t_BATCH_SIZE*t_VERTEX_SIZE*4)
 
 	batch.vao = opengl.NewVertexArray()
 	batch.vbo = opengl.NewVertexBuffer(batch.vertices)
@@ -76,10 +76,11 @@ func (batch *TextBatcher) generateIndexBuffer() {
 	batch.ibo = opengl.NewIndexBuffer(batch.indeces)
 }
 
-func (batch *TextBatcher) AddCharacter(char *FontAtlasItem, x, y float32) {
+func (batch *TextBatcher) AddCharacter(char *FontAtlasItem, x, y float32, projectionMatrix, viewMatrix glm.Mat4) {
 
 	if (batch.num_vertices + 4) > t_BATCH_SIZE*t_VERTEX_SIZE {
-		logging.DebugLog("Batch is full, should flush...")
+		logging.DebugLog("Batch is full, flushing early")
+    batch.FlushBatch(projectionMatrix, viewMatrix)
 	}
 
 	numVerts := batch.num_vertices * 4
@@ -119,7 +120,7 @@ func (batch *TextBatcher) AddCharacter(char *FontAtlasItem, x, y float32) {
 
 }
 
-func (batch *TextBatcher) AddText(text string, x, y float32) {
+func (batch *TextBatcher) AddText(text string, x, y float32, projectionMatrix, viewMatrix glm.Mat4) {
 
 	var offset int = 0
 
@@ -132,7 +133,7 @@ func (batch *TextBatcher) AddText(text string, x, y float32) {
 			return
 		}
 
-		batch.AddCharacter(character, x+float32(offset), y)
+		batch.AddCharacter(character, x+float32(offset), y, projectionMatrix, viewMatrix)
 
 		offset += 24
 
