@@ -28,6 +28,8 @@ type TileData struct {
 	x int
 	y int
 
+  region *Region
+  
 	screenCoords glm.Vec2
 }
 
@@ -67,15 +69,21 @@ func (t *Tilemap) Update() {
 			tileData.screenCoords[0] = (float64(tileData.x) * t.tileSize) - t.offset[0]
 			tileData.screenCoords[1] = (float64(tileData.y) * t.tileSize) - t.offset[1]
 
+      tileData.region = regionManager.CalculateRegionForTile(tileData.x, tileData.y)
+
 			t.tilePositions = append(t.tilePositions, tileData)
 		}
 	}
+
+  // Update the region manager with the new tilemap positions
+  regionManager.Update()
 }
 
 func (t *Tilemap) Draw() {
 	for _, data := range t.tilePositions {
 		pValue := galaxy.PerlinValueAtCoords(data.x, data.y, true)
 		color := util.NewColorRGBf(0.5, 0.5, 0.5)
+    region := data.region
 		gap := glm.Vec2{1.0, 2.0}
 		if DEBUG_PANEL.RenderPerlinNoise {
 			gap = glm.Vec2{1.0, 2.0}
@@ -85,7 +93,7 @@ func (t *Tilemap) Draw() {
 			gap = gap.Mul(0.0)
 			rawColor := BG_COLOR.Mul(float32(pValue))
 			color = util.NewColorRGBAf(rawColor[0], rawColor[1], rawColor[2], 1.0)
-			color = util.NewColorRGBAf(BG_COLOR.Vec4[0], BG_COLOR.Vec4[1], BG_COLOR.Vec4[2], float32(galaxy.PerlinValueAtCoords(data.x, data.y, true)))
+			color = util.NewColorRGBAf(region.color.Vec4[0], region.color.Vec4[1], region.color.Vec4[2], float32(galaxy.PerlinValueAtCoords(data.x, data.y, true)))
 		}
 		mango.IM.FillRect(float32(data.screenCoords[0])+float32(gap[0]), float32(data.screenCoords[1])+float32(gap[0]), float32(t.tileSize)-float32(gap[1]), float32(t.tileSize)-float32(gap[1]), color)
 	}
