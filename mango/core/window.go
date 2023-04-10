@@ -41,6 +41,7 @@ func CreateWindow(width, height int, title string, vsync bool) *Window {
 	// Enable blending
 	gl.Enable(gl.BLEND)
 	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+  gl.Enable(gl.PROGRAM_POINT_SIZE)
 
 	// Add data to window object
 	window.Window = w

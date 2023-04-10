@@ -22,6 +22,7 @@ type IMMEDIATE_MODE struct {
 	lineRenderer   *LineRenderer
 	textRenderer   *TextRenderer
 	textBatcher    *TextBatcher
+  pixelRenderer *PixelRenderer
 }
 
 func Init() *IMMEDIATE_MODE {
@@ -31,8 +32,15 @@ func Init() *IMMEDIATE_MODE {
 	InitFontAtlas()
 	im_mode.viewMatrix = glm.Ident4()
 
+  for i := 0; i < 200; i++ {
+    cur := 10 + (7.5 / 2) * float32(i)
+    testPts = append(testPts, float32(cur), float32(cur))
+  }
+
 	return im_mode
 }
+
+var testPts []float32 = []float32{}
 
 // Starts a new frame in IMMEDIATE MODE
 // This function should only be used internally by the engine
@@ -52,6 +60,8 @@ func (im *IMMEDIATE_MODE) NewFrame(deltaTime float64) {
 	scene.Update(deltaTime)
 
 	scene.Draw()
+
+  im.pixelRenderer.DrawPixels(testPts, 7.5,  im.projectionMatrix, im.viewMatrix)
 
 	im.textBatcher.FlushBatch(im.projectionMatrix, im.viewMatrix)
 
@@ -76,6 +86,7 @@ func (im *IMMEDIATE_MODE) setupRenderers() {
 	im.lineRenderer = InitLineRenderer()
 	im.textRenderer = InitTextRenderer()
 	im.textBatcher = InitTextBatcher()
+  im.pixelRenderer = InitPixelRenderer()
 }
 
 func (im *IMMEDIATE_MODE) SetBackgroundColor(color util.Color) {
