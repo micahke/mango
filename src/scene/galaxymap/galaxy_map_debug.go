@@ -17,6 +17,8 @@ type GalaxyMapDebugPanel struct {
 	RenderPlanets     bool
 	RenderTilemap     bool
 
+  DriftEnabled bool
+
 	LiveRebuild bool
 
   BatchText bool
@@ -31,6 +33,7 @@ func InitGMDebugPanel(galaxyMap *GalaxyMap) *GalaxyMapDebugPanel {
 	panel.RenderTilemap = true
 	panel.LiveRebuild = false
 	panel.BatchText = true
+  panel.DriftEnabled = false
 
 	return panel
 
@@ -58,6 +61,7 @@ func (panel *GalaxyMapDebugPanel) RenderPanel() {
 		imgui.Checkbox("Render Background", &panel.RenderBackground)
 		imgui.Checkbox("Render Planets", &panel.RenderPlanets)
 		imgui.Checkbox("Bacth Render Text", &panel.BatchText)
+    imgui.Checkbox("Drift Enabled", &panel.DriftEnabled)
 		imgui.SliderFloat("Tile Size", &tilemap.proxyTileSize, 5.0, 100.0)
 
 		imgui.TreePop()

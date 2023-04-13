@@ -19,6 +19,8 @@ type PlanetMapDebugPanel struct {
 	tileSize        *float32
 	cameraSpeed     *float32
 
+  hoverCamera bool
+
 	liveRebuild bool
 }
 

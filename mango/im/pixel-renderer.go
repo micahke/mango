@@ -3,6 +3,7 @@ package im
 import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
+	"github.com/micahke/infinite-universe/mango/logging"
 	"github.com/micahke/infinite-universe/mango/opengl"
 	"github.com/micahke/infinite-universe/mango/util"
 )
@@ -29,7 +30,7 @@ type PixelRenderer struct {
 }
 
 const (
-  p_MAX_POINTS int = 1000
+  p_MAX_POINTS int = 5000
   p_VERTEX_SIZE int = 2  // only x y
 )
 
@@ -53,12 +54,9 @@ func InitPixelRenderer() *PixelRenderer {
 
 
 // TODO: think about exceeding max points
+
+// TODO: think about exceeding max points
 func (renderer *PixelRenderer) DrawPixels(pixels []float32, size float32, projectionMatrix, viewMatrix glm.Mat4) {
-
-  // copy(renderer.points, pixels)
-
-  renderer.vbo.Bind()
-  gl.BufferSubData(gl.ARRAY_BUFFER, 0, 4*len(pixels), gl.Ptr(&pixels[0]))
 
   renderer.shader.Bind()
 
@@ -69,9 +67,30 @@ func (renderer *PixelRenderer) DrawPixels(pixels []float32, size float32, projec
   renderer.shader.SetUniform4f("uColor", clr[0], clr[1], clr[2], 1.0)
   renderer.shader.SetUniform1f("uPixelSize", size)
 
-  renderer.vao.Bind()
+  var leftoverVertices int = len(pixels) % (p_MAX_POINTS * 2)
+  var iterator int
 
-  gl.DrawArrays(gl.POINTS, 0, int32(len(pixels) / 2))
+  for iterator < len(pixels) / (p_MAX_POINTS * 2) {
+    logging.DebugLog("BATCH: ", iterator)
+    copy(renderer.points, pixels[iterator*p_MAX_POINTS*2:(iterator+1)*p_MAX_POINTS*2])
 
+    renderer.vbo.Bind()
+    gl.BufferSubData(gl.ARRAY_BUFFER, 0, 4*len(renderer.points), gl.Ptr(&renderer.points[0]))
 
+    renderer.vao.Bind()
+    gl.DrawArrays(gl.POINTS, 0, int32(len(renderer.points) / 2))
+    iterator++
+  }
+
+  if leftoverVertices > 0 {
+    copy(renderer.points, pixels[iterator*p_MAX_POINTS*2:])
+    
+    renderer.vbo.Bind()
+    gl.BufferSubData(gl.ARRAY_BUFFER, 0, 4*leftoverVertices, gl.Ptr(&renderer.points[0]))
+
+    renderer.vao.Bind()
+    gl.DrawArrays(gl.POINTS, 0, int32(leftoverVertices / 2))
+  }
+  
 }
+

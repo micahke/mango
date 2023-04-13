@@ -72,14 +72,14 @@ func (batch *TextBatcher) generateIndexBuffer() {
 
 	}
 
-	logging.DebugLog(batch.indeces)
+	// logging.DebugLog(batch.indeces)
 	batch.ibo = opengl.NewIndexBuffer(batch.indeces)
 }
 
 func (batch *TextBatcher) AddCharacter(char *FontAtlasItem, x, y float32, projectionMatrix, viewMatrix glm.Mat4) {
 
 	if (batch.num_vertices + 4) > t_BATCH_SIZE*t_VERTEX_SIZE {
-		logging.DebugLog("Batch is full, flushing early")
+		// logging.DebugLog("Batch is full, flushing early")
     batch.FlushBatch(projectionMatrix, viewMatrix)
 	}
 
@@ -161,7 +161,6 @@ func (batch *TextBatcher) FlushBatch(projectionMatrix, viewMatrix glm.Mat4) {
 
 	gl.DrawElements(gl.TRIANGLES, int32(indeces), gl.UNSIGNED_INT, nil)
 
-	// logging.DebugLog("Drawing", batch.num_vertices, "vertices")
 
 	batch.num_vertices = 0
 

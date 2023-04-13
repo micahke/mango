@@ -8,8 +8,6 @@ import (
 	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/util"
 	"github.com/micahke/infinite-universe/src/galaxy"
-	"github.com/micahke/infinite-universe/src/render"
-	// "github.com/micahke/infinite-universe/mango/util"
 )
 
 type Tilemap struct {
@@ -44,6 +42,7 @@ func InitTilemap(width, height int) *Tilemap {
 	tilemap.width = width
 	tilemap.height = height
 
+
 	return tilemap
 
 }
@@ -51,8 +50,26 @@ func InitTilemap(width, height int) *Tilemap {
 func (t *Tilemap) Update() {
 	t.tileSize = float64(t.proxyTileSize)
 
+
+  if DEBUG_PANEL.DriftEnabled {
 	tilemap.offset[0] -= 50.0 * mango.Time.DeltaTime()
 	tilemap.offset[1] -= 50.0 * mango.Time.DeltaTime()
+  }
+
+  speed := 300.0
+
+  if input.GetKey(input.KEY_A) {
+	  tilemap.offset[0] -= speed * mango.Time.DeltaTime()
+  }
+  if input.GetKey(input.KEY_D) {
+	  tilemap.offset[0] += speed * mango.Time.DeltaTime()
+  }
+  if input.GetKey(input.KEY_W) {
+	  tilemap.offset[1] += speed * mango.Time.DeltaTime()
+  }
+  if input.GetKey(input.KEY_S) {
+	  tilemap.offset[1] -= speed * mango.Time.DeltaTime()
+  }
 
 	// Reset the tile data
 	t.tilePositions = []*TileData{}
@@ -92,7 +109,6 @@ func (t *Tilemap) Draw() {
 		mango.IM.FillRect(float32(data.screenCoords[0])+float32(gap[0]), float32(data.screenCoords[1])+float32(gap[0]), float32(t.tileSize)-float32(gap[1]), float32(t.tileSize)-float32(gap[1]), color)
 	}
 
-  render.PlotLine(width / 2, height / 2, int(input.MouseX), int(input.MouseY), 3)
 
 }
 
