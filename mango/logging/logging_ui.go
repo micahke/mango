@@ -42,14 +42,6 @@ func InitLogPanel(width, height int) *LogPanel {
 
 func (panel *LogPanel) RenderPanel() {
 
-	// imgui.SetNextWindowSize(imgui.Vec2{
-	//   X: float32(panel.panelWidth),
-	//   Y: float32(panel.panelHeight),
-	// })
-	// imgui.SetNextWindowPos(imgui.Vec2{
-	//   X: 0.0,
-	//   Y: float32(panel.height) - float32(panel.panelHeight),
-	// })
 
 	imgui.BeginV("Mango Log", util.ImguiPanelStatus("logPanel"), 0)
 
@@ -61,9 +53,6 @@ func (panel *LogPanel) RenderPanel() {
 
 		imgui.SameLine()
 
-		// if imgui.Button("Copy") {
-		//
-		// }
 
 		imgui.SameLine()
 

@@ -5,8 +5,10 @@ import (
 
 	glm "github.com/go-gl/mathgl/mgl64"
 	"github.com/micahke/infinite-universe/mango"
+	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/util"
 	"github.com/micahke/infinite-universe/src/galaxy"
+	"github.com/micahke/infinite-universe/src/render"
 	// "github.com/micahke/infinite-universe/mango/util"
 )
 
@@ -89,6 +91,9 @@ func (t *Tilemap) Draw() {
 		}
 		mango.IM.FillRect(float32(data.screenCoords[0])+float32(gap[0]), float32(data.screenCoords[1])+float32(gap[0]), float32(t.tileSize)-float32(gap[1]), float32(t.tileSize)-float32(gap[1]), color)
 	}
+
+  render.PlotLine(width / 2, height / 2, int(input.MouseX), int(input.MouseY), 3)
+
 }
 
 // +++++++++++++++ HELPER FUNCTIONS +++++++++++++++++++++++++
