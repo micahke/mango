@@ -4,7 +4,7 @@ import (
 	"math/rand"
 
 	glm "github.com/go-gl/mathgl/mgl64"
-	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/mango/util/color"
 )
 
 var (
@@ -19,7 +19,7 @@ type System struct {
 
 	size   float64
 	offset glm.Vec2
-	color  util.Color
+	color  color.Color
 
 	parallaxEffect float32
 }
@@ -37,13 +37,13 @@ const (
 )
 
 var (
-	CLASS_O_COLOR util.Color = util.NewColorRGBi(0, 194, 209)
-	CLASS_B_COLOR util.Color = util.NewColorRGBi(214, 252, 255)
-	CLASS_A_COLOR util.Color = util.NewColorRGBi(240, 231, 216)
-	CLASS_F_COLOR util.Color = util.NewColorRGBi(225, 194, 56)
-	CLASS_G_COLOR util.Color = util.NewColorRGBi(255, 224, 86)
-	CLASS_K_COLOR util.Color = util.NewColorRGBi(255, 145, 0)
-	CLASS_M_COLOR util.Color = util.NewColorRGBi(255, 49, 46)
+	CLASS_O_COLOR color.Color = color.NewColorRGBi(0, 194, 209)
+	CLASS_B_COLOR color.Color = color.NewColorRGBi(214, 252, 255)
+	CLASS_A_COLOR color.Color = color.NewColorRGBi(240, 231, 216)
+	CLASS_F_COLOR color.Color = color.NewColorRGBi(225, 194, 56)
+	CLASS_G_COLOR color.Color = color.NewColorRGBi(255, 224, 86)
+	CLASS_K_COLOR color.Color = color.NewColorRGBi(255, 145, 0)
+	CLASS_M_COLOR color.Color = color.NewColorRGBi(255, 49, 46)
 )
 
 func NewSystem(xCoord, yCoord int, fullGeneration bool) *System {
@@ -165,7 +165,7 @@ func (system *System) Size() float64 {
 func (system *System) Offset() glm.Vec2 {
 	return system.offset
 }
-func (system *System) Color() util.Color {
+func (system *System) Color() color.Color {
 	return system.color
 }
 

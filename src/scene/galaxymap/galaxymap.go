@@ -7,6 +7,7 @@ import (
 	glm64 "github.com/go-gl/mathgl/mgl64"
 	"github.com/micahke/infinite-universe/mango"
 	"github.com/micahke/infinite-universe/mango/input"
+	"github.com/micahke/infinite-universe/mango/util/color"
 	"github.com/micahke/infinite-universe/mango/util"
 	"github.com/micahke/infinite-universe/src/galaxy"
 )
@@ -19,7 +20,7 @@ var systemManager *SystemManager
 var width int
 var height int
 
-var BG_COLOR util.Color = util.NewColorRGBi(48, 42, 47)
+var BG_COLOR color.Color = color.NewColorRGBi(48, 42, 47)
 
 var DEBUG_PANEL *GalaxyMapDebugPanel
 
@@ -67,7 +68,7 @@ func (gm *GalaxyMap) Draw() {
 	planetCoords[1] = float32(CLOSEST_GALAXY_TO_MOUSE.parallaxCoords[1]) + float32(CLOSEST_GALAXY_TO_MOUSE.pixelSize/2.0)
 
 	if systemManager.calcDistanceFrom(glm64.Vec2{input.MouseX, input.MouseY}, glm64.Vec2{float64(width) / 2.0, float64(height) / 2.0}) >= 50 {
-		// mango.IM.DrawLine(xp2, yp2, xp, yp, util.WHITE, 1.0)
+		// mango.IM.DrawLine(xp2, yp2, xp, yp, color.WHITE, 1.0)
 	}
 
 	closestSystem := CLOSEST_GALAXY_TO_MOUSE.system

@@ -4,7 +4,7 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/infinite-universe/mango/opengl"
-	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/mango/util/color"
 )
 
 type Ellipse struct {
@@ -13,7 +13,7 @@ type Ellipse struct {
 	width  float32
 	height float32
 
-	Color util.Color
+	Color color.Color
 }
 
 type CircleRenderer struct {

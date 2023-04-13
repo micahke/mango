@@ -7,6 +7,7 @@ import (
 	"github.com/micahke/infinite-universe/mango"
 	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/mango/util/color"
 	"github.com/micahke/infinite-universe/src/galaxy"
 )
 
@@ -63,14 +64,14 @@ func (m *SystemManager) Draw() {
 
 		// if this is the closest system, draw the uv sprite with a clear background and white border
 		if data.closest {
-			uv.SetWhiteChannel(util.NewColorRGBAf(0.0, 0.0, 0.0, 0.0))
-			uv.SetBlackChannel(util.NewColorRGBAf(1.0, 1.0, 1.0, 0.85))
+			uv.SetWhiteChannel(color.NewColorRGBAf(0.0, 0.0, 0.0, 0.0))
+			uv.SetBlackChannel(color.NewColorRGBAf(1.0, 1.0, 1.0, 0.85))
 			var offset float32 = 30.0
 			mango.IM.DrawUVSprite(float32(data.parallaxCoords[0])-offset/2, float32(data.parallaxCoords[1])-offset/2, float32(data.pixelSize)+offset, float32(data.pixelSize)+offset, "thinner-border.png", uv)
 		}
 
 		uv.SetWhiteChannel(data.system.Color())
-		uv.SetBlackChannel(util.DarkenColor(data.system.Color(), 0.5))
+		uv.SetBlackChannel(color.DarkenColor(data.system.Color(), 0.5))
 
 		mango.IM.DrawUVSprite(float32(data.parallaxCoords[0]), float32(data.parallaxCoords[1]), float32(data.pixelSize), float32(data.pixelSize), "minimal.png", uv)
 
