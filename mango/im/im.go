@@ -3,6 +3,7 @@ package im
 import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
+	"github.com/micahke/infinite-universe/mango/util/color"
 	"github.com/micahke/infinite-universe/mango/util"
 )
 
@@ -83,7 +84,7 @@ func (im *IMMEDIATE_MODE) setupRenderers() {
 	im.pixelRenderer = InitPixelRenderer()
 }
 
-func (im *IMMEDIATE_MODE) SetBackgroundColor(color util.Color) {
+func (im *IMMEDIATE_MODE) SetBackgroundColor(color color.Color) {
 
 	colorVec := color.Vec4
 
@@ -93,11 +94,11 @@ func (im *IMMEDIATE_MODE) SetBackgroundColor(color util.Color) {
 
 // Draw a quad to the screen
 func (im *IMMEDIATE_MODE) DrawRect(x, y, width, height float32) {
-	im.quadRenderer.RenderQuad(x, y, width, height, util.WHITE, im.projectionMatrix, im.viewMatrix)
+	im.quadRenderer.RenderQuad(x, y, width, height, color.WHITE, im.projectionMatrix, im.viewMatrix)
 }
 
 // Draw a filled rectangle to the screen
-func (im *IMMEDIATE_MODE) FillRect(x, y, width, height float32, color util.Color) {
+func (im *IMMEDIATE_MODE) FillRect(x, y, width, height float32, color color.Color) {
 	im.quadRenderer.RenderQuad(x, y, width, height, color, im.projectionMatrix, im.viewMatrix)
 }
 
@@ -117,12 +118,12 @@ func (im *IMMEDIATE_MODE) DrawUVSprite(x, y, width, height float32, texturePath 
 
 // Draw a circle to the screen
 // Centered at bottom left
-func (im *IMMEDIATE_MODE) DrawCircle(x, y, width, height float32, color util.Color) {
+func (im *IMMEDIATE_MODE) DrawCircle(x, y, width, height float32, color color.Color) {
 	im.circleRenderer.RenderCircle(x, y, width, height, color.Vec4, im.projectionMatrix, im.viewMatrix)
 }
 
 // Draw a line to the screen
-func (im *IMMEDIATE_MODE) DrawLine(x1, y1, x2, y2 float32, color util.Color, thickness float32) {
+func (im *IMMEDIATE_MODE) DrawLine(x1, y1, x2, y2 float32, color color.Color, thickness float32) {
 
 	p1 := glm.Vec2{x1, y1}
 	p2 := glm.Vec2{x2, y2}

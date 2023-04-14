@@ -7,7 +7,7 @@ import (
 	"github.com/micahke/infinite-universe/mango"
 	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/input"
-	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/mango/util/color"
 	"github.com/micahke/infinite-universe/src/galaxy"
 )
 
@@ -95,19 +95,19 @@ func (t *Tilemap) Update() {
 func (t *Tilemap) Draw() {
 	for _, data := range t.tilePositions {
 		pValue := galaxy.PerlinValueAtCoords(data.x, data.y, true)
-		color := util.NewColorRGBf(0.5, 0.5, 0.5)
+		clr := color.NewColorRGBf(0.5, 0.5, 0.5)
 		gap := glm.Vec2{1.0, 2.0}
 		if DEBUG_PANEL.RenderPerlinNoise {
 			gap = glm.Vec2{1.0, 2.0}
-			color = util.NewColorRGBAf(float32(pValue), float32(pValue), float32(pValue), float32(pValue))
+			clr = color.NewColorRGBAf(float32(pValue), float32(pValue), float32(pValue), float32(pValue))
 		}
 		if DEBUG_PANEL.RenderBackground {
 			gap = gap.Mul(0.0)
 			rawColor := BG_COLOR.Mul(float32(pValue))
-			color = util.NewColorRGBAf(rawColor[0], rawColor[1], rawColor[2], 1.0)
-			color = util.NewColorRGBAf(BG_COLOR.Vec4[0], BG_COLOR.Vec4[1], BG_COLOR.Vec4[2], float32(galaxy.PerlinValueAtCoords(data.x, data.y, true)))
+			clr = color.NewColorRGBAf(rawColor[0], rawColor[1], rawColor[2], 1.0)
+			clr = color.NewColorRGBAf(BG_COLOR.Vec4[0], BG_COLOR.Vec4[1], BG_COLOR.Vec4[2], float32(galaxy.PerlinValueAtCoords(data.x, data.y, true)))
 		}
-		mango.IM.FillRect(float32(data.screenCoords[0])+float32(gap[0]), float32(data.screenCoords[1])+float32(gap[0]), float32(t.tileSize)-float32(gap[1]), float32(t.tileSize)-float32(gap[1]), color)
+		mango.IM.FillRect(float32(data.screenCoords[0])+float32(gap[0]), float32(data.screenCoords[1])+float32(gap[0]), float32(t.tileSize)-float32(gap[1]), float32(t.tileSize)-float32(gap[1]), clr)
 	}
 
 

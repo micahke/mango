@@ -4,7 +4,7 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/infinite-universe/mango/opengl"
-	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/mango/util/color"
 )
 
 type LineRenderer struct {
@@ -41,7 +41,7 @@ func InitLineRenderer() *LineRenderer {
 
 }
 
-func (renderer *LineRenderer) RenderLine(p1, p2 glm.Vec2, color util.Color, thickness float32, projectionMatrix, viewMatrix glm.Mat4) {
+func (renderer *LineRenderer) RenderLine(p1, p2 glm.Vec2, color color.Color, thickness float32, projectionMatrix, viewMatrix glm.Mat4) {
 
 	renderer.vbo.SetData([]float32{
 		p1.X(), p1.Y(),

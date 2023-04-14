@@ -4,7 +4,7 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/infinite-universe/mango/opengl"
-	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/mango/util/color"
 )
 
 type Quad struct {
@@ -56,7 +56,7 @@ func InitQuadRenderer() *QuadRenderer {
 	return renderer
 }
 
-func (renderer *QuadRenderer) RenderQuad(x, y, width, height float32, color util.Color, projectionMatrix, viewMatrix glm.Mat4) {
+func (renderer *QuadRenderer) RenderQuad(x, y, width, height float32, color color.Color, projectionMatrix, viewMatrix glm.Mat4) {
 
 	translation := glm.Translate3D(x, y, 0)
 	scale := glm.Scale3D(width, height, 1.0)

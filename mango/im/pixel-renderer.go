@@ -5,7 +5,7 @@ import (
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/infinite-universe/mango/logging"
 	"github.com/micahke/infinite-universe/mango/opengl"
-	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/mango/util/color"
 )
 
 
@@ -63,7 +63,7 @@ func (renderer *PixelRenderer) DrawPixels(pixels []float32, size float32, projec
 	renderer.shader.SetUniformMat4f("projection", projectionMatrix)
 	renderer.shader.SetUniformMat4f("view", viewMatrix)
 	renderer.shader.SetUniformMat4f("model", glm.Ident4())
-  clr := util.WHITE.Vec4
+  clr := color.WHITE.Vec4
   renderer.shader.SetUniform4f("uColor", clr[0], clr[1], clr[2], 1.0)
   renderer.shader.SetUniform1f("uPixelSize", size)
 
