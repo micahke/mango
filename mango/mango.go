@@ -23,7 +23,6 @@ var Engine *Mango
 var IM *im.IMMEDIATE_MODE
 
 // TIMER
-var Time *core.Timer
 
 // Initialization function for the engine
 func Init(renderMode core.RenderMode) {
@@ -81,7 +80,7 @@ func Start() {
 		panic("No window initialized")
 	}
 
-	Time = core.NewTimer()
+	core.InitTimer()
 
 	for !Engine.Window.Window.ShouldClose() {
 		start := glfw.GetTime()
@@ -91,14 +90,14 @@ func Start() {
 
 		glfw.PollEvents()
 
-		Time.Update()
+		core.Timer.Update()
 		util.ImguiNewFrame()
 
 		update()
 
 		// Check the rendermode and do appropriate stuff
 		if Engine.RenderMode == core.RENDER_MODE_IM {
-			IM.NewFrame(Time.DeltaTime())
+			IM.NewFrame(core.Timer.DeltaTime())
 		}
 
 		util.ImguiRender()
@@ -110,7 +109,7 @@ func Start() {
 		Engine.Window.Window.SwapBuffers()
 
 		end := glfw.GetTime()
-		Time.UpdateFrameData(start, end)
+		core.Timer.UpdateFrameData(start, end)
 	}
 
 	// util.ImguiDestroy()

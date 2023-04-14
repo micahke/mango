@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/AllenDang/imgui-go"
-	"github.com/micahke/infinite-universe/mango"
+	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/util"
 	"github.com/micahke/infinite-universe/src/galaxy"
 )
@@ -43,8 +43,8 @@ func (panel *GalaxyMapDebugPanel) RenderPanel() {
 
 	imgui.BeginV("Galaxy Map Settings", util.ImguiPanelStatus("galaxyMap"), 0)
 
-	fpsCounter := fmt.Sprint("Frametime: ", fmt.Sprintf("%.2f", mango.Time.FrameTime()*1000)) + "ms"
-	fpsCounter += fmt.Sprint(", ", fmt.Sprintf("%.2f", mango.Time.FPS())) + " FPS"
+	fpsCounter := fmt.Sprint("Frametime: ", fmt.Sprintf("%.2f", core.Timer.FrameTime()*1000)) + "ms"
+	fpsCounter += fmt.Sprint(", ", fmt.Sprintf("%.2f", core.Timer.FPS())) + " FPS"
 
 	{
 		imgui.Text(fpsCounter)

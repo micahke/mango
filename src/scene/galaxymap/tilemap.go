@@ -5,6 +5,7 @@ import (
 
 	glm "github.com/go-gl/mathgl/mgl64"
 	"github.com/micahke/infinite-universe/mango"
+	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/util"
 	"github.com/micahke/infinite-universe/src/galaxy"
@@ -52,23 +53,23 @@ func (t *Tilemap) Update() {
 
 
   if DEBUG_PANEL.DriftEnabled {
-	tilemap.offset[0] -= 50.0 * mango.Time.DeltaTime()
-	tilemap.offset[1] -= 50.0 * mango.Time.DeltaTime()
+	tilemap.offset[0] -= 50.0 * core.Timer.DeltaTime()
+	tilemap.offset[1] -= 50.0 * core.Timer.DeltaTime()
   }
 
   speed := 300.0
 
   if input.GetKey(input.KEY_A) {
-	  tilemap.offset[0] -= speed * mango.Time.DeltaTime()
+	  tilemap.offset[0] -= speed * core.Timer.DeltaTime()
   }
   if input.GetKey(input.KEY_D) {
-	  tilemap.offset[0] += speed * mango.Time.DeltaTime()
+	  tilemap.offset[0] += speed * core.Timer.DeltaTime()
   }
   if input.GetKey(input.KEY_W) {
-	  tilemap.offset[1] += speed * mango.Time.DeltaTime()
+	  tilemap.offset[1] += speed * core.Timer.DeltaTime()
   }
   if input.GetKey(input.KEY_S) {
-	  tilemap.offset[1] -= speed * mango.Time.DeltaTime()
+	  tilemap.offset[1] -= speed * core.Timer.DeltaTime()
   }
 
 	// Reset the tile data
