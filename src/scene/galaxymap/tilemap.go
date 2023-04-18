@@ -6,6 +6,7 @@ import (
 	glm "github.com/go-gl/mathgl/mgl64"
 	"github.com/micahke/infinite-universe/mango"
 	"github.com/micahke/infinite-universe/mango/core"
+	// "github.com/micahke/infinite-universe/mango/im"
 	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/util/color"
 	"github.com/micahke/infinite-universe/src/galaxy"
@@ -107,8 +108,20 @@ func (t *Tilemap) Draw() {
 			clr = color.NewColorRGBAf(rawColor[0], rawColor[1], rawColor[2], 1.0)
 			clr = color.NewColorRGBAf(BG_COLOR.Vec4[0], BG_COLOR.Vec4[1], BG_COLOR.Vec4[2], float32(galaxy.PerlinValueAtCoords(data.x, data.y, true)))
 		}
+  // x := float32(data.screenCoords[0])+float32(gap[0])
+  // y := float32(data.screenCoords[1])+float32(gap[0])
+  // size := float32(t.tileSize)-float32(gap[1])
 		mango.IM.FillRect(float32(data.screenCoords[0])+float32(gap[0]), float32(data.screenCoords[1])+float32(gap[0]), float32(t.tileSize)-float32(gap[1]), float32(t.tileSize)-float32(gap[1]), clr)
+    // quad := im.Quad{
+    //   X: x,
+    //   Y: y,
+    //   Width: size,
+    //   Height: size,
+    //   Color: clr,
+    // }
+    // mango.IM.DrawQuad(quad)
 	}
+
 
 
 }

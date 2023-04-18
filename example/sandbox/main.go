@@ -1,13 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"math"
 	"runtime"
 
 	"github.com/micahke/infinite-universe/mango"
 	"github.com/micahke/infinite-universe/mango/core"
-	"github.com/micahke/infinite-universe/mango/logging"
+	"github.com/micahke/infinite-universe/mango/im"
+	"github.com/micahke/infinite-universe/mango/util/color"
 )
 
 func init() {
@@ -36,12 +35,26 @@ func (sb *Sandbox) Init() {
 
 
 func (sb *Sandbox) Update(deltaTime float64) {
-  logging.Log(deltaTime)
 }
 
 
 func (sb *Sandbox) Draw() {
 
-  mango.IM.DrawText(fmt.Sprint(math.Floor(core.Timer.FPS()), " FPS"), 250, 390)
+  quad := im.Quad{
+    X: 100,
+    Y: 100,
+    Width: 100,
+    Height: 100,
+    Color: color.WHITE,
+  }
+  quad2 := im.Quad{
+    X: 400,
+    Y: 400,
+    Width: 100,
+    Height: 100,
+    Color: color.ELECTRON_BLUE,
+  }
+  mango.IM.DrawQuad(quad)
+  mango.IM.DrawQuad(quad2)
 
 }

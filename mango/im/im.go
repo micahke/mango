@@ -3,8 +3,8 @@ package im
 import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
-	"github.com/micahke/infinite-universe/mango/util/color"
 	"github.com/micahke/infinite-universe/mango/util"
+	"github.com/micahke/infinite-universe/mango/util/color"
 )
 
 type IMMEDIATE_MODE struct {
@@ -24,6 +24,7 @@ type IMMEDIATE_MODE struct {
 	textRenderer   *TextRenderer
 	textBatcher    *TextBatcher
 	pixelRenderer  *PixelRenderer
+	quadBatcher    *QuadBatcher
 }
 
 func Init() *IMMEDIATE_MODE {
@@ -33,10 +34,8 @@ func Init() *IMMEDIATE_MODE {
 	InitFontAtlas()
 	im_mode.viewMatrix = glm.Ident4()
 
-
 	return im_mode
 }
-
 
 // Starts a new frame in IMMEDIATE MODE
 // This function should only be used internally by the engine
@@ -55,8 +54,12 @@ func (im *IMMEDIATE_MODE) NewFrame(deltaTime float64) {
 	}
 	scene.Update(deltaTime)
 
-	scene.Draw()
+  // RIP: forgot about the rendering order
+  // To do: make this more general
+  im.quadBatcher.FlushBatch(im.projectionMatrix, im.viewMatrix)
 
+
+	scene.Draw()
 
 	im.textBatcher.FlushBatch(im.projectionMatrix, im.viewMatrix)
 
@@ -82,6 +85,7 @@ func (im *IMMEDIATE_MODE) setupRenderers() {
 	im.textRenderer = InitTextRenderer()
 	im.textBatcher = InitTextBatcher()
 	im.pixelRenderer = InitPixelRenderer()
+  im.quadBatcher = InitQuadBatcher()
 }
 
 func (im *IMMEDIATE_MODE) SetBackgroundColor(color color.Color) {
@@ -144,9 +148,14 @@ func (im *IMMEDIATE_MODE) DrawText(text string, x, y float32) {
 	im.textBatcher.AddText(text, x, y, im.projectionMatrix, im.viewMatrix)
 }
 
-
 func (im *IMMEDIATE_MODE) DrawPixels(buffer []float32, size float32) {
 
-  im.pixelRenderer.DrawPixels(buffer, 2 * size, im.projectionMatrix, im.viewMatrix)
+	im.pixelRenderer.DrawPixels(buffer, 2*size, im.projectionMatrix, im.viewMatrix)
+
+}
+
+func (im *IMMEDIATE_MODE) DrawQuad(quad Quad) {
+
+  im.quadBatcher.AddQuad(quad, im.projectionMatrix, im.viewMatrix)
 
 }

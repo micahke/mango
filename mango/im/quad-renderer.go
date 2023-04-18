@@ -7,14 +7,6 @@ import (
 	"github.com/micahke/infinite-universe/mango/util/color"
 )
 
-type Quad struct {
-	x      float32
-	y      float32
-	width  float32
-	height float32
-
-	color glm.Vec4
-}
 
 type QuadRenderer struct {
 	vao    *opengl.VertexArray
