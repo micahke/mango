@@ -6,7 +6,7 @@ import (
 	glm "github.com/go-gl/mathgl/mgl64"
 	"github.com/micahke/infinite-universe/mango"
 	"github.com/micahke/infinite-universe/mango/core"
-	// "github.com/micahke/infinite-universe/mango/im"
+	"github.com/micahke/infinite-universe/mango/im"
 	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/util/color"
 	"github.com/micahke/infinite-universe/src/galaxy"
@@ -44,7 +44,6 @@ func InitTilemap(width, height int) *Tilemap {
 	tilemap.width = width
 	tilemap.height = height
 
-
 	return tilemap
 
 }
@@ -52,26 +51,25 @@ func InitTilemap(width, height int) *Tilemap {
 func (t *Tilemap) Update() {
 	t.tileSize = float64(t.proxyTileSize)
 
+	if DEBUG_PANEL.DriftEnabled {
+		tilemap.offset[0] -= 50.0 * core.Timer.DeltaTime()
+		tilemap.offset[1] -= 50.0 * core.Timer.DeltaTime()
+	}
 
-  if DEBUG_PANEL.DriftEnabled {
-	tilemap.offset[0] -= 50.0 * core.Timer.DeltaTime()
-	tilemap.offset[1] -= 50.0 * core.Timer.DeltaTime()
-  }
+	speed := 300.0
 
-  speed := 300.0
-
-  if input.GetKey(input.KEY_A) {
-	  tilemap.offset[0] -= speed * core.Timer.DeltaTime()
-  }
-  if input.GetKey(input.KEY_D) {
-	  tilemap.offset[0] += speed * core.Timer.DeltaTime()
-  }
-  if input.GetKey(input.KEY_W) {
-	  tilemap.offset[1] += speed * core.Timer.DeltaTime()
-  }
-  if input.GetKey(input.KEY_S) {
-	  tilemap.offset[1] -= speed * core.Timer.DeltaTime()
-  }
+	if input.GetKey(input.KEY_A) {
+		tilemap.offset[0] -= speed * core.Timer.DeltaTime()
+	}
+	if input.GetKey(input.KEY_D) {
+		tilemap.offset[0] += speed * core.Timer.DeltaTime()
+	}
+	if input.GetKey(input.KEY_W) {
+		tilemap.offset[1] += speed * core.Timer.DeltaTime()
+	}
+	if input.GetKey(input.KEY_S) {
+		tilemap.offset[1] -= speed * core.Timer.DeltaTime()
+	}
 
 	// Reset the tile data
 	t.tilePositions = []*TileData{}
@@ -93,6 +91,7 @@ func (t *Tilemap) Update() {
 	}
 }
 
+// TODO: clean this up
 func (t *Tilemap) Draw() {
 	for _, data := range t.tilePositions {
 		pValue := galaxy.PerlinValueAtCoords(data.x, data.y, true)
@@ -108,21 +107,23 @@ func (t *Tilemap) Draw() {
 			clr = color.NewColorRGBAf(rawColor[0], rawColor[1], rawColor[2], 1.0)
 			clr = color.NewColorRGBAf(BG_COLOR.Vec4[0], BG_COLOR.Vec4[1], BG_COLOR.Vec4[2], float32(galaxy.PerlinValueAtCoords(data.x, data.y, true)))
 		}
-  // x := float32(data.screenCoords[0])+float32(gap[0])
-  // y := float32(data.screenCoords[1])+float32(gap[0])
-  // size := float32(t.tileSize)-float32(gap[1])
-		mango.IM.FillRect(float32(data.screenCoords[0])+float32(gap[0]), float32(data.screenCoords[1])+float32(gap[0]), float32(t.tileSize)-float32(gap[1]), float32(t.tileSize)-float32(gap[1]), clr)
-    // quad := im.Quad{
-    //   X: x,
-    //   Y: y,
-    //   Width: size,
-    //   Height: size,
-    //   Color: clr,
-    // }
-    // mango.IM.DrawQuad(quad)
+		if DEBUG_PANEL.BatchQuads {
+
+			x := float32(data.screenCoords[0]) + float32(gap[0])
+			y := float32(data.screenCoords[1]) + float32(gap[0])
+			size := float32(t.tileSize) - float32(gap[1])
+			quad := im.Quad{
+				X:      x,
+				Y:      y,
+				Width:  size,
+				Height: size,
+				Color:  clr,
+			}
+			mango.IM.DrawQuad(quad)
+		} else {
+			mango.IM.FillRect(float32(data.screenCoords[0])+float32(gap[0]), float32(data.screenCoords[1])+float32(gap[0]), float32(t.tileSize)-float32(gap[1]), float32(t.tileSize)-float32(gap[1]), clr)
+		}
 	}
-
-
 
 }
 

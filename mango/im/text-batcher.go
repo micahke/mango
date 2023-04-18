@@ -26,7 +26,7 @@ type TextBatcher struct {
 }
 
 const (
-	t_BATCH_SIZE  int = 100 // Basically "max quads"
+	t_BATCH_SIZE  int = 500 // Basically "max quads"
 	t_VERTEX_SIZE int = 4
 )
 

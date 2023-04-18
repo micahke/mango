@@ -23,7 +23,7 @@ type QuadBatcher struct {
 }
 
 const (
-	q_MAX_QUADS   int = 1000
+	q_MAX_QUADS   int = 10000 // why not
 	q_VERTEX_SIZE int = 6
 )
 
