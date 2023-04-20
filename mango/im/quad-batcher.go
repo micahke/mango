@@ -1,9 +1,9 @@
 package im
 
 import (
-
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
+	"github.com/micahke/infinite-universe/mango/logging"
 	"github.com/micahke/infinite-universe/mango/opengl"
 	"github.com/micahke/infinite-universe/mango/util/color"
 )
@@ -120,6 +120,7 @@ func (batcher *QuadBatcher) AddQuad(quad Quad, projectionMatrix, viewMatrix glm.
   batcher.vertices[offset+22] = clr[2]
   batcher.vertices[offset+23] = clr[3]
 
+  logging.DebugLog(batcher.vertices[offset:offset+24])
 
   batcher.nVertices += 4
 

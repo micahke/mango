@@ -127,13 +127,20 @@ func (im *IMMEDIATE_MODE) DrawCircle(x, y, width, height float32, color color.Co
 }
 
 // Draw a line to the screen
-func (im *IMMEDIATE_MODE) DrawLine(x1, y1, x2, y2 float32, color color.Color, thickness float32) {
+func (im *IMMEDIATE_MODE) DrawGLine(x1, y1, x2, y2 float32, color color.Color, thickness float32) {
 
 	p1 := glm.Vec2{x1, y1}
 	p2 := glm.Vec2{x2, y2}
 
 	im.lineRenderer.RenderLine(p1, p2, color, thickness, im.projectionMatrix, im.viewMatrix)
 
+}
+
+func (im *IMMEDIATE_MODE) DrawLine(x0, y0, x1, y1, size int) {
+  linePoints := im.lineRenderer.GenerateBresenhamPoints(x0, y0, x1, y1, size)
+  
+  // TODO: fix unecessary conversions between float32 and int
+  im.DrawPixels(linePoints, float32(size))
 }
 
 // Draw text within the world space
