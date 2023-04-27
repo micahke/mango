@@ -21,9 +21,9 @@ func NewScene() *Scene {
 
 
 // Creates a new entity and adds it to the scene
-func (scene *Scene) CreateEntity() *ecs.Entity {
+func (scene *Scene) CreateEntity(id string) *ecs.Entity {
   
-  return scene.ecs.CreateEntity()
+  return scene.ecs.CreateEntity(id)
 
 }
 

@@ -37,7 +37,7 @@ func (game *Game) Init() {
 
   game.ecs = &ecs.ECS{}
   
-  game.player = game.ecs.CreateEntity()
+  game.player = game.ecs.CreateEntity("player")
   game.player.Tranform().X = 100
   game.player.Tranform().Y = 100
 

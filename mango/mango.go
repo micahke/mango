@@ -93,7 +93,9 @@ func Start() {
 		core.Timer.Update()
 		util.ImguiNewFrame()
 
+    // TODO: find a better place for this
 		update()
+  
 
 		// Check the rendermode and do appropriate stuff
 		if Engine.RenderMode == core.RENDER_MODE_IM {
