@@ -7,6 +7,7 @@ import "github.com/micahke/infinite-universe/mango/components"
 
 type Entity struct {
   
+  id string
 	components []interface{}
 
 }
