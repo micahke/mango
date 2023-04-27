@@ -52,7 +52,7 @@ func (im *IMMEDIATE_MODE) NewFrame(deltaTime float64) {
 		scene.Init()
 		im.sceneActivated = true
 	}
-	scene.Update(deltaTime)
+	scene.Update()
 
   // RIP: forgot about the rendering order
   // To do: make this more general

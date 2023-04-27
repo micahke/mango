@@ -43,7 +43,17 @@ func (game *Game) Init() {
 
 }
 
-func (game *Game) Update(deltaTime float64) {
+func (game *Game) Update() {
+
+  tranform := game.player.Tranform()
+
+  // I'm only now using the one in the method because I want to get rid of it
+  tranform.X += 300 * float32(core.Timer.DeltaTime())
+
+  if (tranform.X + 100 > 800) {
+
+    tranform.X = 700
+  }
 
 }
 

@@ -41,7 +41,7 @@ func (gm *GalaxyMap) Init() {
 
 }
 
-func (gm *GalaxyMap) Update(deltaTime float64) {
+func (gm *GalaxyMap) Update() {
 
 	if input.MouseRightPressed {
 		util.ImguiTogglePanel("galaxyMap")
