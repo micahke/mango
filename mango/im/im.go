@@ -44,8 +44,6 @@ func (im *IMMEDIATE_MODE) NewFrame(deltaTime float64) {
 	// Poll for events
 	// glfw.PollEvents()
 
-	// Clear the screen
-	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 	scene, _ := im.scene.(IM_SCRIPT)
 	if !im.sceneActivated {

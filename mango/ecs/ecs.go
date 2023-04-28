@@ -50,6 +50,12 @@ func (ecs *ECS) GetEntity(id string) *Entity {
 }
 
 
+// Get all the entities in the scene
+func (ecs *ECS) GetEntities() []*Entity {
+  return ecs.entities
+}
+
+
 func (ecs *ECS) AddSystem(system interface{}) (System, error) {
 
   // Check if the system implements the system interface

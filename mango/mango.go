@@ -3,6 +3,7 @@ package mango
 import (
 	"runtime"
 
+	"github.com/go-gl/gl/v3.3-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/ecs"
@@ -81,7 +82,9 @@ func CreateWindow(width, height int, title string, vsync bool) {
 func CreateScene() *core.Scene {
 
   scene := core.NewScene()
-  scene.ECS().AddSystem(&ecs.EntitySystem{})
+  scene.ECS().AddSystem(&ecs.EntitySystem{
+    Entities: scene.ECS().GetEntities(),
+  })
 
   return scene
 
@@ -118,6 +121,9 @@ func Start() {
     // TODO: find a better place for this
 		update()
   
+
+    // Clear the screen
+    gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 		// Check the rendermode and do appropriate stuff
 		if Engine.RenderMode == core.RENDER_MODE_IM {

@@ -17,6 +17,8 @@ func main() {
   scene := mango.CreateScene()
   mango.SetScene(scene)
 
+  scene.CreateEntity("test")
+
   mango.CreateWindow(800, 600, "Retained Mode Rendering", true)
   mango.Start()
 

@@ -13,7 +13,9 @@ type System interface {
 }
 
 
-type EntitySystem struct {}
+type EntitySystem struct {
+  Entities []*Entity
+}
 
 
 
@@ -22,6 +24,13 @@ func (system *EntitySystem) Init() {}
 
 func (system *EntitySystem) Tick() {
 
-  logging.DebugLog("Ticking from entity system")
+  logging.DebugLog(len(system.Entities))
+
+  for _, entity := range(system.Entities) {
+
+    entity.Update()
+
+
+  }
 
 }
