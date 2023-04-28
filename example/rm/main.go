@@ -1,12 +1,9 @@
 package main
 
 import (
-	"github.com/micahke/infinite-universe/mango"
-	"github.com/micahke/infinite-universe/mango/core"
+	"github.com/micahke/mango"
+	"github.com/micahke/mango/core"
 )
-
-
-
 
 
 func main() {

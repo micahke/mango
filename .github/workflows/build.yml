@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: "1.17"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libglfw3-dev libgles2-mesa-dev
+
+      - name: Build project
+        run: |
+          go build
