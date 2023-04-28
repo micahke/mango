@@ -80,9 +80,6 @@ If you are looking to contribute to the project, start here. Simply clone the re
 ```bash
 git clone https://github.com/micahke/mango.git
 cd mango
-
-# This will run the sandbox.go file
-go run .
 ```
 
 **Warning**: Mango relies on GLFW and OpenGL to handle window creation and graphics. Please make sure these libraries are installed on your machine.

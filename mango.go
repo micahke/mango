@@ -1,4 +1,4 @@
-package main
+package mango
 
 import (
 	"runtime"

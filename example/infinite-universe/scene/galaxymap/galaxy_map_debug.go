@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/AllenDang/imgui-go"
-	"github.com/micahke/infinite-universe/mango/core"
-	"github.com/micahke/infinite-universe/mango/util"
-	"github.com/micahke/infinite-universe/src/galaxy"
+	"github.com/micahke/mango/core"
+	"github.com/micahke/mango/util"
+	"inifinite-universe/galaxy"
 )
 
 type GalaxyMapDebugPanel struct {

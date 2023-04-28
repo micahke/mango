@@ -1,11 +1,10 @@
 package main
 
 import (
+	"inifinite-universe/scene/galaxymap"
 	"runtime"
 
 	"github.com/micahke/mango"
-	"github.com/micahke/mango/core"
-	"github.com/micahke/src/scene/galaxymap"
 )
 
 func init() {

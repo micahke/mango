@@ -4,11 +4,11 @@ import (
 	"math"
 
 	"github.com/go-gl/mathgl/mgl32"
-	"github.com/micahke/infinite-universe/mango"
-	"github.com/micahke/infinite-universe/mango/input"
-	"github.com/micahke/infinite-universe/mango/util"
-	"github.com/micahke/infinite-universe/src/debug"
-	"github.com/micahke/infinite-universe/src/galaxy"
+	"github.com/micahke/mango"
+	"github.com/micahke/mango/input"
+	"github.com/micahke/mango/util"
+	"inifinite-universe/debug"
+	"inifinite-universe/galaxy"
 )
 
 type PlanetMap struct {

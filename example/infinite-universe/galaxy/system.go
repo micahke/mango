@@ -4,7 +4,7 @@ import (
 	"math/rand"
 
 	glm "github.com/go-gl/mathgl/mgl64"
-	"github.com/micahke/infinite-universe/mango/util/color"
+	"github.com/micahke/mango/util/color"
 )
 
 var (

@@ -2,11 +2,11 @@ package debug
 
 import (
 	"fmt"
+	"inifinite-universe/galaxy"
 
 	"github.com/AllenDang/imgui-go"
-	"github.com/micahke/infinite-universe"
-	"github.com/micahke/infinite-universe/util"
-	"github.com/micahke/infinite-universe/src/galaxy"
+	"github.com/micahke/mango"
+	"github.com/micahke/mango/util"
 )
 
 type PlanetMapDebugPanel struct {

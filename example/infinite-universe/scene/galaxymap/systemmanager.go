@@ -4,11 +4,11 @@ import (
 	"math"
 
 	glm "github.com/go-gl/mathgl/mgl64"
-	"github.com/micahke/infinite-universe/mango"
-	"github.com/micahke/infinite-universe/mango/input"
-	"github.com/micahke/infinite-universe/mango/util"
-	"github.com/micahke/infinite-universe/mango/util/color"
-	"github.com/micahke/infinite-universe/src/galaxy"
+	"github.com/micahke/mango"
+	"github.com/micahke/mango/input"
+	"github.com/micahke/mango/util"
+	"github.com/micahke/mango/util/color"
+	"inifinite-universe/galaxy"
 )
 
 type SystemManager struct {
