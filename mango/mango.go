@@ -1,6 +1,8 @@
 package mango
 
 import (
+	"runtime"
+
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/micahke/infinite-universe/mango/core"
 	"github.com/micahke/infinite-universe/mango/im"
@@ -14,6 +16,8 @@ type Mango struct {
 	RenderMode core.RenderMode // The currently set render mode
 	Window     *core.Window
 	LogPanel   *logging.LogPanel
+
+  scene *core.Scene
 }
 
 // The main engine instance
@@ -22,7 +26,9 @@ var Engine *Mango
 // RENDER MODES
 var IM *im.IMMEDIATE_MODE
 
-// TIMER
+func init() {
+  runtime.LockOSThread()
+}
 
 // Initialization function for the engine
 func Init(renderMode core.RenderMode) {
@@ -69,9 +75,19 @@ func CreateWindow(width, height int, title string, vsync bool) {
 
 }
 
-func GetWindow() *core.Window {
-	return Engine.Window
+
+func CreateScene() *core.Scene {
+
+  return core.NewScene()
+
 }
+
+func AttachScene(scene *core.Scene) {
+  
+  Engine.scene = scene
+
+} 
+
 
 // Starts the main game loop
 func Start() {
@@ -118,6 +134,11 @@ func Start() {
 
 	glfw.Terminate()
 
+}
+
+
+func GetWindow() *core.Window {
+	return Engine.Window
 }
 
 func update() {

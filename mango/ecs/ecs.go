@@ -19,7 +19,7 @@ type ECS struct {
 func (ecs *ECS) Update() {
 
   // Update the entity's logic
-  // This might have to be moved
+  // This might have to be (re)moved
   ecs.updateEntities()
 
   // Update various systems

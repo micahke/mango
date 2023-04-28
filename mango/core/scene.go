@@ -19,6 +19,18 @@ func NewScene() *Scene {
 
 }
 
+// Get the scene's Entity Component System
+func (scene *Scene) ECS() *ecs.ECS {
+  return scene.ecs
+}
+
+func (scene *Scene) Update() {
+
+  // update the entity component system
+  scene.ecs.Update()
+
+}
+
 
 // Creates a new entity and adds it to the scene
 func (scene *Scene) CreateEntity(id string) *ecs.Entity {
