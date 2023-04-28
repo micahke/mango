@@ -50,13 +50,16 @@ func (ecs *ECS) GetEntity(id string) *Entity {
 }
 
 
-func (ecs *ECS) AddSystem(system interface{}) (*System, error) {
+func (ecs *ECS) AddSystem(system interface{}) (System, error) {
 
   // Check if the system implements the system interface
   if _, ok := system.(System); ok {
 
-    ecs.addSystem(system.(*System))
-    return system.(*System), nil
+    sys := system.(System)
+    sys.Init()
+    ecs.addSystem(sys)
+
+    return sys, nil
   }
 
   errorMessage := "The system you added does not implement interface System"
@@ -102,7 +105,7 @@ func (ecs *ECS) addEntityToECS(entity *Entity) {
 }
 
 
-func (ecs *ECS) addSystem(system *System) {
+func (ecs *ECS) addSystem(system System) {
 
   ecs.systems = append(ecs.systems, system)
 

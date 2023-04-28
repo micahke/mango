@@ -13,19 +13,11 @@ type System interface {
 }
 
 
-type EntitySystem struct {
-
-  
-
-}
+type EntitySystem struct {}
 
 
 
-func (system *EntitySystem) Init() {
-
-  
-
-}
+func (system *EntitySystem) Init() {}
 
 
 func (system *EntitySystem) Tick() {

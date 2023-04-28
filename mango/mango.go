@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/micahke/infinite-universe/mango/core"
+	"github.com/micahke/infinite-universe/mango/ecs"
 	"github.com/micahke/infinite-universe/mango/im"
 	"github.com/micahke/infinite-universe/mango/input"
 	"github.com/micahke/infinite-universe/mango/logging"
@@ -76,13 +77,18 @@ func CreateWindow(width, height int, title string, vsync bool) {
 }
 
 
+// Creates a scene and sets up an ECS
 func CreateScene() *core.Scene {
 
-  return core.NewScene()
+  scene := core.NewScene()
+  scene.ECS().AddSystem(&ecs.EntitySystem{})
+
+  return scene
 
 }
 
-func AttachScene(scene *core.Scene) {
+
+func SetScene(scene *core.Scene) {
   
   Engine.scene = scene
 
@@ -118,6 +124,10 @@ func Start() {
 			IM.NewFrame(core.Timer.DeltaTime())
 		}
 
+    if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
+      Engine.scene.ECS().Update()
+    }
+
 		util.ImguiRender()
 
 		// Input handler reset
@@ -140,6 +150,9 @@ func Start() {
 func GetWindow() *core.Window {
 	return Engine.Window
 }
+
+
+
 
 func update() {
 

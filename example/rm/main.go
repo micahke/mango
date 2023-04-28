@@ -11,17 +11,13 @@ import (
 
 func main() {
   
-
   mango.Init(core.RENDER_MODE_DEFAULT)
-
 
   // scene setup
   scene := mango.CreateScene()
-  mango.AttachScene(scene)
-
+  mango.SetScene(scene)
 
   mango.CreateWindow(800, 600, "Retained Mode Rendering", true)
   mango.Start()
-
 
 }
