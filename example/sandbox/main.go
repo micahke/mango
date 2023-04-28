@@ -3,10 +3,10 @@ package main
 import (
 	"runtime"
 
-	"github.com/micahke/infinite-universe/mango"
-	"github.com/micahke/infinite-universe/mango/core"
-	"github.com/micahke/infinite-universe/mango/im"
-	"github.com/micahke/infinite-universe/mango/util/color"
+	"github.com/micahke/mango"
+	"github.com/micahke/mango/core"
+	"github.com/micahke/mango/im"
+	"github.com/micahke/mango/util/color"
 )
 
 func init() {

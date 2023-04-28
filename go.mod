@@ -1,4 +1,4 @@
-module github.com/micahke/infinite-universe
+module github.com/micahke/mango
 
 go 1.19
 
