@@ -10,6 +10,10 @@ Mango is a cross-platform, data-driven game engine written in Go. The engine is 
 
 **Warning**: Mango is in extremely early stages. I would advise against using it to build a game but if you want to see how this might work, the Immediate Mode system is pretty usable. See [examples](./example/ecs/main.go).
 
+<p align="center">
+    <img src="./doc/screenshot.png" width="100%" />
+</p>
+
 ## Features
 
 These are Mango's mean features so far:
