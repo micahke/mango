@@ -56,7 +56,7 @@ func (shader *Shader) Unbind() {
 }
 
 func (shader *Shader) ParseShader(shaderPath string) string {
-	contents, err := ioutil.ReadFile("mango/shaders/" + shaderPath)
+	contents, err := ioutil.ReadFile("shaders/" + shaderPath)
 	if err != nil {
 		panic("There was an error parsing the shader")
 	}

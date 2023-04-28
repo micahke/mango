@@ -5,6 +5,7 @@ import (
 	"runtime"
 
 	"github.com/micahke/mango"
+	"github.com/micahke/mango/core"
 )
 
 func init() {
