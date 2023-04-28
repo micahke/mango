@@ -8,7 +8,7 @@ import (
 	"github.com/micahke/mango/input"
 	"github.com/micahke/mango/util"
 	"github.com/micahke/mango/util/color"
-	"inifinite-universe/galaxy"
+	"github.com/micahke/mango/example/infinite-universe/galaxy"
 )
 
 type SystemManager struct {

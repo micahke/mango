@@ -6,7 +6,7 @@ import (
 	"github.com/AllenDang/imgui-go"
 	"github.com/micahke/mango/core"
 	"github.com/micahke/mango/util"
-	"inifinite-universe/galaxy"
+	"github.com/micahke/mango/example/infinite-universe/galaxy"
 )
 
 type GalaxyMapDebugPanel struct {

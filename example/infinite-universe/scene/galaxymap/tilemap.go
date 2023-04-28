@@ -9,7 +9,7 @@ import (
 	"github.com/micahke/mango/im"
 	"github.com/micahke/mango/input"
 	"github.com/micahke/mango/util/color"
-	"inifinite-universe/galaxy"
+	"github.com/micahke/mango/example/infinite-universe/galaxy"
 )
 
 type Tilemap struct {
