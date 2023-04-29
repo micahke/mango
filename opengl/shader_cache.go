@@ -4,6 +4,8 @@ import (
 	"embed"
 	"io/fs"
 	"strings"
+
+	"github.com/micahke/mango/logging"
 )
 
 // TODO: come back to this, I'm sure it's horrible code, I just want it to work rn
@@ -15,6 +17,9 @@ var ShaderCache map[string]string
 
 // Loads the shaders into the cache
 func LoadShaders() (map[string]string, error) {
+
+    logging.DebugLog("Loading shaders")
+    
     shaders := make(map[string]string)
     files, err := fs.Glob(shaderFiles, "shaders/*.glsl")
     if err != nil {

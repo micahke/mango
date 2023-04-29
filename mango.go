@@ -79,11 +79,9 @@ func CreateWindow(width, height int, title string, vsync bool) {
   // DEBUGGING ENABLED AFTER THIS POINT
 
   // Load shaders
-  shaders, error := opengl.LoadShaders()
+  _, error := opengl.LoadShaders()
   if error != nil {
     logging.DebugLogError("Failed to load shaders: ", error)
-  } else {
-    logging.DebugLog(shaders["CircleVertex.glsl"])
   }
 
 }

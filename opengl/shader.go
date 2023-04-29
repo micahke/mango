@@ -2,7 +2,7 @@ package opengl
 
 import (
 	"fmt"
-	"io/ioutil"
+	// "io/ioutil"
 
 	"github.com/go-gl/gl/v3.3-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
@@ -58,12 +58,14 @@ func (shader *Shader) Unbind() {
 }
 
 func (shader *Shader) ParseShader(shaderPath string) string {
-	contents, err := ioutil.ReadFile("opengl/shaders/" + shaderPath)
-	if err != nil {
-		panic("There was an error parsing the shader")
-	}
-	source := string(contents) + "\x00"
-	return source
+	// contents, err := ioutil.ReadFile("opengl/shaders/" + shaderPath)
+	// if err != nil {
+	// 	panic("There was an error parsing the shader")
+	// }
+	// source := string(contents) + "\x00"
+
+  return ShaderCache[shaderPath] + "\x00"
+
 }
 
 func (shader *Shader) CompileShader(source string, shaderType uint32) uint32 {
