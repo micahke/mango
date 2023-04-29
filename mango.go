@@ -10,6 +10,7 @@ import (
 	"github.com/micahke/mango/im"
 	"github.com/micahke/mango/input"
 	"github.com/micahke/mango/logging"
+	"github.com/micahke/mango/opengl"
 	"github.com/micahke/mango/util"
 	"github.com/micahke/mango/util/loaders"
 )
@@ -35,7 +36,7 @@ func init() {
 // Initialization function for the engine
 func Init(renderMode core.RenderMode) {
 	// Lock the runtime
-
+    
 	// create a nre instance of Mango
 	Engine = new(Mango)
 
@@ -74,6 +75,16 @@ func CreateWindow(width, height int, title string, vsync bool) {
 	util.InitImguiLayer(Engine.Window.Window)
 	Engine.LogPanel = logging.InitLogPanel(width, height)
 	util.ImguiRegisterPanel("logPanel", Engine.LogPanel)
+
+  // DEBUGGING ENABLED AFTER THIS POINT
+
+  // Load shaders
+  shaders, error := opengl.LoadShaders()
+  if error != nil {
+    logging.DebugLogError("Failed to load shaders: ", error)
+  } else {
+    logging.DebugLog(shaders["CircleVertex.glsl"])
+  }
 
 }
 

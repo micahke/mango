@@ -2,9 +2,10 @@ package opengl
 
 import (
 	"fmt"
+	"io/ioutil"
+
 	"github.com/go-gl/gl/v3.3-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
-	"io/ioutil"
 )
 
 type Shader struct {
@@ -14,6 +15,7 @@ type Shader struct {
 	m_Renderer_ID          uint32
 	m_UniformLocationCache map[string]int32
 }
+
 
 func NewShader(vertexPath string, fragmentPath string) *Shader {
 	shader := Shader{}
@@ -56,7 +58,7 @@ func (shader *Shader) Unbind() {
 }
 
 func (shader *Shader) ParseShader(shaderPath string) string {
-	contents, err := ioutil.ReadFile("shaders/" + shaderPath)
+	contents, err := ioutil.ReadFile("opengl/shaders/" + shaderPath)
 	if err != nil {
 		panic("There was an error parsing the shader")
 	}
