@@ -1,6 +1,7 @@
 package loaders
 
 import (
+	"bytes"
 	"fmt"
 	"image"
 	"image/png"
@@ -8,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/disintegration/imaging"
+	"github.com/micahke/mango/logging"
 )
 
 type PNG_LOADER struct {
@@ -47,6 +49,13 @@ func LoadPNG(path string) *image.NRGBA {
 	return load_png(filePath)
 }
 
+func LoadPNGFromResources(path string) *image.NRGBA {
+	if value, ok := png_loader.cache[path]; ok {
+		return value
+	}
+	return load_png(path)
+}
+
 // Loads an individual PNG file and returns it's data
 // Also adds image data to cache
 func load_png(path string) *image.NRGBA {
@@ -67,6 +76,26 @@ func load_png(path string) *image.NRGBA {
 	flippedImage := imaging.FlipV(img)
 	png_loader.cache[path] = flippedImage
 	return flippedImage
+
+}
+
+// Loads an image into the png cache 
+// Make it work for now and then come back to this
+// wehn we have more engine resources to load
+func LoadImageFromData(name string, data []byte) (*image.NRGBA, error) {
+  img, _, err := image.Decode(bytes.NewReader(data))
+  if err != nil {
+    logging.DebugLogError("Failed to load resource: ", name)
+    logging.DebugLogError("Message:", err)
+    return nil, err
+  }
+
+  flippedImage := imaging.FlipV(img)
+
+  // Put the image data in the cache
+  png_loader.cache[name] = flippedImage
+  
+  return flippedImage, nil
 
 }
 

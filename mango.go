@@ -130,7 +130,7 @@ func Start() {
 		util.ImguiNewFrame()
 
 		// TODO: find a better place for this
-		update()
+		processInput()
 
 		// Clear the screen
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
@@ -160,14 +160,22 @@ func Start() {
 
 	glfw.Terminate()
 
+
+  cleanup()
+
 }
 
+// TODO: move this
 func GetWindow() *core.Window {
 	return Engine.Window
 }
 
-func update() {
+// handle any engine cleanup that needs to be done
+func cleanup() {
 
+}
+
+func processInput() {
 	if input.GetKeyDown(input.KEY_LEFT_CTRL) {
 		util.ImguiTogglePanel("logPanel")
 	}

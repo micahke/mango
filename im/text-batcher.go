@@ -7,6 +7,7 @@ import (
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/mango/logging"
 	"github.com/micahke/mango/opengl"
+	"github.com/micahke/mango/util/loaders"
 )
 
 type TextBatcher struct {
@@ -48,7 +49,10 @@ func InitTextBatcher() *TextBatcher {
 	batch.generateIndexBuffer()
 
 	batch.shader = opengl.NewShader("TextVertex.glsl", "TextFragment.glsl")
-	batch.texture = getTexture("BitmapFont.png", false)
+
+
+  fontImageData := loaders.LoadPNGFromResources("BitmapFont.png") 
+  batch.texture = opengl.NewTextureFromData("BitmapFont.png", fontImageData, false)
 
 	return batch
 

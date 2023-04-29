@@ -3,8 +3,10 @@ package im
 import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
+	"github.com/micahke/mango/res"
 	"github.com/micahke/mango/util"
 	"github.com/micahke/mango/util/color"
+	"github.com/micahke/mango/util/loaders"
 )
 
 type IMMEDIATE_MODE struct {
@@ -80,8 +82,13 @@ func (im *IMMEDIATE_MODE) setupRenderers() {
 	im.spriteRenderer = InitSpriteRenderer()
 	im.circleRenderer = InitCircleRenderer()
 	im.lineRenderer = InitLineRenderer()
+
+  // Load the bitmap font before we start any text rendering
+  fontData, _ := res.LoadEngineResource("BitmapFont.png")
+  loaders.LoadImageFromData("BitmapFont.png", fontData)
 	im.textRenderer = InitTextRenderer()
 	im.textBatcher = InitTextBatcher()
+
 	im.pixelRenderer = InitPixelRenderer()
   im.quadBatcher = InitQuadBatcher()
 }

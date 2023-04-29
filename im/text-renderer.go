@@ -6,6 +6,7 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/mango/opengl"
+	"github.com/micahke/mango/util/loaders"
 )
 
 type TextRenderer struct {
@@ -37,7 +38,8 @@ func InitTextRenderer() *TextRenderer {
 
 	renderer.shader = opengl.NewShader("TextVertex.glsl", "TextFragment.glsl")
 
-	renderer.texture = getTexture("BitmapFontDebug.png", true)
+  fontImageData := loaders.LoadPNGFromResources("BitmapFont.png") 
+  renderer.texture = opengl.NewTextureFromData("BitmapFont.png", fontImageData, false)
 
 	renderer.modelMatrix = glm.Ident4()
 
