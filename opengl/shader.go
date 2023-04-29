@@ -66,6 +66,7 @@ func (shader *Shader) ParseShader(shaderPath string) string {
 
   return ShaderCache[shaderPath] + "\x00"
 
+  // return source
 }
 
 func (shader *Shader) CompileShader(source string, shaderType uint32) uint32 {

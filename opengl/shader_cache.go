@@ -36,5 +36,11 @@ func LoadShaders() (map[string]string, error) {
 
     ShaderCache = shaders
 
+
     return ShaderCache, nil
+}
+
+
+func getShaderFromCache(name string) string {
+  return ShaderCache[name]
 }

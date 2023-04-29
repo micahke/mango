@@ -20,7 +20,7 @@ type Mango struct {
 	Window     *core.Window
 	LogPanel   *logging.LogPanel
 
-  scene *core.Scene
+	scene *core.Scene
 }
 
 // The main engine instance
@@ -30,15 +30,17 @@ var Engine *Mango
 var IM *im.IMMEDIATE_MODE
 
 func init() {
-  runtime.LockOSThread()
+	runtime.LockOSThread()
 }
 
 // Initialization function for the engine
 func Init(renderMode core.RenderMode) {
-	// Lock the runtime
-    
+
 	// create a nre instance of Mango
 	Engine = new(Mango)
+
+	// DEBUGGING ENABLED AFTER THIS POINT
+	logging.DebugLog("LOGGING ENABLED")
 
 	// set the rendering mode
 	Engine.RenderMode = renderMode
@@ -51,6 +53,13 @@ func Init(renderMode core.RenderMode) {
 
 	// Initialize resource loaders
 	loaders.InitPNGLoader()
+
+
+	// Load shaders
+	_, error := opengl.LoadShaders()
+	if error != nil {
+		logging.DebugLogError("Failed to load shaders: ", error)
+	}
 
 }
 
@@ -76,36 +85,29 @@ func CreateWindow(width, height int, title string, vsync bool) {
 	Engine.LogPanel = logging.InitLogPanel(width, height)
 	util.ImguiRegisterPanel("logPanel", Engine.LogPanel)
 
-  // DEBUGGING ENABLED AFTER THIS POINT
 
-  // Load shaders
-  _, error := opengl.LoadShaders()
-  if error != nil {
-    logging.DebugLogError("Failed to load shaders: ", error)
-  }
 
 }
-
 
 // Creates a scene and sets up an ECS
 func CreateScene() *core.Scene {
 
-  scene := core.NewScene()
-  scene.ECS().AddSystem(&ecs.EntitySystem{
-    Entities: scene.ECS().GetEntities(),
-  })
+	logging.DebugLog("Scene creation requested: ")
 
-  return scene
+	scene := core.NewScene()
+	scene.ECS().AddSystem(&ecs.EntitySystem{
+		Entities: scene.ECS().GetEntities(),
+	})
+
+	return scene
 
 }
 
-
 func SetScene(scene *core.Scene) {
-  
-  Engine.scene = scene
 
-} 
+	Engine.scene = scene
 
+}
 
 // Starts the main game loop
 func Start() {
@@ -127,21 +129,20 @@ func Start() {
 		core.Timer.Update()
 		util.ImguiNewFrame()
 
-    // TODO: find a better place for this
+		// TODO: find a better place for this
 		update()
-  
 
-    // Clear the screen
-    gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+		// Clear the screen
+		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 		// Check the rendermode and do appropriate stuff
 		if Engine.RenderMode == core.RENDER_MODE_IM {
 			IM.NewFrame(core.Timer.DeltaTime())
 		}
 
-    if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
-      Engine.scene.ECS().Update()
-    }
+		if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
+			Engine.scene.ECS().Update()
+		}
 
 		util.ImguiRender()
 
@@ -161,13 +162,9 @@ func Start() {
 
 }
 
-
 func GetWindow() *core.Window {
 	return Engine.Window
 }
-
-
-
 
 func update() {
 
