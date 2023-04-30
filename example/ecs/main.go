@@ -3,8 +3,10 @@ package main
 import (
 	"runtime"
 
+	"github.com/micahke/mango"
 	"github.com/micahke/mango/core"
 	"github.com/micahke/mango/ecs"
+	"github.com/micahke/mango/logging"
 	"github.com/micahke/mango/util/color"
 )
 
@@ -45,19 +47,18 @@ func (game *Game) Init() {
 func (game *Game) Update() {
 
   tranform := game.player.Tranform()
+  logging.Log(tranform)
 
   // I'm only now using the one in the method because I want to get rid of it
   tranform.X += 300 * float32(core.Timer.DeltaTime())
 
   if (tranform.X + 100 > 800) {
-
     tranform.X = 700
   }
 
 }
 
 func (game *Game) Draw() {
-
   mango.IM.FillRect(game.player.Tranform().X, game.player.Tranform().Y, 100, 100, color.ELECTRON_BLUE)
 
 }
