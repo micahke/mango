@@ -31,8 +31,8 @@ func InitLogPanel(width, height int) *LogPanel {
 
 	panel.width, panel.height = width, height
 
-	panel.panelWidth = width
-	panel.panelHeight = int(0.25 * float64(panel.height))
+	panel.panelWidth = width / 2
+	panel.panelHeight = height / 2
 	panel.showGameLogs = true
 	panel.showEngineLogs = true
 
@@ -43,6 +43,10 @@ func InitLogPanel(width, height int) *LogPanel {
 func (panel *LogPanel) RenderPanel() {
 
 
+  imgui.SetNextWindowSize(imgui.Vec2{
+    X: float32(panel.panelWidth),
+    Y: float32(panel.panelHeight),
+  })
 	imgui.BeginV("Mango Log", util.ImguiPanelStatus("logPanel"), 0)
 
 	{

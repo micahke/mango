@@ -47,8 +47,8 @@ func (entity *Entity) Tranform() *components.TransformComponent {
   for _, component := range(entity.components) {
 
     // Check to see if the component is a TransformComponent
-    if transform, ok := component.(components.TransformComponent); ok {
-      return &transform
+    if transform, ok := component.(*components.TransformComponent); ok {
+      return transform
     }
   }
 
@@ -61,7 +61,7 @@ func (entity *Entity) Tranform() *components.TransformComponent {
 // Creates a default transform component
 func (entity *Entity) addTranformComponent() {
 
-  entity.AddComponent(components.TransformComponent{
+  entity.AddComponent(&components.TransformComponent{
     X: 0,
     Y: 0,
   })
