@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/micahke/mango"
 	"github.com/micahke/mango/core"
+	"github.com/micahke/mango/logging"
 )
 
 
@@ -14,7 +15,10 @@ func main() {
   scene := mango.CreateScene()
   mango.SetScene(scene)
 
-  scene.CreateEntity("test")
+  player := scene.CreateEntity("test")
+  player.Tranform().Position.X = 100
+
+  logging.Log(player.Tranform().Position)
 
   mango.CreateWindow(800, 600, "Retained Mode Rendering", true)
   mango.Start()

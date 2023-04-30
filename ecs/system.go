@@ -1,5 +1,6 @@
 package ecs
 
+
 // Base implementation of a system
 type System interface {
 
@@ -12,7 +13,7 @@ type System interface {
 
 
 type EntitySystem struct {
-  Entities []*Entity
+  Entities *[]*Entity
 }
 
 
@@ -22,7 +23,7 @@ func (system *EntitySystem) Init() {}
 
 func (system *EntitySystem) Tick() {
 
-  for _, entity := range(system.Entities) {
+  for _, entity := range(*system.Entities) {
 
     entity.Update()
 

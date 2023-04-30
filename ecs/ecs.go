@@ -51,12 +51,14 @@ func (ecs *ECS) GetEntity(id string) *Entity {
 
 
 // Get all the entities in the scene
-func (ecs *ECS) GetEntities() []*Entity {
-  return ecs.entities
+func (ecs *ECS) GetEntities() *[]*Entity {
+  return &ecs.entities
 }
 
 
 func (ecs *ECS) AddSystem(system interface{}) (System, error) {
+
+  logging.DebugLog("Adding system")
 
   // Check if the system implements the system interface
   if _, ok := system.(System); ok {
@@ -92,6 +94,7 @@ func (ecs *ECS) updateEntities() {
 
 // Handles the updating of various systems every frame
 func (ecs *ECS) tickSystems() {
+
 
   for _, system := range(ecs.systems) {
 
