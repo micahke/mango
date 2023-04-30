@@ -61,10 +61,7 @@ func (entity *Entity) Tranform() *components.TransformComponent {
 // Creates a default transform component
 func (entity *Entity) addTranformComponent() {
 
-  entity.AddComponent(&components.TransformComponent{
-    X: 0,
-    Y: 0,
-  })
+  entity.AddComponent(&components.TransformComponent{})
 
 }
 
