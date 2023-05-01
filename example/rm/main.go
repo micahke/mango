@@ -20,7 +20,9 @@ func main() {
   player := scene.CreateEntity("test")
   player.Tranform().Position.X = 100
 
-  addEntities(scene, 32)
+  player.AddComponent(&CustomComponent{})
+
+  // addEntities(scene, 32)
 
   logging.Log(player.Tranform().Position)
 
@@ -36,4 +38,18 @@ func addEntities(scene*core.Scene, num int) {
     scene.CreateEntity(fmt.Sprint("entity", i))
   }
 
+}
+
+
+
+type CustomComponent struct {}
+
+
+func (cc *CustomComponent) Init() {}
+
+func (cc *CustomComponent) Update() {
+}
+
+func (cc *CustomComponent) GetComponentName() string {
+  return "Custom Component"
 }

@@ -23,6 +23,8 @@ type LogPanel struct {
 	showEngineLogs bool
 
 	freeScroll bool
+
+	errorColor imgui.Vec4
 }
 
 func InitLogPanel(width, height int) *LogPanel {
@@ -36,17 +38,23 @@ func InitLogPanel(width, height int) *LogPanel {
 	panel.showGameLogs = true
 	panel.showEngineLogs = true
 
+	panel.errorColor = imgui.Vec4{
+    X: 1.0,
+    Y: 0.0,
+    Z: 0.0,
+    W: 1.0,
+  }
+
 	return panel
 
 }
 
 func (panel *LogPanel) RenderPanel() {
 
-
-  imgui.SetNextWindowSize(imgui.Vec2{
-    X: float32(panel.panelWidth),
-    Y: float32(panel.panelHeight),
-  })
+	imgui.SetNextWindowSizeV(imgui.Vec2{
+		X: float32(panel.panelWidth),
+		Y: float32(panel.panelHeight),
+	}, imgui.ConditionOnce)
 	imgui.BeginV("Mango Log", util.ImguiPanelStatus("logPanel"), 0)
 
 	{
@@ -56,7 +64,6 @@ func (panel *LogPanel) RenderPanel() {
 		}
 
 		imgui.SameLine()
-
 
 		imgui.SameLine()
 
@@ -81,20 +88,16 @@ func (panel *LogPanel) RenderPanel() {
 
 		for _, logItem := range iterator {
 			logStr := constructLogString(logItem)
-			// if imgui.TreeNode(logStr) {
-			//   imgui.Text(logStr)
-			//   imgui.TreePop()
-			// }
 			if len(panel.filter) > 0 {
 				if !panel.containsSearchTerm(logStr) {
 					continue
 				}
 			}
 			if panel.showGameLogs && logItem.source == APP {
-				imgui.Text(logStr)
+				panel.DrawLogText(logStr, logItem.logType)
 			}
 			if panel.showEngineLogs && logItem.source == ENGINE {
-				imgui.Text(logStr)
+				panel.DrawLogText(logStr, logItem.logType)
 			}
 		}
 
@@ -110,6 +113,18 @@ func (panel *LogPanel) RenderPanel() {
 
 }
 
+func (panel *LogPanel) DrawLogText(text string, logType LogType) {
+
+	if logType == LOG_ERROR {
+		imgui.PushStyleColor(imgui.StyleColorText, panel.errorColor)
+		imgui.Text(text)
+		imgui.PopStyleColor()
+	} else {
+		imgui.Text(text)
+	}
+
+}
+
 func (panel *LogPanel) containsSearchTerm(log string) bool {
 
 	return strings.Contains(log, panel.filter)
@@ -119,6 +134,14 @@ func (panel *LogPanel) containsSearchTerm(log string) bool {
 func constructLogString(item *LogItem) string {
 
 	str := "["
+
+  if item.source == ENGINE {
+    str += "ENGINE "
+  }
+
+  if item.source == APP {
+    str += "APPLICATION "
+  }
 
 	// add log type
 	if item.logType == LOG_LOG {

@@ -42,6 +42,10 @@ func (editor *SceneEditor) RenderPanel() {
 	imgui.SetNextWindowSizeV(size, imgui.ConditionOnce)
 	imgui.BeginV("Scene Editor", util.ImguiPanelStatus("sceneEditor"), 0)
 
+  if imgui.Button("Add Entity") {
+    editor.Scene.CreateEntity("Unnamed Entity")
+  }
+
 	imgui.ListBox("Entity List", &editor.currentEntityIndex, entityNames)
 
 	imgui.Spacing()
@@ -49,6 +53,10 @@ func (editor *SceneEditor) RenderPanel() {
 
 	imgui.Spacing()
 	imgui.Text(fmt.Sprint("Selected entity:\t", currentEntity.Name))
+	imgui.Spacing()
+
+  imgui.InputText("Edit Name", &currentEntity.Name)
+
 	imgui.Spacing()
 
 	for _, component := range currentEntity.Components {
