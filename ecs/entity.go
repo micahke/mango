@@ -62,7 +62,7 @@ func (entity *Entity) Tranform() *components.TransformComponent {
 func (entity *Entity) addTranformComponent() {
 
   entity.AddComponent(&components.TransformComponent{
-    Name: "transform",
+    Name: "Transform",
   })
 
 }
