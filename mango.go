@@ -20,9 +20,10 @@ type Mango struct {
 	Window     *core.Window
 	LogPanel   *logging.LogPanel
 
+	SceneEditor *core.SceneEditor
+
 	scene *core.Scene
 }
-
 
 // The main engine instance
 var Engine *Mango
@@ -55,7 +56,6 @@ func Init(renderMode core.RenderMode) {
 	// Initialize resource loaders
 	loaders.InitPNGLoader()
 
-
 	// Load shaders
 	_, error := opengl.LoadShaders()
 	if error != nil {
@@ -83,11 +83,16 @@ func CreateWindow(width, height int, title string, vsync bool) {
 	// At this point, OpenGL is ready to be used anywhere in the program
 
 	util.InitImguiLayer(Engine.Window.Window)
+
+  // Create logging panel
 	Engine.LogPanel = logging.InitLogPanel(width, height)
 	util.ImguiRegisterPanel("logPanel", Engine.LogPanel)
 
-
-
+  // Scene Editor
+  if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
+    Engine.SceneEditor = core.NewSceneEditor(Engine.scene)
+    util.ImguiRegisterPanel("sceneEditor", Engine.SceneEditor)
+  }
 }
 
 // Creates a scene and sets up an ECS
@@ -107,6 +112,7 @@ func CreateScene() *core.Scene {
 func SetScene(scene *core.Scene) {
 
 	Engine.scene = scene
+
 
 }
 
@@ -161,8 +167,7 @@ func Start() {
 
 	glfw.Terminate()
 
-
-  cleanup()
+	cleanup()
 
 }
 
@@ -177,7 +182,14 @@ func cleanup() {
 }
 
 func processInput() {
+  // On left CTRL, show log
 	if input.GetKeyDown(input.KEY_LEFT_CTRL) {
 		util.ImguiTogglePanel("logPanel")
 	}
+
+  // On left tab, open scene editor
+  if input.GetKeyDown(input.KEY_LEFT_SHIFT) {
+    util.ImguiTogglePanel("sceneEditor")
+  }
+
 }

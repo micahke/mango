@@ -32,6 +32,7 @@ func (ecs *ECS) Update() {
 func (ecs *ECS) CreateEntity(id string) *Entity {
 
   entity := new(Entity)
+  entity.Name = id
   ecs.addEntityToECS(entity)
 
   return entity
@@ -41,7 +42,7 @@ func (ecs *ECS) CreateEntity(id string) *Entity {
 func (ecs *ECS) GetEntity(id string) *Entity {
 
   for _, entity := range(ecs.entities) {
-    if entity.id == id {
+    if entity.Name == id {
       return entity
     }
   }

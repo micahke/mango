@@ -9,7 +9,7 @@ import (
 
 type Entity struct {
   
-  id string
+  Name string
 	components []interface{}
 
 }
