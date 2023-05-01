@@ -4,13 +4,14 @@ import (
 	"fmt"
 
 	"github.com/AllenDang/imgui-go"
+	"github.com/micahke/mango/ecs"
 	"github.com/micahke/mango/util"
 )
 
 type SceneEditor struct {
 	Scene *Scene
 
-  currentEntityIndex int32
+	currentEntityIndex int32
 }
 
 func NewSceneEditor(scene *Scene) *SceneEditor {
@@ -26,32 +27,77 @@ func NewSceneEditor(scene *Scene) *SceneEditor {
 // Render the editor panel
 func (editor *SceneEditor) RenderPanel() {
 
-  entityNames := editor.getEntityNames()
+	entityNames := editor.getEntityNames()
+	currentEntity := editor.Scene.ECS().GetEntity(entityNames[editor.currentEntityIndex])
 
-  imgui.SetNextWindowSizeV(imgui.Vec2{400, 400}, imgui.ConditionOnce)
+	if currentEntity == nil {
+		return
+	}
+
+	size := imgui.Vec2{
+		X: 400,
+		Y: 400,
+	}
+
+	imgui.SetNextWindowSizeV(size, imgui.ConditionOnce)
 	imgui.BeginV("Scene Editor", util.ImguiPanelStatus("sceneEditor"), 0)
 
-  imgui.Text("Entity List")
-  imgui.PushItemWidth(-1.0)
-	imgui.ListBox("List Box", &editor.currentEntityIndex, entityNames)
+	imgui.ListBox("Entity List", &editor.currentEntityIndex, entityNames)
 
-  imgui.Separator()
-  
-  imgui.Text(fmt.Sprint("Selected entity:\t", entityNames[editor.currentEntityIndex]))
+	imgui.Spacing()
+	imgui.Separator()
+
+	imgui.Spacing()
+	imgui.Text(fmt.Sprint("Selected entity:\t", currentEntity.Name))
+	imgui.Spacing()
+
+	for _, component := range currentEntity.Components {
+		// Get the name of the component
+		name := ecs.GetComponentName(component)
+		// Draw the tree node for the component
+		if imgui.TreeNodeV(name, 2) {
+
+			editor.renderControlPanel(component)
+
+			imgui.TreePop()
+		}
+
+	}
 
 	imgui.End()
 
 }
 
-
 func (editor *SceneEditor) getEntityNames() []string {
 
-  names := make([]string, len(*editor.Scene.ecs.GetEntities()))
+	names := make([]string, len(*editor.Scene.ecs.GetEntities()))
 
-  for i, entity := range(*editor.Scene.ecs.GetEntities()) {
-    names[i] = entity.Name
-  }
+	for i, entity := range *editor.Scene.ecs.GetEntities() {
+		names[i] = entity.Name
+	}
 
-  return names
+	return names
+
+}
+
+func (editor *SceneEditor) renderControlPanel(component interface{}) {
+
+	// Check to see whether the entity implements the UIEditableComponent interface
+
+	// imgui.PushItemWidth(-1.0)
+	// imgui.BeginChildV("Control Panel", imgui.Vec2{
+	// 	X: 0,
+	// 	Y: 0,
+	// }, true, 0)
+
+	controlPanel, ok := component.(ecs.UIEditableComponent)
+
+	if ok {
+		controlPanel.RenderControlPanel()
+	} else {
+		imgui.Text("This component does not implement a control panel")
+	}
+
+	// imgui.EndChild()
 
 }

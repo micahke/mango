@@ -10,7 +10,7 @@ import (
 type Entity struct {
   
   Name string
-	components []interface{}
+	Components []interface{}
 
 }
 
@@ -19,7 +19,7 @@ type Entity struct {
 func (entity *Entity) Update() {
 
 
-  for _, component := range(entity.components) {
+  for _, component := range(entity.Components) {
 
     // Check to see if this is a valid component
     if _, ok := component.(Component); ok {
@@ -36,7 +36,7 @@ func (entity *Entity) Update() {
 
 func (entity *Entity) AddComponent(component interface{}) {
 
-  entity.components = append(entity.components, component)
+  entity.Components = append(entity.Components, component)
 
 }
 
@@ -44,7 +44,7 @@ func (entity *Entity) AddComponent(component interface{}) {
 // Get the transform component of the entity
 func (entity *Entity) Tranform() *components.TransformComponent {
 
-  for _, component := range(entity.components) {
+  for _, component := range(entity.Components) {
 
     // Check to see if the component is a TransformComponent
     if transform, ok := component.(*components.TransformComponent); ok {
@@ -61,7 +61,9 @@ func (entity *Entity) Tranform() *components.TransformComponent {
 // Creates a default transform component
 func (entity *Entity) addTranformComponent() {
 
-  entity.AddComponent(&components.TransformComponent{})
+  entity.AddComponent(&components.TransformComponent{
+    Name: "transform",
+  })
 
 }
 

@@ -121,3 +121,16 @@ func (ecs *ECS) addSystem(system System) {
 
 }
 
+
+func GetComponentName(component interface{}) string {
+
+  // Check to see if it implements NamedComponent
+
+  if component, ok := component.(NamedComponent); ok {
+    // If it's okay, return the name
+    return component.GetComponentName()
+  }
+  
+  return "Unnamed Component"
+
+}

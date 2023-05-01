@@ -9,4 +9,16 @@ type Component interface {
   // This function updated every frame
   Update()
 
+
+}
+
+type NamedComponent interface {
+  GetComponentName() string
+}
+
+
+type UIEditableComponent interface {
+
+  RenderControlPanel()
+
 }

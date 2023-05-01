@@ -5,11 +5,11 @@ import (
 	"math/rand"
 	"runtime"
 
-	"github.com/micahke/infinite-universe/mango"
-	"github.com/micahke/infinite-universe/mango/core"
-	"github.com/micahke/infinite-universe/mango/im"
-	"github.com/micahke/infinite-universe/mango/logging"
-	"github.com/micahke/infinite-universe/mango/util/color"
+	"github.com/micahke/mango"
+	"github.com/micahke/mango/core"
+	"github.com/micahke/mango/im"
+	"github.com/micahke/mango/logging"
+	"github.com/micahke/mango/util/color"
 )
 
 func init() {
@@ -86,7 +86,7 @@ func (pong *Pong) Init() {
   pong.leftPaddle.calcTarget()
 }
 
-func (pong *Pong) Update(deltaTime float64) {
+func (pong *Pong) Update() {
   pong.updateBall();
 
     pong.leftPaddle.upOrDown(pong.ball)
