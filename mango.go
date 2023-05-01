@@ -129,7 +129,12 @@ func Start() {
 		start := glfw.GetTime()
 
 		Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)
-		Engine.Window.SetKeyCallback(input.KeyCallback)
+
+    if util.ImguiWantsTextInput(){
+      util.ImguiSetDefaultKeyCallback()
+    } else {
+      Engine.Window.SetKeyCallback(input.KeyCallback)
+    }
 
 		glfw.PollEvents()
 
@@ -163,7 +168,6 @@ func Start() {
 		core.Timer.UpdateFrameData(start, end)
 	}
 
-	// util.ImguiDestroy()
 
 	glfw.Terminate()
 

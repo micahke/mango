@@ -46,7 +46,12 @@ func (editor *SceneEditor) RenderPanel() {
     editor.Scene.CreateEntity("Unnamed Entity")
   }
 
-	imgui.ListBox("Entity List", &editor.currentEntityIndex, entityNames)
+  var heightItems int = 5
+  if len(entityNames) > 10 {
+    heightItems = 10
+  }
+
+	imgui.ListBoxV("Entity List", &editor.currentEntityIndex, entityNames, heightItems)
 
 	imgui.Spacing()
 	imgui.Separator()

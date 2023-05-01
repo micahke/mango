@@ -13,8 +13,8 @@ github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b h1:GgabKamyOY
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
 github.com/go-gl/mathgl v1.0.0 h1:t9DznWJlXxxjeeKLIdovCOVJQk/GzDEL7h/h+Ro2B68=
 github.com/go-gl/mathgl v1.0.0/go.mod h1:yhpkQzEiH9yPyxDUGzkmgScbaBVlhC06qodikEM0ZwQ=
-github.com/micahke/glfw_imgui_backend v0.0.0-20230308164351-0b5674c98765 h1:WSM1hHH0xJLxw3/CCnsdN1kcsxYgJ5wAFJ/cAnmcL7w=
-github.com/micahke/glfw_imgui_backend v0.0.0-20230308164351-0b5674c98765/go.mod h1:P67go3IWtu6ApoYNgSLOumqPLEpSHD37decCmE0BIeg=
+github.com/micahke/glfw_imgui_backend v0.0.0-20230501213858-e92abaec6faa h1:lLOabbBXJGvZXMiBlVZ04Ju9D4KwA+E79n4Wz1Ogjug=
+github.com/micahke/glfw_imgui_backend v0.0.0-20230501213858-e92abaec6faa/go.mod h1:P67go3IWtu6ApoYNgSLOumqPLEpSHD37decCmE0BIeg=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

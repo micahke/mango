@@ -42,6 +42,13 @@ func GetImguiLayer() *ImguiLayer {
 	return imgui_layer
 }
 
+// Revert to the default key callback
+func ImguiSetDefaultKeyCallback() {
+  imgui_layer.impl.SetDefaultKeyCallback()
+}
+
+
+
 func ImguiNewFrame() {
 	imgui_layer.impl.NewFrame()
 }
