@@ -192,7 +192,7 @@ func processInput() {
 	}
 
   // On left tab, open scene editor
-  if input.GetKeyDown(input.KEY_LEFT_SHIFT) {
+  if input.GetKeyDown(input.KEY_TAB) {
     util.ImguiTogglePanel("sceneEditor")
   }
 
