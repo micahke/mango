@@ -4,8 +4,11 @@ import (
 	"fmt"
 
 	"github.com/micahke/mango"
+	"github.com/micahke/mango/components"
+	"github.com/micahke/mango/components/shape"
 	"github.com/micahke/mango/core"
 	"github.com/micahke/mango/logging"
+	// "github.com/micahke/mango/logging"
 )
 
 
@@ -20,13 +23,21 @@ func main() {
   player := scene.CreateEntity("test")
   player.Tranform().Position.X = 100
 
+  shapeComponent := &components.Shape2DComponent{}
+  rect := shape.Rect{
+    Width: 100,
+    Height: 100,
+  }
+  shapeComponent.SetShape(&rect)
+  player.AddComponent(shapeComponent)
+
   player.AddComponent(&CustomComponent{})
 
-  // addEntities(scene, 32)
+  addEntities(scene, 10)
 
   logging.Log(player.Tranform().Position)
 
-  mango.CreateWindow(800, 600, "Retained Mode Rendering", true)
+  mango.CreateWindow(1300, 800, "Retained Mode Rendering", true)
   mango.Start()
 
 }

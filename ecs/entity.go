@@ -12,11 +12,28 @@ type Entity struct {
   Name string
 	Components []interface{}
 
+  componentBuffer []interface{}
+
 }
 
 
 
 func (entity *Entity) Update() {
+
+  // activate new components
+  for _, component := range(entity.componentBuffer) {
+    if _, ok := component.(Component); ok {
+      cmp := component.(Component)
+
+      // Initializing component
+      cmp.Init()
+
+      entity.Components = append(entity.Components, cmp)
+
+    }
+  }
+
+  entity.componentBuffer = []interface{}{}
 
 
   for _, component := range(entity.Components) {
@@ -25,6 +42,7 @@ func (entity *Entity) Update() {
     if _, ok := component.(Component); ok {
       
       cmp := component.(Component)
+
       cmp.Update()
 
     }
@@ -36,7 +54,7 @@ func (entity *Entity) Update() {
 
 func (entity *Entity) AddComponent(component interface{}) {
 
-  entity.Components = append(entity.Components, component)
+  entity.componentBuffer = append(entity.componentBuffer, component)
 
 }
 
@@ -45,6 +63,14 @@ func (entity *Entity) AddComponent(component interface{}) {
 func (entity *Entity) Tranform() *components.TransformComponent {
 
   for _, component := range(entity.Components) {
+
+    // Check to see if the component is a TransformComponent
+    if transform, ok := component.(*components.TransformComponent); ok {
+      return transform
+    }
+  }
+
+  for _, component := range(entity.componentBuffer) {
 
     // Check to see if the component is a TransformComponent
     if transform, ok := component.(*components.TransformComponent); ok {
