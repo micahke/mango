@@ -1,11 +1,8 @@
 package components
 
 import (
-	"fmt"
-
 	"github.com/AllenDang/imgui-go"
 	"github.com/micahke/mango/components/shape"
-	"github.com/micahke/mango/logging"
 )
 
 type Shape2DComponent struct {
@@ -28,7 +25,6 @@ var SHAPES_LIST = [3]string{
 }
 
 func (component *Shape2DComponent) Init() {
-	fmt.Println("Initializing shape")
 	component.Name = "Shape2D"
 }
 
@@ -58,7 +54,6 @@ func (component *Shape2DComponent) RenderControlPanel() {
 	}
 	imgui.Spacing()
 
-  logging.DebugLog(component.Shape)
 
 	if component.Shape == nil {
 		return

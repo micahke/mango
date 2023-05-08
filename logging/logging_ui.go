@@ -33,7 +33,7 @@ func InitLogPanel(width, height int) *LogPanel {
 
 	panel.width, panel.height = width, height
 
-	panel.panelWidth = width / 2
+	panel.panelWidth = 400
 	panel.panelHeight = height / 2
 	panel.showGameLogs = true
 	panel.showEngineLogs = true

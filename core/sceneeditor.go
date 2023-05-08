@@ -36,7 +36,7 @@ func (editor *SceneEditor) RenderPanel() {
 
 	size := imgui.Vec2{
 		X: 400,
-		Y: 400,
+		Y: 550,
 	}
 
 	imgui.SetNextWindowSizeV(size, imgui.ConditionOnce)

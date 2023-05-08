@@ -36,7 +36,7 @@ func init() {
 }
 
 // Initialization function for the engine
-func Init(renderMode core.RenderMode) {
+func Init(renderMode core.RenderMode, args ...any) {
 
 	// create a nre instance of Mango
 	Engine = new(Mango)
@@ -87,11 +87,17 @@ func CreateWindow(width, height int, title string, vsync bool) {
   // Create logging panel
 	Engine.LogPanel = logging.InitLogPanel(width, height)
 	util.ImguiRegisterPanel("logPanel", Engine.LogPanel)
+  if core.Settings.CONSOLE_ON_STARTUP {
+    util.ImguiActivatePanel("logPanel")
+  }
 
   // Scene Editor
   if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
     Engine.SceneEditor = core.NewSceneEditor(Engine.scene)
     util.ImguiRegisterPanel("sceneEditor", Engine.SceneEditor)
+    if core.Settings.SCENE_EDITOR_STARTUP {
+      util.ImguiActivatePanel("sceneEditor")
+    }
   }
 }
 
@@ -125,6 +131,7 @@ func SetScene(scene *core.Scene) {
   })
 
 }
+
 
 // Starts the main game loop
 func Start() {
