@@ -5,14 +5,15 @@ import (
 )
 
 
-
-
 type Entity struct {
   
   Name string
 	Components []interface{}
 
   componentBuffer []interface{}
+
+  // Represents whether or not this entity gets rendered
+  Renderable bool
 
 }
 
@@ -42,6 +43,11 @@ func (entity *Entity) Update() {
     if _, ok := component.(Component); ok {
       
       cmp := component.(Component)
+
+      // If the component is renderable, mark it as such
+      if isRenderableComponent(cmp) {
+        entity.Renderable = true
+      }
 
       cmp.Update()
 

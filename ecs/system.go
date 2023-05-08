@@ -12,22 +12,3 @@ type System interface {
 }
 
 
-type EntitySystem struct {
-  Entities *[]*Entity
-}
-
-
-
-func (system *EntitySystem) Init() {}
-
-
-func (system *EntitySystem) Tick() {
-
-  for _, entity := range(*system.Entities) {
-
-    entity.Update()
-
-
-  }
-
-}

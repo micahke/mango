@@ -6,11 +6,11 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/micahke/mango/core"
-	"github.com/micahke/mango/ecs"
 	"github.com/micahke/mango/im"
 	"github.com/micahke/mango/input"
 	"github.com/micahke/mango/logging"
 	"github.com/micahke/mango/opengl"
+	"github.com/micahke/mango/system"
 	"github.com/micahke/mango/util"
 	"github.com/micahke/mango/util/loaders"
 )
@@ -101,18 +101,28 @@ func CreateScene() *core.Scene {
 	logging.DebugLog("Scene creation requested: ")
 
 	scene := core.NewScene()
-	scene.ECS().AddSystem(&ecs.EntitySystem{
-		Entities: scene.ECS().GetEntities(),
-	})
 
 	return scene
 
+}
+
+// Handles the creation of the core systems that the ECS uses
+// These systems are the ones responsible to handling the entity's logic
+func setupCoreSystems() {
+  
 }
 
 func SetScene(scene *core.Scene) {
 
 	Engine.scene = scene
 
+	scene.ECS().AddSystem(&system.EntitySystem{
+		Entities: scene.ECS().GetEntities(),
+	})
+
+  scene.ECS().AddSystem(&system.RenderSystem{
+		Entities: scene.ECS().GetEntities(),
+  })
 
 }
 

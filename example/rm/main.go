@@ -20,7 +20,7 @@ func main() {
   scene := mango.CreateScene()
   mango.SetScene(scene)
 
-  player := scene.CreateEntity("test")
+  player := scene.CreateEntity("player")
   player.Tranform().Position.X = 100
 
   shapeComponent := &components.Shape2DComponent{}
@@ -31,6 +31,7 @@ func main() {
   shapeComponent.SetShape(&rect)
   player.AddComponent(shapeComponent)
 
+  player.AddComponent(&components.SampleComponent{})
   player.AddComponent(&CustomComponent{})
 
   addEntities(scene, 10)
