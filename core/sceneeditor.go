@@ -12,13 +12,17 @@ type SceneEditor struct {
 	Scene *Scene
 
 	currentEntityIndex int32
+  windowWidth int
+  windowHeight int
 }
 
-func NewSceneEditor(scene *Scene) *SceneEditor {
+func NewSceneEditor(scene *Scene, windowWidth, windowHeight int) *SceneEditor {
 
 	editor := &SceneEditor{}
 
 	editor.Scene = scene
+  editor.windowWidth = windowWidth
+  editor.windowHeight = windowHeight
 
 	return editor
 
@@ -36,9 +40,15 @@ func (editor *SceneEditor) RenderPanel() {
 
 	size := imgui.Vec2{
 		X: 400,
-		Y: 550,
+		Y: float32(editor.windowHeight),
 	}
 
+  position := imgui.Vec2{
+    X: float32(editor.windowWidth) - size.X,
+    Y: 0,
+  }
+
+  imgui.SetNextWindowPosV(position, imgui.ConditionOnce, imgui.Vec2{X: 0, Y: 0})
 	imgui.SetNextWindowSizeV(size, imgui.ConditionOnce)
 	imgui.BeginV("Scene Editor", util.ImguiPanelStatus("sceneEditor"), 0)
 
@@ -64,6 +74,8 @@ func (editor *SceneEditor) RenderPanel() {
 
 	imgui.Spacing()
 
+  imgui.BeginChild("Components")
+
 	for _, component := range currentEntity.Components {
 		// Get the name of the component
 		name := ecs.GetComponentName(component)
@@ -76,6 +88,8 @@ func (editor *SceneEditor) RenderPanel() {
 		}
 
 	}
+
+  imgui.EndChild()
 
 	imgui.End()
 

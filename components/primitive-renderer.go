@@ -37,6 +37,7 @@ func (component *PrimitiveRenderer) RenderControlPanel() {
     component.Color.W(),
   }
 
+  imgui.PushItemWidth(200)
   imgui.ColorPicker4V("Color", &colorTempArr, imgui.ColorPickerFlagsPickerHueWheel)
   imgui.Spacing()
 

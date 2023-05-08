@@ -93,7 +93,7 @@ func CreateWindow(width, height int, title string, vsync bool) {
 
   // Scene Editor
   if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
-    Engine.SceneEditor = core.NewSceneEditor(Engine.scene)
+    Engine.SceneEditor = core.NewSceneEditor(Engine.scene, width, height)
     util.ImguiRegisterPanel("sceneEditor", Engine.SceneEditor)
     if core.Settings.SCENE_EDITOR_STARTUP {
       util.ImguiActivatePanel("sceneEditor")
