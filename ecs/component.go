@@ -30,9 +30,17 @@ type UIEditableComponent interface {
 func isRenderableComponent(component Component) bool {
   // For testing, we're setting the sample component as something that
   // that can be rendered
-  _, err := component.(*components.SampleComponent)
-  if err {
-    return false
+  _, sampleError := component.(*components.SampleComponent)
+  if !sampleError {
+    return true
   }
-  return true
+
+
+  _, primitiveError := component.(*components.PrimitiveRenderer)
+  if !primitiveError {
+    return true
+  }
+
+  return false
+
 }

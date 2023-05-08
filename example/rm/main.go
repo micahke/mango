@@ -34,8 +34,9 @@ func main() {
   shapeComponent.SetShape(&rect)
   player.AddComponent(shapeComponent)
 
+  player.AddComponent(&components.PrimitiveRenderer{})
   player.AddComponent(&components.SampleComponent{})
-  player.AddComponent(&CustomComponent{})
+  // player.AddComponent(&CustomComponent{})
 
   addEntities(scene, 10)
 
