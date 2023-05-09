@@ -1,10 +1,10 @@
 package components
 
 import (
-	"fmt"
 
 	"github.com/AllenDang/imgui-go"
 	// "github.com/micahke/mango/util"
+	"github.com/micahke/mango/util"
 	"github.com/micahke/mango/util/math"
 )
 
@@ -35,11 +35,11 @@ func (transform *TransformComponent) renderDragFloats(id string, first, second, 
 
   imgui.PushStyleVarVec2(imgui.StyleVarItemSpacing, imgui.Vec2{X: 0, Y:0})
 
-  imgui.PushStyleColor(imgui.StyleColorButton, imgui.Vec4{0.91, 0.30, 0.21, 1.0})
-  imgui.PushStyleColor(imgui.StyleColorButtonHovered, imgui.Vec4{1.0, 0.40, 0.31, 1.0})
-  imgui.PushStyleColor(imgui.StyleColorButtonActive, imgui.Vec4{1.0, 0.40, 0.31, 1.0})
+  imgui.PushStyleColor(imgui.StyleColorButton, util.ImguiGenVec4(0.91, 0.30, 0.21, 1.0))
+  imgui.PushStyleColor(imgui.StyleColorButtonHovered, util.ImguiGenVec4(1.0, 0.40, 0.31, 1.0))
+  imgui.PushStyleColor(imgui.StyleColorButtonActive, util.ImguiGenVec4(1.0, 0.40, 0.31, 1.0))
 	if imgui.Button("X") {
-		fmt.Println("Okay")
+    *first = 0.0
 	}
   imgui.PopStyleColorV(3)
 	imgui.SameLine()
@@ -49,11 +49,11 @@ func (transform *TransformComponent) renderDragFloats(id string, first, second, 
 
 	imgui.SameLine()
 
-  imgui.PushStyleColor(imgui.StyleColorButton, imgui.Vec4{0.15, 0.68, 0.38, 1.0})
-  imgui.PushStyleColor(imgui.StyleColorButtonHovered, imgui.Vec4{0.25, 0.78, 0.48, 1.0})
-  imgui.PushStyleColor(imgui.StyleColorButtonActive, imgui.Vec4{0.25, 0.78, 0.48, 1.0})
+  imgui.PushStyleColor(imgui.StyleColorButton, util.ImguiGenVec4(0.15, 0.68, 0.38, 1.0))
+  imgui.PushStyleColor(imgui.StyleColorButtonHovered, util.ImguiGenVec4(0.25, 0.78, 0.48, 1.0))
+  imgui.PushStyleColor(imgui.StyleColorButtonActive, util.ImguiGenVec4(0.25, 0.78, 0.48, 1.0))
 	if imgui.Button("Y") {
-		fmt.Println("Okay")
+    *second = 0.0
 	}
   imgui.PopStyleColorV(3)
   imgui.PopItemWidth()
@@ -65,11 +65,11 @@ func (transform *TransformComponent) renderDragFloats(id string, first, second, 
 	imgui.SameLine()
 
 
-  imgui.PushStyleColor(imgui.StyleColorButton, imgui.Vec4{0.16, 0.50, 0.73, 1.0})
-  imgui.PushStyleColor(imgui.StyleColorButtonHovered, imgui.Vec4{0.26, 0.83, 0.83, 1.0})
-  imgui.PushStyleColor(imgui.StyleColorButtonActive, imgui.Vec4{0.26, 0.83, 0.83, 1.0})
+  imgui.PushStyleColor(imgui.StyleColorButton, util.ImguiGenVec4(0.16, 0.50, 0.73, 1.0))
+  imgui.PushStyleColor(imgui.StyleColorButtonHovered, util.ImguiGenVec4(0.26, 0.83, 0.83, 1.0))
+  imgui.PushStyleColor(imgui.StyleColorButtonActive, util.ImguiGenVec4(0.26, 0.83, 0.83, 1.0))
 	if imgui.Button("Z") {
-		fmt.Println("Okay")
+    *third = 0.0
 	}
   imgui.PopStyleColorV(3)
 	imgui.SameLine()

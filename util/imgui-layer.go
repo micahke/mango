@@ -48,6 +48,15 @@ func ImguiSetDefaultKeyCallback() {
 }
 
 
+func ImguiGenVec4(v1, v2, v3, v4 float32) imgui.Vec4 {
+  return imgui.Vec4{
+    X: v1,
+    Y: v2,
+    Z: v3,
+    W: v4,
+  }
+}
+
 
 func ImguiNewFrame() {
 	imgui_layer.impl.NewFrame()
