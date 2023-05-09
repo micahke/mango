@@ -1,6 +1,9 @@
 package ecs
 
 import (
+	"fmt"
+	"reflect"
+
 	"github.com/micahke/mango/components"
 )
 
@@ -100,3 +103,23 @@ func (entity *Entity) addTranformComponent() {
 }
 
 
+// Checks whether the enitity has a given componetn
+func (entity *Entity) HasComponent(t reflect.Type) bool {
+  for _, component := range(entity.Components) {
+    if reflect.TypeOf(component) == t {
+      return true
+    }
+  }
+  return false
+}
+
+
+// Gets a component if it exists
+func (entity *Entity) GetComponent(t reflect.Type) (interface{}, error) {
+  for _, component := range(entity.Components) {
+    if reflect.TypeOf(component) == t {
+      return component, nil
+    }
+  }
+  return nil, fmt.Errorf("No component found")
+}

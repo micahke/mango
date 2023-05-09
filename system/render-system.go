@@ -1,27 +1,42 @@
 package system
 
 import (
+	"reflect"
+
 	"github.com/micahke/mango/components"
 	"github.com/micahke/mango/ecs"
 	"github.com/micahke/mango/logging"
+	"github.com/micahke/mango/renderer"
 )
 
 
 type RenderSystem struct {
   Entities  *[]*ecs.Entity
+  tediousRenderer *renderer.TediousRenderer
 }
 
 
-func (renderSystem *RenderSystem) Init() {}
+func (renderSystem *RenderSystem) Init() {
+  renderSystem.tediousRenderer = &renderer.TediousRenderer{}
+}
 
 // This is about to be worst render system of all time
 func (renderSystem *RenderSystem) Tick() {
   // Loop through the entities and detect which of them are renderable
   for _, entity := range(*renderSystem.Entities) {
     if entity.Renderable {
-      // Handle the rendering of the system
+      renderSystem.determineRenderer(entity)
     } 
   }
+}
+
+// Detmines which renderer we send things to
+func (renderSystem *RenderSystem) determineRenderer(entity *ecs.Entity) {
+
+  if entity.HasComponent(reflect.TypeOf(&components.PrimitiveRenderer{})) {
+    logging.DebugLog("Would be sending to the active 2D renderer")
+  }
+
 }
 
 // This check whether or a given component should be iterated upon
@@ -40,8 +55,4 @@ func TrySubmitRenderQueue(component ecs.Component) {
 }
 
 
-// Placeholder
-// I want to replace this using a more efficient ECS system that decouples everything
-func (renderSystem *RenderSystem) TrySubmitRenderQueue(component *ecs.Component) {
-  // renderSystem.renderableComponents = append(renderSystem.renderableComponents, component)
-}
+
