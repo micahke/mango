@@ -1,7 +1,6 @@
 package components
 
 import (
-
 	"github.com/AllenDang/imgui-go"
 	// "github.com/micahke/mango/util"
 	"github.com/micahke/mango/util"
@@ -22,13 +21,15 @@ func (tranform *TransformComponent) Update() {}
 
 func (transform *TransformComponent) renderDragFloats(id string, first, second, third *float32) {
 
+
 	imgui.PushID(id)
 
 	imgui.ColumnsV(2, "", false)
 	imgui.SetColumnWidth(0, 100)
-	imgui.SetColumnWidth(1, 300)
+	imgui.SetColumnWidth(1, imgui.WindowWidth() - 100)
 
-  var itemWidth float32 = (300 - (3 * 32.5)) / 3
+  // var itemWidth float32 = (300 - (3 * 32.5)) / 3
+  var itemWidth float32 = ((imgui.WindowWidth() - 100) - (3 * 25)) / 3
 
 	imgui.Text(id)
 	imgui.NextColumn()

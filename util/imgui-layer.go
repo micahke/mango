@@ -48,6 +48,13 @@ func ImguiSetDefaultKeyCallback() {
 }
 
 
+func ImguiGenVec2(v1, v2 float32) imgui.Vec2 {
+  return imgui.Vec2{
+    X: v1,
+    Y: v2,
+  }
+}
+
 func ImguiGenVec4(v1, v2, v3, v4 float32) imgui.Vec4 {
   return imgui.Vec4{
     X: v1,
