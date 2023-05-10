@@ -1,6 +1,10 @@
 package renderer
 
-import glm "github.com/go-gl/mathgl/mgl32"
+import (
+	glm "github.com/go-gl/mathgl/mgl32"
+	"github.com/micahke/mango/ecs"
+	"github.com/micahke/mango/logging"
+)
 
 // Basically a bad renderer that renders each entity with a draw call
 type TediousRenderer struct {
@@ -18,6 +22,15 @@ func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
 }
 
 
-func (renderer *TediousRenderer) Render() {
+// Handles the entity and starts to work on its available data
+func (renderer *TediousRenderer) Submit(entity *ecs.Entity, renderableComponent RenderableComponent) {
 
+  switch renderableComponent {
+  case PRIMITIVE_RENDERER:
+    logging.DebugLog("Would start to prep vertices for shape2d")
+  }
+
+}
+
+func (renderer *TediousRenderer) Render() {
 }
