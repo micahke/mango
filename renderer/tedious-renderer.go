@@ -1,7 +1,10 @@
 package renderer
 
 import (
+	"reflect"
+
 	glm "github.com/go-gl/mathgl/mgl32"
+	"github.com/micahke/mango/components"
 	"github.com/micahke/mango/ecs"
 	"github.com/micahke/mango/logging"
 )
@@ -11,6 +14,7 @@ type TediousRenderer struct {
   projectionMatrix glm.Mat4
   viewMatrix glm.Mat4
 }
+
 
 
 func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
@@ -27,10 +31,26 @@ func (renderer *TediousRenderer) Submit(entity *ecs.Entity, renderableComponent 
 
   switch renderableComponent {
   case PRIMITIVE_RENDERER:
-    logging.DebugLog("Would start to prep vertices for shape2d")
+    renderer.handlePrimitiveRenderer(entity)
   }
 
 }
+
+func (renderer *TediousRenderer) handlePrimitiveRenderer(entity *ecs.Entity) {
+  // Get the Shape2D component
+  shape2D, err := entity.GetComponent(reflect.TypeOf(&components.Shape2DComponent{}))
+  if err != nil {
+    logging.DebugLogError("Entity does not have a Shape2D component")
+    return
+  }
+
+  correctShape := shape2D.(*components.Shape2DComponent).Determine()
+  if correctShape == components.SHAPE_RECT {
+    logging.DebugLog("Got rectangle shape")
+  }
+
+}
+
 
 func (renderer *TediousRenderer) Render() {
 }

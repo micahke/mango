@@ -42,7 +42,7 @@ func main() {
 
   logging.Log(player.Tranform().Position)
 
-  mango.CreateWindow(1300, 800, "Retained Mode Rendering", true)
+  mango.CreateWindow(1300, 800, "Retained Mode Rendering", false)
   mango.Start()
 
 }

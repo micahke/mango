@@ -12,10 +12,13 @@ type Shape2DComponent struct {
 	selectedShapeIndex int
 }
 
+type Shape2D int
+
 const (
-	SHAPE_RECT    int = 0
-	SHAPE_ELLIPSE int = 1
-	SHAPE_LINE    int = 2
+	SHAPE_NONE    Shape2D = -1
+	SHAPE_RECT    Shape2D = 0
+	SHAPE_ELLIPSE Shape2D = 1
+	SHAPE_LINE    Shape2D = 2
 )
 
 var SHAPES_LIST = [3]string{
@@ -32,6 +35,17 @@ func (component *Shape2DComponent) Update() {}
 
 func (component *Shape2DComponent) GetComponentName() string {
 	return component.Name
+}
+
+func (component *Shape2DComponent) Determine() Shape2D {
+
+	_, ok := component.Shape.(*shape.Rect)
+	if ok {
+		return SHAPE_RECT
+	}
+
+	return SHAPE_NONE
+
 }
 
 func (component *Shape2DComponent) RenderControlPanel() {
@@ -54,43 +68,42 @@ func (component *Shape2DComponent) RenderControlPanel() {
 	}
 	imgui.Spacing()
 
-
 	if component.Shape == nil {
 		return
 	}
 
 	imgui.Text(SHAPES_LIST[component.selectedShapeIndex])
 
-  imgui.Spacing()
+	imgui.Spacing()
 
-  // Check to see if the current shape is a Rect
-  if rect, ok := component.Shape.(*shape.Rect); ok {
-    component.drawRectPanel(rect)
-  }
+	// Check to see if the current shape is a Rect
+	if rect, ok := component.Shape.(*shape.Rect); ok {
+		component.drawRectPanel(rect)
+	}
 
-  imgui.Spacing()
+	imgui.Spacing()
 
 }
 
 func (component *Shape2DComponent) drawRectPanel(rect *shape.Rect) {
 
-  imgui.PushItemWidth(75)
-  imgui.InputFloat("Width", &rect.Width)
-  
-  imgui.PushItemWidth(75)
-  imgui.InputFloat("Height", &rect.Height)
+	imgui.PushItemWidth(75)
+	imgui.InputFloat("Width", &rect.Width)
+
+	imgui.PushItemWidth(75)
+	imgui.InputFloat("Height", &rect.Height)
 
 }
 
 func (component *Shape2DComponent) processShapeSelection(shapeIndex int) {
 	switch shapeIndex {
-	case SHAPE_RECT:
+	case int(SHAPE_RECT):
 		component.SetShape(&shape.Rect{
 			Width:  100,
 			Height: 100,
 		})
 	default:
-    component.SetShape(nil)
+		component.SetShape(nil)
 	}
 }
 
