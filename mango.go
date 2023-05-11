@@ -158,6 +158,7 @@ func Start() {
 		core.Timer.Update()
 		util.ImguiNewFrame()
 
+
 		// TODO: find a better place for this
 		processInput()
 

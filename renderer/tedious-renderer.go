@@ -5,8 +5,10 @@ import (
 
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/mango/components"
+	"github.com/micahke/mango/components/shape"
 	"github.com/micahke/mango/ecs"
 	"github.com/micahke/mango/logging"
+	"github.com/micahke/mango/util/color"
 )
 
 // Basically a bad renderer that renders each entity with a draw call
@@ -17,6 +19,7 @@ type TediousRenderer struct {
 
 
 
+// Initialize the renderer
 func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
 
   // Initialize the renderer with a projection matrix and a view matrix
@@ -37,18 +40,35 @@ func (renderer *TediousRenderer) Submit(entity *ecs.Entity, renderableComponent 
 }
 
 func (renderer *TediousRenderer) handlePrimitiveRenderer(entity *ecs.Entity) {
+  // stopwatch := &util.Stopwatch{}
+  // stopwatch.Start()
   // Get the Shape2D component
-  shape2D, err := entity.GetComponent(reflect.TypeOf(&components.Shape2DComponent{}))
+  primitveRenderer, err := entity.GetComponent(reflect.TypeOf(&components.PrimitiveRenderer{}))
+  color := primitveRenderer.(*components.PrimitiveRenderer).Color
+  transform := entity.Tranform()
+  if err != nil {
+    logging.DebugLogError("No primitive component found for entity")
+  }
+  rawShape, err := entity.GetComponent(reflect.TypeOf(&components.Shape2DComponent{}))
   if err != nil {
     logging.DebugLogError("Entity does not have a Shape2D component")
     return
   }
 
-  correctShape := shape2D.(*components.Shape2DComponent).Determine()
-  if correctShape == components.SHAPE_RECT {
-    logging.DebugLog("Got rectangle shape")
-  }
+  shape2D := rawShape.(*components.Shape2DComponent)
 
+  correctShape := shape2D.Determine()
+  if correctShape == components.SHAPE_RECT {
+    quad := shape2D.Shape.(*shape.Rect)
+    renderer.drawQuad(transform, quad, color)
+  }
+  // end := stopwatch.Stop()
+  // logging.DebugLog("Filtering render data took", end, "MS")
+}
+
+func (renderer *TediousRenderer) drawQuad(tranform *components.TransformComponent, quad *shape.Rect, color color.Color) {
+  // Handles the drawing of a quad
+  logging.DebugLog("Render data:", tranform, quad, color) 
 }
 
 
