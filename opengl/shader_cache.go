@@ -18,29 +18,28 @@ var ShaderCache map[string]string
 // Loads the shaders into the cache
 func LoadShaders() (map[string]string, error) {
 
-    logging.DebugLog("Loading shaders")
-    
-    shaders := make(map[string]string)
-    files, err := fs.Glob(shaderFiles, "shaders/*.glsl")
-    if err != nil {
-        return nil, err
-    }
-    for _, file := range files {
-        contents, err := fs.ReadFile(shaderFiles, file)
-        if err != nil {
-            return nil, err
-        }
-        // shaders[strings.TrimSuffix(file, ".glsl")] = string(contents)
-        shaders[strings.Trim(file, "shaders/")] = string(contents)
-    }
+	logging.DebugLog("Loading shaders")
 
-    ShaderCache = shaders
+	shaders := make(map[string]string)
+	files, err := fs.Glob(shaderFiles, "shaders/*.glsl")
+	if err != nil {
+		return nil, err
+	}
+	for _, file := range files {
+		contents, err := fs.ReadFile(shaderFiles, file)
+		if err != nil {
+			return nil, err
+		}
+		// shaders[strings.TrimSuffix(file, ".glsl")] = string(contents)
+		pathName := strings.Trim(file, "shaders/")
+		shaders[pathName] = string(contents)
+	}
 
+	ShaderCache = shaders
 
-    return ShaderCache, nil
+	return ShaderCache, nil
 }
 
-
 func getShaderFromCache(name string) string {
-  return ShaderCache[name]
+	return ShaderCache[name]
 }

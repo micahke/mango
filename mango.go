@@ -1,6 +1,7 @@
 package mango
 
 import (
+	"fmt"
 	"runtime"
 
 	"github.com/go-gl/gl/v3.3-core/gl"
@@ -82,23 +83,31 @@ func CreateWindow(width, height int, title string, vsync bool) {
 
 	// At this point, OpenGL is ready to be used anywhere in the program
 
+	fmt.Println("OpenGL version", gl.GoStr(gl.GetString(gl.VERSION)))
+
 	util.InitImguiLayer(Engine.Window.Window)
 
-  // Create logging panel
+	// Create logging panel
 	Engine.LogPanel = logging.InitLogPanel(width, height)
 	util.ImguiRegisterPanel("logPanel", Engine.LogPanel)
-  if core.Settings.CONSOLE_ON_STARTUP {
-    util.ImguiActivatePanel("logPanel")
-  }
+	if core.Settings.CONSOLE_ON_STARTUP {
+		util.ImguiActivatePanel("logPanel")
+	}
 
-  // Scene Editor
-  if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
-    Engine.SceneEditor = core.NewSceneEditor(Engine.scene, width, height)
-    util.ImguiRegisterPanel("sceneEditor", Engine.SceneEditor)
-    if core.Settings.SCENE_EDITOR_STARTUP {
-      util.ImguiActivatePanel("sceneEditor")
-    }
-  }
+	// Scene Editor
+	if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
+		Engine.SceneEditor = core.NewSceneEditor(Engine.scene, width, height)
+		util.ImguiRegisterPanel("sceneEditor", Engine.SceneEditor)
+		if core.Settings.SCENE_EDITOR_STARTUP {
+			util.ImguiActivatePanel("sceneEditor")
+		}
+	}
+
+	fmt.Println("Adding render system")
+	Engine.scene.ECS().AddSystem(&system.RenderSystem{
+		Entities: Engine.scene.ECS().GetEntities(),
+	})
+
 }
 
 // Creates a scene and sets up an ECS
@@ -115,7 +124,7 @@ func CreateScene() *core.Scene {
 // Handles the creation of the core systems that the ECS uses
 // These systems are the ones responsible to handling the entity's logic
 func setupCoreSystems() {
-  
+
 }
 
 func SetScene(scene *core.Scene) {
@@ -126,12 +135,7 @@ func SetScene(scene *core.Scene) {
 		Entities: scene.ECS().GetEntities(),
 	})
 
-  scene.ECS().AddSystem(&system.RenderSystem{
-		Entities: scene.ECS().GetEntities(),
-  })
-
 }
-
 
 // Starts the main game loop
 func Start() {
@@ -147,17 +151,16 @@ func Start() {
 
 		Engine.Window.SetMouseButtonCallback(input.MouseButtonCallback)
 
-    if util.ImguiWantsTextInput(){
-      util.ImguiSetDefaultKeyCallback()
-    } else {
-      Engine.Window.SetKeyCallback(input.KeyCallback)
-    }
+		if util.ImguiWantsTextInput() {
+			util.ImguiSetDefaultKeyCallback()
+		} else {
+			Engine.Window.SetKeyCallback(input.KeyCallback)
+		}
 
 		glfw.PollEvents()
 
 		core.Timer.Update()
 		util.ImguiNewFrame()
-
 
 		// TODO: find a better place for this
 		processInput()
@@ -186,7 +189,6 @@ func Start() {
 		core.Timer.UpdateFrameData(start, end)
 	}
 
-
 	glfw.Terminate()
 
 	cleanup()
@@ -204,14 +206,14 @@ func cleanup() {
 }
 
 func processInput() {
-  // On left CTRL, show log
+	// On left CTRL, show log
 	if input.GetKeyDown(input.KEY_LEFT_CTRL) {
 		util.ImguiTogglePanel("logPanel")
 	}
 
-  // On left tab, open scene editor
-  if input.GetKeyDown(input.KEY_TAB) {
-    util.ImguiTogglePanel("sceneEditor")
-  }
+	// On left tab, open scene editor
+	if input.GetKeyDown(input.KEY_TAB) {
+		util.ImguiTogglePanel("sceneEditor")
+	}
 
 }

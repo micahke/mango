@@ -16,7 +16,6 @@ type Shader struct {
 	m_UniformLocationCache map[string]int32
 }
 
-
 func NewShader(vertexPath string, fragmentPath string) *Shader {
 	shader := Shader{}
 	vertexShader := shader.ParseShader(vertexPath)
@@ -64,9 +63,14 @@ func (shader *Shader) ParseShader(shaderPath string) string {
 	// }
 	// source := string(contents) + "\x00"
 
-  return ShaderCache[shaderPath] + "\x00"
+	source := ShaderCache[shaderPath]
 
-  // return source
+	if source == "" {
+		panic("There was an error parsing the shader: " + shaderPath)
+	}
+	source = source + "\x00"
+
+	return source
 }
 
 func (shader *Shader) CompileShader(source string, shaderType uint32) uint32 {
