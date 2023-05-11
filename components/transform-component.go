@@ -19,6 +19,7 @@ func (transform *TransformComponent) Init() {}
 // Don't really need much functionality from this every frame
 func (tranform *TransformComponent) Update() {}
 
+
 func (transform *TransformComponent) renderDragFloats(id string, first, second, third *float32) {
 
 

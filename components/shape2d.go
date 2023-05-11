@@ -37,6 +37,7 @@ func (component *Shape2DComponent) GetComponentName() string {
 	return component.Name
 }
 
+// Determines what specific shape this is
 func (component *Shape2DComponent) Determine() Shape2D {
 
 	_, ok := component.Shape.(*shape.Rect)
@@ -52,7 +53,7 @@ func (component *Shape2DComponent) RenderControlPanel() {
 
 	imgui.Spacing()
 
-	if imgui.BeginCombo("Select Shape", "---") {
+	if imgui.BeginCombo("Select Shape", SHAPES_LIST[component.selectedShapeIndex]) {
 
 		for index, shape := range SHAPES_LIST {
 
@@ -87,11 +88,29 @@ func (component *Shape2DComponent) RenderControlPanel() {
 
 func (component *Shape2DComponent) drawRectPanel(rect *shape.Rect) {
 
-	imgui.PushItemWidth(75)
-	imgui.InputFloat("Width", &rect.Width)
+  imgui.PushID("rect_controls")
 
-	imgui.PushItemWidth(75)
-	imgui.InputFloat("Height", &rect.Height)
+  imgui.ColumnsV(2, "width_controls", false) 
+  imgui.SetColumnWidth(0, 100)
+  imgui.SetColumnWidth(1, imgui.WindowWidth() - 100)
+
+  imgui.Text("Width")
+  imgui.NextColumn()
+  imgui.DragFloatV("##width", &rect.Width, 0.1, 0.0, 0.0, "%.3f", 1.0)
+
+  imgui.Columns()
+
+  imgui.ColumnsV(2, "height_controls", false) 
+  imgui.SetColumnWidth(0, 100)
+  imgui.SetColumnWidth(1, imgui.WindowWidth() - 100)
+
+  imgui.Text("Height")
+  imgui.NextColumn()
+  imgui.DragFloatV("##height", &rect.Height, 0.1, 0.0, 0.0, "%.3f", 1.0)
+
+  imgui.Columns()
+
+  imgui.PopID()
 
 }
 

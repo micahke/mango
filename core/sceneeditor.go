@@ -80,6 +80,11 @@ func (editor *SceneEditor) RenderPanel() {
 		// Get the name of the component
 		name := ecs.GetComponentName(component)
 		// Draw the tree node for the component
+      
+    // If it is a transform component, set the element to open (once)
+    if name == "Transform" {
+      imgui.SetNextItemOpen(true, imgui.ConditionOnce)
+    }
 		if imgui.TreeNodeV(name, 2) {
 
 			editor.renderControlPanel(component)
