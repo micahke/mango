@@ -83,3 +83,7 @@ cd mango
 ```
 
 **Warning**: Mango relies on GLFW and OpenGL to handle window creation and graphics. Please make sure these libraries are installed on your machine.
+
+<p align="center">
+    <img src="./doc/editorprogress.png" width="100%" />
+</p>
