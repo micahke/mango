@@ -114,7 +114,7 @@ func (renderer *TediousRenderer) drawQuad(transform *components.TransformCompone
 	renderer.quadVBO.Bind()
 	gl.BufferSubData(gl.ARRAY_BUFFER, 0, len(quadVerts)*4, gl.Ptr(&quadVerts[0]))
 
-	logging.DebugLog(quadVerts)
+	// logging.DebugLog(quadVerts)
 
 	renderer.quadVAO.Bind()
 	renderer.quadIBO.Bind()

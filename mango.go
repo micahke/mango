@@ -1,7 +1,6 @@
 package mango
 
 import (
-	"fmt"
 	"runtime"
 
 	"github.com/go-gl/gl/v3.3-core/gl"
@@ -83,8 +82,6 @@ func CreateWindow(width, height int, title string, vsync bool) {
 
 	// At this point, OpenGL is ready to be used anywhere in the program
 
-	fmt.Println("OpenGL version", gl.GoStr(gl.GetString(gl.VERSION)))
-
 	util.InitImguiLayer(Engine.Window.Window)
 
 	// Create logging panel
@@ -103,7 +100,6 @@ func CreateWindow(width, height int, title string, vsync bool) {
 		}
 	}
 
-	fmt.Println("Adding render system")
 	Engine.scene.ECS().AddSystem(&system.RenderSystem{
 		Entities: Engine.scene.ECS().GetEntities(),
 	})
@@ -161,8 +157,6 @@ func Start() {
 
 		core.Timer.Update()
 		util.ImguiNewFrame()
-
-    fmt.Println(core.Timer.FPS())
 
 		// TODO: find a better place for this
 		processInput()

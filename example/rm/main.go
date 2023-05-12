@@ -1,14 +1,11 @@
 package main
 
 import (
-	"fmt"
 
 	"github.com/micahke/mango"
 	"github.com/micahke/mango/components"
 	"github.com/micahke/mango/components/shape"
 	"github.com/micahke/mango/core"
-	"github.com/micahke/mango/logging"
-	// "github.com/micahke/mango/logging"
 )
 
 func main() {
@@ -32,35 +29,20 @@ func main() {
 	}
 	shapeComponent.SetShape(&rect)
 	player.AddComponent(shapeComponent)
-
 	player.AddComponent(&components.PrimitiveRenderer{})
-	player.AddComponent(&components.SampleComponent{})
-	// player.AddComponent(&CustomComponent{})
 
-	addEntities(scene, 10)
-
-	logging.Log(player.Tranform().Position)
+  p2 := scene.CreateEntity("player2")
+  p2.Tranform().Position.X = 400
+  p2.Tranform().Position.Y = 300
+  p2Shape := &components.Shape2DComponent{}
+  p2Shape.SetShape(&shape.Rect{
+    Width: 30,
+    Height: 20,
+  })
+  p2.AddComponent(p2Shape)
+  p2.AddComponent(&components.PrimitiveRenderer{})
 
 	mango.CreateWindow(1300, 800, "Retained Mode Rendering", false)
 	mango.Start()
 
-}
-
-func addEntities(scene *core.Scene, num int) {
-
-	for i := 0; i < num; i++ {
-		scene.CreateEntity(fmt.Sprint("entity", i))
-	}
-
-}
-
-type CustomComponent struct{}
-
-func (cc *CustomComponent) Init() {}
-
-func (cc *CustomComponent) Update() {
-}
-
-func (cc *CustomComponent) GetComponentName() string {
-	return "Custom Component"
 }
