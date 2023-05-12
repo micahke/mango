@@ -34,7 +34,7 @@ func (component *Shape2DComponent) Init() {
 func (component *Shape2DComponent) Update() {}
 
 func (component *Shape2DComponent) GetComponentName() string {
-	return component.Name
+	return "Shape2D"
 }
 
 // Determines what specific shape this is

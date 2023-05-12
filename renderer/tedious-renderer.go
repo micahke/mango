@@ -74,7 +74,7 @@ func (renderer *TediousRenderer) handlePrimitiveRenderer(entity *ecs.Entity) {
 	}
 	rawShape, err := entity.GetComponent(reflect.TypeOf(&components.Shape2DComponent{}))
 	if err != nil {
-		logging.DebugLogError("Entity does not have a Shape2D component")
+		// logging.DebugLogError("Entity does not have a Shape2D component")
 		return
 	}
 

@@ -2,8 +2,10 @@ package core
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/AllenDang/imgui-go"
+	"github.com/micahke/mango/components"
 	"github.com/micahke/mango/ecs"
 	"github.com/micahke/mango/util"
 )
@@ -12,8 +14,17 @@ type SceneEditor struct {
 	Scene *Scene
 
 	currentEntityIndex int32
-  windowWidth int
-  windowHeight int
+	windowWidth        int
+	windowHeight       int
+
+  currentEntity *ecs.Entity
+}
+
+var component_list []ecs.NamedComponent = []ecs.NamedComponent{
+  &components.SampleComponent{},
+  &components.TransformComponent{},
+  &components.Shape2DComponent{},
+  &components.PrimitiveRenderer{},
 }
 
 func NewSceneEditor(scene *Scene, windowWidth, windowHeight int) *SceneEditor {
@@ -21,8 +32,8 @@ func NewSceneEditor(scene *Scene, windowWidth, windowHeight int) *SceneEditor {
 	editor := &SceneEditor{}
 
 	editor.Scene = scene
-  editor.windowWidth = windowWidth
-  editor.windowHeight = windowHeight
+	editor.windowWidth = windowWidth
+	editor.windowHeight = windowHeight
 
 	return editor
 
@@ -31,35 +42,43 @@ func NewSceneEditor(scene *Scene, windowWidth, windowHeight int) *SceneEditor {
 // Render the editor panel
 func (editor *SceneEditor) RenderPanel() {
 
-	entityNames := editor.getEntityNames()
-	currentEntity := editor.Scene.ECS().GetEntity(entityNames[editor.currentEntityIndex])
 
-	if currentEntity == nil {
-		return
-	}
 
 	size := imgui.Vec2{
 		X: 400,
 		Y: float32(editor.windowHeight),
 	}
 
-  position := imgui.Vec2{
-    X: float32(editor.windowWidth) - size.X,
-    Y: 0,
-  }
+	position := imgui.Vec2{
+		X: float32(editor.windowWidth) - size.X,
+		Y: 0,
+	}
 
-  imgui.SetNextWindowPosV(position, imgui.ConditionOnce, imgui.Vec2{X: 0, Y: 0})
+	imgui.SetNextWindowPosV(position, imgui.ConditionOnce, imgui.Vec2{X: 0, Y: 0})
 	imgui.SetNextWindowSizeV(size, imgui.ConditionOnce)
 	imgui.BeginV("Scene Editor", util.ImguiPanelStatus("sceneEditor"), 0)
 
-  if imgui.Button("Add Entity") {
-    editor.Scene.CreateEntity("Unnamed Entity")
+	if imgui.Button("Add Entity") {
+		editor.Scene.CreateEntity("Unnamed Entity")
+	}
+
+  if len(*editor.Scene.ECS().GetEntities()) == 0 {
+    imgui.End()
+    return
   }
 
-  var heightItems int = 5
-  if len(entityNames) > 10 {
-    heightItems = 10
-  }
+	entityNames := editor.getEntityNames()
+	currentEntity := editor.Scene.ECS().GetEntity(entityNames[editor.currentEntityIndex])
+  editor.currentEntity = currentEntity
+
+	if currentEntity == nil {
+		return
+	}
+
+	var heightItems int = 5
+	if len(entityNames) > 10 {
+		heightItems = 10
+	}
 
 	imgui.ListBoxV("Entity List", &editor.currentEntityIndex, entityNames, heightItems)
 
@@ -70,21 +89,23 @@ func (editor *SceneEditor) RenderPanel() {
 	imgui.Text(fmt.Sprint("Selected entity:\t", currentEntity.Name))
 	imgui.Spacing()
 
-  imgui.InputText("Edit Name", &currentEntity.Name)
+	imgui.InputText("Edit Name", &currentEntity.Name)
 
 	imgui.Spacing()
 
-  imgui.BeginChild("Components")
+	imgui.BeginChild("Components")
+
+  editor.renderAddComponentList()
 
 	for _, component := range currentEntity.Components {
 		// Get the name of the component
 		name := ecs.GetComponentName(component)
 		// Draw the tree node for the component
-      
-    // If it is a transform component, set the element to open (once)
-    if name == "Transform" {
-      imgui.SetNextItemOpen(true, imgui.ConditionOnce)
-    }
+
+		// If it is a transform component, set the element to open (once)
+		if name == "Transform" {
+			imgui.SetNextItemOpen(true, imgui.ConditionOnce)
+		}
 		if imgui.TreeNodeV(name, 2) {
 
 			editor.renderControlPanel(component)
@@ -94,10 +115,33 @@ func (editor *SceneEditor) RenderPanel() {
 
 	}
 
-  imgui.EndChild()
+	imgui.EndChild()
 
 	imgui.End()
 
+}
+
+func (editor *SceneEditor) renderAddComponentList() {
+  if imgui.IsMouseReleased(1) {
+    imgui.OpenPopup("component_list")
+  }
+
+  if imgui.BeginPopupContextItemV("component_list", 0) {
+    imgui.Text("Add Component")
+    imgui.Spacing()
+    imgui.Separator()
+    imgui.Spacing()
+
+    for _, component  := range(component_list) {
+
+      if imgui.Selectable(component.GetComponentName()) {
+        editor.addComponentToEntity(component, editor.currentEntity)
+      }
+
+    }
+
+    imgui.EndPopup()
+  }
 }
 
 func (editor *SceneEditor) getEntityNames() []string {
@@ -111,6 +155,16 @@ func (editor *SceneEditor) getEntityNames() []string {
 	return names
 
 }
+
+
+func (editor *SceneEditor) addComponentToEntity(component interface{}, entity *ecs.Entity) {
+
+  cmpt := reflect.New(reflect.TypeOf(component).Elem()).Interface().(ecs.Component)
+
+  entity.AddComponent(cmpt)
+
+}
+
 
 func (editor *SceneEditor) renderControlPanel(component interface{}) {
 

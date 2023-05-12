@@ -105,5 +105,5 @@ func (transform *TransformComponent) RenderControlPanel() {
 
 // Keeping this here to avoid using reflection
 func (transform *TransformComponent) GetComponentName() string {
-	return transform.Name
+	return "Transform"
 }
