@@ -96,7 +96,7 @@ func (component *Shape2DComponent) drawRectPanel(rect *shape.Rect) {
 
   imgui.Text("Width")
   imgui.NextColumn()
-  imgui.DragFloatV("##width", &rect.Width, 0.1, 0.0, 0.0, "%.3f", 1.0)
+  imgui.DragFloatV("##width", &rect.Width, 1.0, 0.0, 0.0, "%.3f", 1.0)
 
   imgui.Columns()
 
@@ -106,7 +106,7 @@ func (component *Shape2DComponent) drawRectPanel(rect *shape.Rect) {
 
   imgui.Text("Height")
   imgui.NextColumn()
-  imgui.DragFloatV("##height", &rect.Height, 0.1, 0.0, 0.0, "%.3f", 1.0)
+  imgui.DragFloatV("##height", &rect.Height, 1.0, 0.0, 0.0, "%.3f", 1.0)
 
   imgui.Columns()
 

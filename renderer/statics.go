@@ -25,7 +25,7 @@ func generateQuadVertices(color color.Color) []float32 {
 
 	// Make a copy of the quadVertices array and replaces the appropriate rgba values
 
-	vertices := make([]float32, len(quadVertices))
+	vertices := quadVertices
 
 	vertices[2] = colorValues[0]
 	vertices[3] = colorValues[1]

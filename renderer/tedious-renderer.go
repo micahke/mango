@@ -92,12 +92,13 @@ func (renderer *TediousRenderer) handlePrimitiveRenderer(entity *ecs.Entity) {
 // Handles the drawing of a quad
 func (renderer *TediousRenderer) drawQuad(transform *components.TransformComponent, quad *shape.Rect, color color.Color) {
 
+
 	if !renderer.initialized {
 		logging.DebugLogError("Renderer not initialized")
 		return
 	}
 
-	// quadVerts := generateQuadVertices(color)
+	quadVerts := generateQuadVertices(color)
 
 	translation := glm.Translate3D(transform.Position.X, transform.Position.Y, 0)
 	scale := glm.Scale3D(quad.Width, quad.Height, 1.0)
@@ -110,10 +111,10 @@ func (renderer *TediousRenderer) drawQuad(transform *components.TransformCompone
 	renderer.quadShader.SetUniformMat4f("u_view", renderer.viewMatrix)
 	renderer.quadShader.SetUniformMat4f("u_projection", renderer.projectionMatrix)
 
-	// renderer.quadVBO.Bind()
-	// gl.BufferSubData(gl.ARRAY_BUFFER, 0, len(quadVerts)*4, gl.Ptr(&quadVerts[0]))
+	renderer.quadVBO.Bind()
+	gl.BufferSubData(gl.ARRAY_BUFFER, 0, len(quadVerts)*4, gl.Ptr(&quadVerts[0]))
 
-	logging.DebugLog(model)
+	logging.DebugLog(quadVerts)
 
 	renderer.quadVAO.Bind()
 	renderer.quadIBO.Bind()

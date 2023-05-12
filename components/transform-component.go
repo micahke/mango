@@ -47,7 +47,7 @@ func (transform *TransformComponent) renderDragFloats(id string, first, second, 
 	imgui.SameLine()
 	imgui.PushItemWidth(itemWidth) // set a specific width for the DragFloat
 
-	imgui.DragFloatV("##X", first, 0.1, 0.0, 0.0, "%.3f", 1.0)
+	imgui.DragFloatV("##X", first, 1.0, 0.0, 0.0, "%.3f", 1.0)
 
 	imgui.SameLine()
 
@@ -61,7 +61,7 @@ func (transform *TransformComponent) renderDragFloats(id string, first, second, 
   imgui.PopItemWidth()
 	imgui.SameLine()
 	imgui.PushItemWidth(itemWidth) // set a specific width for the DragFloat
-	imgui.DragFloatV("##Y", second, 0.1, 0.0, 0.0, "%.3f", 1.0)
+	imgui.DragFloatV("##Y", second, 1.0, 0.0, 0.0, "%.3f", 1.0)
   imgui.PopItemWidth()
 
 	imgui.SameLine()
@@ -76,7 +76,7 @@ func (transform *TransformComponent) renderDragFloats(id string, first, second, 
   imgui.PopStyleColorV(3)
 	imgui.SameLine()
 	imgui.PushItemWidth(itemWidth) // set a specific width for the DragFloat
-	imgui.DragFloatV("##Z", third, 0.1, 0.0, 0.0, "%.3f", 1.0)
+	imgui.DragFloatV("##Z", third, 1.0, 0.0, 0.0, "%.3f", 1.0)
   imgui.PopItemWidth()
 
 	imgui.PopStyleVar()

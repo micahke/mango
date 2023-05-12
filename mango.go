@@ -162,6 +162,8 @@ func Start() {
 		core.Timer.Update()
 		util.ImguiNewFrame()
 
+    fmt.Println(core.Timer.FPS())
+
 		// TODO: find a better place for this
 		processInput()
 
