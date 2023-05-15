@@ -98,11 +98,10 @@ func CreateWindow(width, height int, title string, vsync bool) {
 		if core.Settings.SCENE_EDITOR_STARTUP {
 			util.ImguiActivatePanel("sceneEditor")
 		}
+		Engine.scene.ECS().AddSystem(&system.RenderSystem{
+			Entities: Engine.scene.ECS().GetEntities(),
+		})
 	}
-
-	Engine.scene.ECS().AddSystem(&system.RenderSystem{
-		Entities: Engine.scene.ECS().GetEntities(),
-	})
 
 }
 
