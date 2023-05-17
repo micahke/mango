@@ -15,6 +15,8 @@ var shaderFiles embed.FS
 
 var ShaderCache map[string]string
 
+var ShaderNames []string
+
 // Loads the shaders into the cache
 func LoadShaders() (map[string]string, error) {
 
@@ -33,6 +35,7 @@ func LoadShaders() (map[string]string, error) {
 		// shaders[strings.TrimSuffix(file, ".glsl")] = string(contents)
 		pathName := strings.Trim(file, "shaders/")
 		shaders[pathName] = string(contents)
+    ShaderNames = append(ShaderNames, pathName)
 	}
 
 	ShaderCache = shaders

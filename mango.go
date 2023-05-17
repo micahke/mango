@@ -21,6 +21,7 @@ type Mango struct {
 	LogPanel   *logging.LogPanel
 
 	SceneEditor *core.SceneEditor
+  ShaderEditor *core.ShaderEditor
 
 	scene *core.Scene
 }
@@ -102,6 +103,14 @@ func CreateWindow(width, height int, title string, vsync bool) {
 			Entities: Engine.scene.ECS().GetEntities(),
 		})
 	}
+
+  // NON_DEFAULT TOOLS
+  Engine.ShaderEditor = core.NewShaderEditor()
+  util.ImguiRegisterPanel("shaderEditor", Engine.ShaderEditor)
+  if core.Settings.SHADER_EDITOR_ON_STARTUP {
+    util.ImguiActivatePanel("shaderEditor")
+  } 
+  
 
 }
 

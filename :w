@@ -1,0 +1,20 @@
+package core
+
+import "github.com/AllenDang/imgui-go"
+
+type ShaderEditor struct {
+
+
+
+}
+
+
+
+func (editor *ShaderEditor) Init() {
+
+}
+
+
+func (editor *ShaderEditor) RenderPanel() {
+  imgui.Text("Hello, world!")
+}
