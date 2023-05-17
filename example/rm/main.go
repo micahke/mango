@@ -12,8 +12,8 @@ func main() {
 
 	mango.Init(core.RENDER_MODE_DEFAULT)
 
-	// core.Settings.SCENE_EDITOR_STARTUP = true
-	// core.Settings.CONSOLE_ON_STARTUP = true
+	core.Settings.SCENE_EDITOR_STARTUP = true
+	core.Settings.CONSOLE_ON_STARTUP = true
 
 	// scene setup
 	scene := mango.CreateScene()
