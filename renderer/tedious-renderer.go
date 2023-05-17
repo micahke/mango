@@ -25,6 +25,7 @@ type TediousRenderer struct {
 	quadVAO    *opengl.VertexArray
 	quadVBO    *opengl.VertexBuffer
 	quadIBO    *opengl.IndexBuffer
+
 }
 
 // Initialize the renderer
@@ -100,7 +101,7 @@ func (renderer *TediousRenderer) drawQuad(transform *components.TransformCompone
 
 	quadVerts := generateQuadVertices(color)
 
-	translation := glm.Translate3D(transform.Position.X, transform.Position.Y, 0)
+	translation := glm.Translate3D(transform.Position.X, transform.Position.Y, transform.Position.Z)
 	scale := glm.Scale3D(quad.Width, quad.Height, 1.0)
 
 	modelMatrix := glm.Ident4()

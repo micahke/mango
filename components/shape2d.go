@@ -12,14 +12,14 @@ type Shape2DComponent struct {
 	selectedShapeIndex int
 }
 
-type Shape2D int
+// type Shape2D int
 
-const (
-	SHAPE_NONE    Shape2D = -1
-	SHAPE_RECT    Shape2D = 0
-	SHAPE_ELLIPSE Shape2D = 1
-	SHAPE_LINE    Shape2D = 2
-)
+// const (
+// 	SHAPE_NONE    Shape2D = -1
+// 	SHAPE_RECT    Shape2D = 0
+// 	SHAPE_ELLIPSE Shape2D = 1
+// 	SHAPE_LINE    Shape2D = 2
+// )
 
 var SHAPES_LIST = [3]string{
 	"Rect",
