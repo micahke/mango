@@ -23,7 +23,7 @@ type SceneEditor struct {
 var component_list []ecs.NamedComponent = []ecs.NamedComponent{
   &components.SampleComponent{},
   &components.TransformComponent{},
-  &components.Shape2DComponent{},
+  // &components.Shape2DComponent{},
   &components.PrimitiveRenderer{},
 }
 

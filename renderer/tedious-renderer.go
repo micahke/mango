@@ -73,21 +73,14 @@ func (renderer *TediousRenderer) handlePrimitiveRenderer(entity *ecs.Entity) {
 	if err != nil {
 		logging.DebugLogError("No primitive component found for entity")
 	}
-	rawShape, err := entity.GetComponent(reflect.TypeOf(&components.Shape2DComponent{}))
-	if err != nil {
-		// logging.DebugLogError("Entity does not have a Shape2D component")
-		return
-	}
 
-	shape2D := rawShape.(*components.Shape2DComponent)
-
-	correctShape := shape2D.Determine()
-	if correctShape == components.SHAPE_RECT {
-		quad := shape2D.Shape.(*shape.Rect)
-		renderer.drawQuad(transform, quad, color)
-	}
-	// end := stopwatch.Stop()
-	// logging.DebugLog("Filtering render data took", end, "MS")
+  prComponent := primitveRenderer.(*components.PrimitiveRenderer)
+  switch prComponent.Shape.(type) {
+    case *shape.Rect:
+      quad := prComponent.Shape.(*shape.Rect)
+      renderer.drawQuad(transform, quad, color)
+    default:
+  }
 }
 
 // Handles the drawing of a quad

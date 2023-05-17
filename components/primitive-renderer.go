@@ -5,6 +5,7 @@ import (
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/mango/components/shape"
 	"github.com/micahke/mango/logging"
+	"github.com/micahke/mango/util"
 	"github.com/micahke/mango/util/color"
 )
 
@@ -75,6 +76,7 @@ func (component *PrimitiveRenderer) RenderControlPanel() {
 
   imgui.Spacing()
 
+
   // Draw the color field which works for any primitive
   component.drawColorField()
 
@@ -108,6 +110,7 @@ func (component *PrimitiveRenderer) handleShapeSelection(shape shape_list_item) 
   case SHAPE_RECT:
     component.setShapeSquare()
   default:
+    component.Shape = nil
     logging.DebugLogError("No pipeline set for this shape")
   }
 }
@@ -123,6 +126,9 @@ func (component *PrimitiveRenderer) drawControls() {
 }
 
 func (component *PrimitiveRenderer) drawRectControls() {
+
+  imgui.BeginChildV("shape_handler", util.ImguiGenVec2(0, imgui.TextLineHeightWithSpacing() * 3.5), true, 0) 
+
   // Get the rect (should work because we're only here if the casting has already worked)
   rect := component.Shape.(*shape.Rect)
 
@@ -149,6 +155,8 @@ func (component *PrimitiveRenderer) drawRectControls() {
   imgui.Columns()
 
   imgui.PopID()
+
+  imgui.EndChild()
 }
 
 // Sets the current shape to be a square
