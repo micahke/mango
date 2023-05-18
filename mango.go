@@ -169,6 +169,8 @@ func Start() {
 		// TODO: find a better place for this
 		processInput()
 
+    // fmt.Println(core.Timer.FPS())
+
 		// Clear the screen
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 

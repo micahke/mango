@@ -7,6 +7,7 @@ import (
 	"github.com/AllenDang/imgui-go"
 	"github.com/micahke/mango/components"
 	"github.com/micahke/mango/ecs"
+	"github.com/micahke/mango/logging"
 	"github.com/micahke/mango/util"
 )
 
@@ -22,7 +23,7 @@ type SceneEditor struct {
 
 var component_list []ecs.NamedComponent = []ecs.NamedComponent{
   &components.SampleComponent{},
-  &components.TransformComponent{},
+  // &components.TransformComponent{},
   // &components.Shape2DComponent{},
   &components.PrimitiveRenderer{},
 }
@@ -108,7 +109,14 @@ func (editor *SceneEditor) RenderPanel() {
 		}
 		if imgui.TreeNodeV(name, 2) {
 
+      // TODO: fix this so that we're passing references because
+      // I think it's fucking with which entity instance we're actually
+      // in control of
 			editor.renderControlPanel(component)
+
+      if reflect.TypeOf(component) != reflect.TypeOf(&components.TransformComponent{}) {
+        editor.drawRemoveButton(component)
+      }
 
 			imgui.TreePop()
 		}
@@ -118,6 +126,23 @@ func (editor *SceneEditor) RenderPanel() {
 	imgui.EndChild()
 
 	imgui.End()
+
+}
+
+func (editor *SceneEditor) drawRemoveButton(component interface{}) {
+  
+  c, ok := component.(ecs.Component)
+  if !ok {
+    logging.DebugLogError("Failed converting component")
+  }
+
+    imgui.Spacing()
+
+  // Make the button font size smaller
+  if imgui.ButtonV("Remove Component", util.ImguiGenVec2(-1, 0)) {
+    editor.currentEntity.RemoveComponentByType(reflect.TypeOf(c))
+    // editor.currentEntity.RemoveComponent(component)
+  }
 
 }
 

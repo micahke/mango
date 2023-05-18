@@ -67,6 +67,21 @@ func (entity *Entity) AddComponent(component interface{}) {
 
 }
 
+func (entity *Entity) RemoveComponentByType(t reflect.Type) {
+  for index, component := range(entity.Components) {
+    if reflect.TypeOf(component) == t {
+      entity.Components = append(entity.Components[:index], entity.Components[index+1:]...)
+    }
+  }
+}
+
+func (entity *Entity) RemoveComponent(component interface{}) {
+  for index, c := range(entity.Components) {
+    if c == component {
+      entity.Components = append(entity.Components[:index], entity.Components[index+1:]...)
+    }
+  }
+}
 
 // Get the transform component of the entity
 func (entity *Entity) Tranform() *components.TransformComponent {
