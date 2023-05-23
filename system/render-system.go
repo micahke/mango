@@ -29,6 +29,7 @@ func (renderSystem *RenderSystem) Init() {
 // This is about to be worst render system of all time
 func (renderSystem *RenderSystem) Tick() {
 	// Loop through the entities and detect which of them are renderable
+  renderSystem.NewFrame()
 	for _, entity := range *renderSystem.Entities {
 		if entity.Renderable {
 			// Get the appropriate renderer and the right renderable component
@@ -36,8 +37,18 @@ func (renderSystem *RenderSystem) Tick() {
 			renderSystem.submitToRenderer(renderer, entity, renderComponent)
 		}
 	}
+  renderSystem.EndFrame()
 }
 
+func (renderSystem *RenderSystem) EndFrame() {
+  renderSystem.tediousRenderer.FlushFrame()
+}
+
+func (renderSystem *RenderSystem) NewFrame() {
+  renderSystem.tediousRenderer.NewFrame()
+}
+
+  
 // Detmines which renderer we send things to
 func (renderSystem *RenderSystem) determineRenderer(entity *ecs.Entity) (mango_renderer, renderer.RenderableComponent) {
 

@@ -26,6 +26,19 @@ type TediousRenderer struct {
 	quadVBO    *opengl.VertexBuffer
 	quadIBO    *opengl.IndexBuffer
 
+  fbData *FrameBufferData
+  framebufferID uint32
+  framebufferTextureID uint32
+
+  windowWidth int
+  windowHeight int
+}
+
+type FrameBufferData struct {
+	Shader *opengl.Shader
+	VAO    *opengl.VertexArray
+	VBO    *opengl.VertexBuffer
+	IBO    *opengl.IndexBuffer
 }
 
 // Initialize the renderer
@@ -34,6 +47,9 @@ func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
 	// Initialize the renderer with a projection matrix and a view matrix
 	renderer.projectionMatrix = glm.Ortho(0, float32(windowWidth), 0, float32(windowHeight), -1.0, 1.0)
 	renderer.viewMatrix = glm.Ident4()
+
+  renderer.windowWidth = windowWidth
+  renderer.windowHeight = windowHeight
 
 	// Initialize shaders
 	renderer.quadShader = opengl.NewShader("RMQuadVertex.glsl", "RMQuadFragment.glsl")
@@ -49,9 +65,13 @@ func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
 	quadLayout.Pushf(4)
 	renderer.quadVAO.AddBuffer(*renderer.quadVBO, *quadLayout)
 
+  renderer.initFrameBuffer()
+
 	renderer.initialized = true
 
 }
+
+
 
 // Handles the entity and starts to work on its available data
 func (renderer *TediousRenderer) Submit(entity *ecs.Entity, renderableComponent RenderableComponent) {
@@ -117,5 +137,63 @@ func (renderer *TediousRenderer) drawQuad(transform *components.TransformCompone
 
 }
 
-func (renderer *TediousRenderer) Render() {
+func (renderer *TediousRenderer) initFrameBuffer() {
+  // Framebuffer
+  gl.GenFramebuffers(1, &renderer.framebufferID)
+  gl.BindFramebuffer(gl.FRAMEBUFFER, renderer.framebufferID)
+
+  // Framebuffer Texture
+  gl.GenTextures(1, &renderer.framebufferTextureID)
+  gl.BindTexture(gl.TEXTURE_2D, renderer.framebufferTextureID)
+
+  gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, int32(renderer.windowWidth), int32(renderer.windowHeight), 0, gl.RGBA, gl.UNSIGNED_INT, nil)
+  gl.FramebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, renderer.framebufferTextureID, 0)
+
+  status := gl.CheckFramebufferStatus(gl.FRAMEBUFFER)
+  if status != gl.FRAMEBUFFER_COMPLETE {
+    logging.DebugLogError("Error setting up framebuffer")
+  }
+
+  gl.BindFramebuffer(gl.FRAMEBUFFER, 0)
+
+  data := &FrameBufferData{}
+  data.Shader = opengl.NewShader("FramebufferVertex.glsl", "FramebufferFragment.glsl")
+  data.VAO = opengl.NewVertexArray()
+  data.VBO = opengl.NewVertexBuffer(framebufferVertices)
+  layout := opengl.NewVertexBufferLayout()
+  layout.Pushf(2)
+  layout.Pushf(2)
+  data.VAO.AddBuffer(*data.VBO, *layout)
+
+  data.IBO = opengl.NewIndexBuffer(quadIndeces)
+  renderer.fbData = data
+}
+
+func (renderer *TediousRenderer) NewFrame() {
+  gl.BindFramebuffer(gl.FRAMEBUFFER, renderer.framebufferID)
+  gl.Viewport(0, 0, int32(renderer.windowWidth), int32(renderer.windowHeight))
+  gl.Clear(gl.COLOR_BUFFER_BIT)
+}
+
+
+
+// Find a better name for this function (this is experimental)
+func (renderer *TediousRenderer) FlushFrame(){
+  // Bind the default framebuffer
+  gl.BindFramebuffer(gl.FRAMEBUFFER, 0)
+  gl.Viewport(0, 0, int32(renderer.windowWidth), int32(renderer.windowHeight))
+  gl.ActiveTexture(gl.TEXTURE0)
+  gl.BindTexture(gl.TEXTURE_2D, renderer.framebufferTextureID)
+  // Next step, render full screen quad
+  renderer.renderFullQuad()
+}
+
+func (renderer *TediousRenderer) renderFullQuad() {
+  renderer.fbData.Shader.Bind()
+  renderer.fbData.Shader.SetUniform1i("uTexture", 0)
+  
+  renderer.fbData.VAO.Bind()
+  renderer.fbData.IBO.Bind()
+
+  gl.DrawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, nil)
 }

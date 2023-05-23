@@ -14,11 +14,13 @@ func main() {
 
 	core.Settings.SCENE_EDITOR_STARTUP = true
 	// core.Settings.CONSOLE_ON_STARTUP = true
-	// core.Settings.SHADER_EDITOR_ON_STARTUP = true
+  // core.Settings.SHADER_EDITOR_ON_STARTUP = true
 
 	// scene setup
 	scene := mango.CreateScene()
 	mango.SetScene(scene)
+
+  scene.CreateEntity("player");
 
 	// player := scene.CreateEntity("player")
 	// player.Tranform().Position.X = 100
@@ -47,3 +49,8 @@ func main() {
 	mango.Start()
 
 }
+
+
+
+
+

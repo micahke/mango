@@ -19,6 +19,13 @@ var quadIndeces []uint32 = []uint32{
 	2, 3, 0,
 }
 
+var framebufferVertices []float32 = []float32{
+  -1.0, -1.0, -1.0, -1.0,
+  -1.0, 1.0, -1.0, 1.0,
+  1.0, 1.0, 1.0, 1.0,
+  1.0, -1.0, 1.0, -1.0,
+}
+
 // Will generate quad vertex arrays that edit the color of the quad
 func generateQuadVertices(color color.Color) []float32 {
 	colorValues := color.Vec4
