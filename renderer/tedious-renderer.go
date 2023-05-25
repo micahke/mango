@@ -1,7 +1,6 @@
 package renderer
 
 import (
-	"fmt"
 	"reflect"
 
 	"github.com/go-gl/gl/v3.3-core/gl"
@@ -11,6 +10,7 @@ import (
 	"github.com/micahke/mango/ecs"
 	"github.com/micahke/mango/logging"
 	"github.com/micahke/mango/opengl"
+	"github.com/micahke/mango/util"
 	"github.com/micahke/mango/util/color"
 )
 
@@ -32,6 +32,8 @@ type TediousRenderer struct {
 
   windowWidth int
   windowHeight int
+
+  outputViewer *OutputViewer 
 }
 
 type FrameBufferData struct {
@@ -51,10 +53,14 @@ func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
   renderer.windowWidth = windowWidth
   renderer.windowHeight = windowHeight
 
+  renderer.initFrameBuffer()
+  renderer.outputViewer = NewOutputViewer(&renderer.framebufferTextureID)
+
+  util.ImguiRegisterPanel("framebuffer", renderer.outputViewer)
+  util.ImguiActivatePanel("framebuffer")
+
 	// Initialize shaders
 	renderer.quadShader = opengl.NewShader("RMQuadVertex.glsl", "RMQuadFragment.glsl")
-
-	fmt.Println("Valid shader found")
 
 	// Initialize vertex arrays
 	renderer.quadVAO = opengl.NewVertexArray()
@@ -65,7 +71,6 @@ func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
 	quadLayout.Pushf(4)
 	renderer.quadVAO.AddBuffer(*renderer.quadVBO, *quadLayout)
 
-  renderer.initFrameBuffer()
 
 	renderer.initialized = true
 
@@ -171,7 +176,10 @@ func (renderer *TediousRenderer) initFrameBuffer() {
 
 func (renderer *TediousRenderer) NewFrame() {
   gl.BindFramebuffer(gl.FRAMEBUFFER, renderer.framebufferID)
-  gl.Viewport(0, 0, int32(renderer.windowWidth), int32(renderer.windowHeight))
+  // gl.Viewport(0, 0, int32(renderer.windowWidth), int32(renderer.windowHeight))
+  gl.Enable(gl.DEPTH_TEST)
+
+  gl.ClearColor(0.5, 0.5, 0.5, 1.0)
   gl.Clear(gl.COLOR_BUFFER_BIT)
 }
 
@@ -181,7 +189,12 @@ func (renderer *TediousRenderer) NewFrame() {
 func (renderer *TediousRenderer) FlushFrame(){
   // Bind the default framebuffer
   gl.BindFramebuffer(gl.FRAMEBUFFER, 0)
-  gl.Viewport(0, 0, int32(renderer.windowWidth), int32(renderer.windowHeight))
+  gl.Disable(gl.DEPTH_TEST)
+  // gl.Viewport(0, 0, int32(renderer.windowWidth), int32(renderer.windowHeight))
+
+  gl.ClearColor(0.5, 0.5, 0.5, 1.0)
+  gl.Clear(gl.COLOR_BUFFER_BIT)
+
   gl.ActiveTexture(gl.TEXTURE0)
   gl.BindTexture(gl.TEXTURE_2D, renderer.framebufferTextureID)
   // Next step, render full screen quad
