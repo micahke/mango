@@ -6,12 +6,12 @@ import "github.com/micahke/mango/util/color"
 
 var quadVertices []float32 = []float32{
 
-	// x, y, z,           r, g, b, a
+	// x, y           r, g, b, a        // uvX, uvY
 
-	0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-	0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
-	1.0, 1.0, 0.0, 0.0, 0.0, 0.0,
-	1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+	0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+	0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+	1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0,
+	1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
 }
 
 var quadIndeces []uint32 = []uint32{
@@ -32,20 +32,20 @@ func generateQuadVertices(color color.Color) []float32 {
 	vertices[4] = colorValues[2]
 	vertices[5] = colorValues[3]
 
-	vertices[8] = colorValues[0]
-	vertices[9] = colorValues[1]
-	vertices[10] = colorValues[2]
-	vertices[11] = colorValues[3]
+  vertices[10] = colorValues[0]
+  vertices[11] = colorValues[1]
+  vertices[12] = colorValues[2]
+  vertices[13] = colorValues[3]
 
-	vertices[14] = colorValues[0]
-	vertices[15] = colorValues[1]
-	vertices[16] = colorValues[2]
-	vertices[17] = colorValues[3]
+  vertices[18] = colorValues[0]
+  vertices[19] = colorValues[1]
+  vertices[20] = colorValues[2]
+  vertices[21] = colorValues[3]
 
-	vertices[20] = colorValues[0]
-	vertices[21] = colorValues[1]
-	vertices[22] = colorValues[2]
-	vertices[23] = colorValues[3]
+  vertices[26] = colorValues[0]
+  vertices[27] = colorValues[1]
+  vertices[28] = colorValues[2]
+  vertices[29] = colorValues[3]
 
 	return vertices
 

@@ -26,6 +26,7 @@ type TediousRenderer struct {
 	quadVBO    *opengl.VertexBuffer
 	quadIBO    *opengl.IndexBuffer
 
+	circleShader *opengl.Shader
 }
 
 // Initialize the renderer
@@ -37,6 +38,7 @@ func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
 
 	// Initialize shaders
 	renderer.quadShader = opengl.NewShader("RMQuadVertex.glsl", "RMQuadFragment.glsl")
+	renderer.circleShader = opengl.NewShader("RMCircleVertex.glsl", "RMCircleFragment.glsl")
 
 	fmt.Println("Valid shader found")
 
@@ -47,6 +49,7 @@ func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
 	quadLayout := opengl.NewVertexBufferLayout()
 	quadLayout.Pushf(2)
 	quadLayout.Pushf(4)
+	quadLayout.Pushf(2)
 	renderer.quadVAO.AddBuffer(*renderer.quadVBO, *quadLayout)
 
 	renderer.initialized = true
@@ -78,13 +81,16 @@ func (renderer *TediousRenderer) handlePrimitiveRenderer(entity *ecs.Entity) {
   switch prComponent.Shape.(type) {
     case *shape.Rect:
       quad := prComponent.Shape.(*shape.Rect)
-      renderer.drawQuad(transform, quad, color)
+      renderer.drawQuad(transform, quad, color, renderer.quadShader)
+  case *shape.Circle:
+      circle := prComponent.Shape.(*shape.Circle)
+      renderer.drawCircle(transform, circle, color, renderer.circleShader)
     default:
   }
 }
 
 // Handles the drawing of a quad
-func (renderer *TediousRenderer) drawQuad(transform *components.TransformComponent, quad *shape.Rect, color color.Color) {
+func (renderer *TediousRenderer) drawQuad(transform *components.TransformComponent, quad *shape.Rect, color color.Color, shader *opengl.Shader) {
 
 
 	if !renderer.initialized {
@@ -100,10 +106,10 @@ func (renderer *TediousRenderer) drawQuad(transform *components.TransformCompone
 	modelMatrix := glm.Ident4()
 	model := translation.Mul4(scale).Mul4(modelMatrix)
 
-	renderer.quadShader.Bind()
-	renderer.quadShader.SetUniformMat4f("u_model", model)
-	renderer.quadShader.SetUniformMat4f("u_view", renderer.viewMatrix)
-	renderer.quadShader.SetUniformMat4f("u_projection", renderer.projectionMatrix)
+	shader.Bind()
+	shader.SetUniformMat4f("u_model", model)
+	shader.SetUniformMat4f("u_view", renderer.viewMatrix)
+	shader.SetUniformMat4f("u_projection", renderer.projectionMatrix)
 
 	renderer.quadVBO.Bind()
 	gl.BufferSubData(gl.ARRAY_BUFFER, 0, len(quadVerts)*4, gl.Ptr(&quadVerts[0]))
@@ -117,5 +123,16 @@ func (renderer *TediousRenderer) drawQuad(transform *components.TransformCompone
 
 }
 
-func (renderer *TediousRenderer) Render() {
+
+// Circle is just a rect with a bunch of color in a pattern just do that
+// Will need a new shader
+func (renderer *TediousRenderer) drawCircle(transform *components.TransformComponent, circle *shape.Circle, color color.Color, shader *opengl.Shader) {
+  // Generate a quad with width and height of 2 * radius
+  quad := &shape.Rect{
+    Width: circle.Radius * 2,
+    Height: circle.Radius * 2,
+  }
+
+  renderer.drawQuad(transform, quad, color, shader)
+
 }
