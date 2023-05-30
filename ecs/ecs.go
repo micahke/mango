@@ -134,3 +134,7 @@ func GetComponentName(component interface{}) string {
   return "Unnamed Component"
 
 }
+
+
+
+
