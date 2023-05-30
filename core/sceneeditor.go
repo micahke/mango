@@ -60,7 +60,8 @@ func (editor *SceneEditor) RenderPanel() {
 	imgui.BeginV("Scene Editor", util.ImguiPanelStatus("sceneEditor"), 0)
 
 	if imgui.Button("Add Entity") {
-		editor.Scene.CreateEntity("Unnamed Entity")
+    newName := fmt.Sprint("entity", len(*editor.Scene.ecs.GetEntities()))
+		editor.Scene.CreateEntity(newName)
 	}
 
   if len(*editor.Scene.ECS().GetEntities()) == 0 {

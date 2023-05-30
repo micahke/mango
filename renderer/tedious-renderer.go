@@ -136,3 +136,5 @@ func (renderer *TediousRenderer) drawCircle(transform *components.TransformCompo
   renderer.drawQuad(transform, quad, color, shader)
 
 }
+
+
