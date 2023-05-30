@@ -21,13 +21,13 @@ const (
 	TEDIOUS_RENDERER mango_renderer = 0
 )
 
-func (renderSystem *RenderSystem) Init() {
+func (renderSystem *RenderSystem) InitializeSystem() {
 	renderSystem.tediousRenderer = &renderer.TediousRenderer{}
 	renderSystem.tediousRenderer.Init(1300, 800)
 }
 
 // This is about to be worst render system of all time
-func (renderSystem *RenderSystem) Tick() {
+func (renderSystem *RenderSystem) UpdateSystem() {
 	// Loop through the entities and detect which of them are renderable
 	for _, entity := range *renderSystem.Entities {
 		if entity.Renderable {

@@ -23,6 +23,8 @@ type Mango struct {
 	SceneEditor *core.SceneEditor
   ShaderEditor *core.ShaderEditor
 
+  SystemManager *core.SystemManager
+
 	scene *core.Scene
 }
 
@@ -63,6 +65,8 @@ func Init(renderMode core.RenderMode, args ...any) {
 		logging.DebugLogError("Failed to load shaders: ", error)
 	}
 
+
+  Engine.SystemManager = core.NewSystemManager()
 }
 
 // Creates a new window
@@ -92,6 +96,7 @@ func CreateWindow(width, height int, title string, vsync bool) {
 		util.ImguiActivatePanel("logPanel")
 	}
 
+
 	// Scene Editor
 	if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
 		Engine.SceneEditor = core.NewSceneEditor(Engine.scene, width, height)
@@ -99,9 +104,9 @@ func CreateWindow(width, height int, title string, vsync bool) {
 		if core.Settings.SCENE_EDITOR_STARTUP {
 			util.ImguiActivatePanel("sceneEditor")
 		}
-		Engine.scene.ECS().AddSystem(&system.RenderSystem{
-			Entities: Engine.scene.ECS().GetEntities(),
-		})
+    Engine.SystemManager.AddSystem(&system.RenderSystem{
+      Entities: Engine.scene.ECS().GetEntities(),
+    })
 	}
 
   // NON_DEFAULT TOOLS
@@ -110,7 +115,8 @@ func CreateWindow(width, height int, title string, vsync bool) {
   if core.Settings.SHADER_EDITOR_ON_STARTUP {
     util.ImguiActivatePanel("shaderEditor")
   } 
-  
+    
+
 
 }
 
@@ -135,9 +141,9 @@ func SetScene(scene *core.Scene) {
 
 	Engine.scene = scene
 
-	scene.ECS().AddSystem(&system.EntitySystem{
-		Entities: scene.ECS().GetEntities(),
-	})
+  Engine.SystemManager.AddSystem(&system.EntitySystem{
+    Entities: scene.ECS().GetEntities(),
+  })
 
 }
 
@@ -180,7 +186,8 @@ func Start() {
 		}
 
 		if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
-			Engine.scene.ECS().Update()
+			// Engine.scene.ECS().Update()
+      Engine.SystemManager.Update()
 		}
 
 		util.ImguiRender()
