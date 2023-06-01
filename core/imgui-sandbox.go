@@ -13,7 +13,8 @@ import (
 
 
 type ImguiSandbox struct {
-  Image *image.Image
+  sbImage *image.Image
+  textureID uint32
 }
 
 
@@ -29,8 +30,15 @@ func InitImguiSandbox() *ImguiSandbox {
     fmt.Println("Error loading sandbox image")
   }
 
-  sandbox.Image = img
-  fmt.Println(sandbox.Image)
+  sandbox.sbImage = img
+  data, ok := (*sandbox.sbImage).(*image.NRGBA)
+  if !ok {
+    logging.DebugLogError("Error running sandbox image")
+    fmt.Println()
+  }
+
+  texture := opengl.NewTextureFromData("quicktime.png", data, false)
+  sandbox.textureID = texture.GetID()
 
   return sandbox
 }
@@ -40,15 +48,7 @@ func (sandbox *ImguiSandbox) RenderPanel() {
   imgui.SetNextWindowSizeV(util.ImguiGenVec2(400, 400), imgui.ConditionOnce)
   imgui.Begin("Sandbox")
 
-  data, ok := (*sandbox.Image).(*image.NRGBA)
-  if !ok {
-    logging.DebugLogError("Error running sandbox image")
-    fmt.Println()
-  }
-
-  texture := opengl.NewTextureFromData("quicktime.png", data, false)
-
-  imgui.Image(imgui.TextureID(texture.GetID()), util.ImguiGenVec2(400, 400))
+  imgui.Image(imgui.TextureID(sandbox.textureID), util.ImguiGenVec2(400, 400))
 
   sandbox.endFrame()
 }
