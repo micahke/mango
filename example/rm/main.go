@@ -1,11 +1,11 @@
 package main
 
 import (
-
 	"github.com/micahke/mango"
 	// "github.com/micahke/mango/components"
 	// "github.com/micahke/mango/components/shape"
 	"github.com/micahke/mango/core"
+	ecs "github.com/micahke/mango/ecs/prefabs"
 )
 
 func main() {
@@ -32,16 +32,19 @@ func main() {
 	// player.AddComponent(shapeComponent)
 	// player.AddComponent(&components.PrimitiveRenderer{})
 
-  // p2 := scene.CreateEntity("player2")
-  // p2.Tranform().Position.X = 400
-  // p2.Tranform().Position.Y = 300
-  // p2Shape := &components.Shape2DComponent{}
-  // p2Shape.SetShape(&shape.Rect{
-  //   Width: 30,
-  //   Height: 20,
-  // })
-  // p2.AddComponent(p2Shape)
-  // p2.AddComponent(&components.PrimitiveRenderer{})
+	// p2 := scene.CreateEntity("player2")
+	// p2.Tranform().Position.X = 400
+	// p2.Tranform().Position.Y = 300
+	// p2Shape := &components.Shape2DComponent{}
+	// p2Shape.SetShape(&shape.Rect{
+	//   Width: 30,
+	//   Height: 20,
+	// })
+	// p2.AddComponent(p2Shape)
+	// p2.AddComponent(&components.PrimitiveRenderer{})
+
+	square := ecs.NewSquarePrefab()
+	scene.AddPrefab(square)
 
 	mango.CreateWindow(1300, 800, "Retained Mode Rendering", false)
 	mango.Start()

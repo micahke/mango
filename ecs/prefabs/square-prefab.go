@@ -2,20 +2,26 @@ package ecs
 
 import (
 	"github.com/micahke/mango/components"
-	"github.com/micahke/mango/components/shape"
+	"github.com/micahke/mango/ecs"
 )
 
 type SquarePrefab struct {
-	renderer *components.PrimitiveRenderer
-	name string
+	Renderer *components.PrimitiveRenderer
+	Name     string
 }
 
-func NewSquarePrefab() *SquarePrefab{
-	prefab := new(SquarePrefab);
-	prefab.name = "square"
-	prefab.renderer = 
+func NewSquarePrefab() *SquarePrefab {
+	prefab := new(SquarePrefab)
+	prefab.Name = "square"
+	prefab.Renderer = &components.PrimitiveRenderer{}
+	prefab.Renderer.SetShape(components.SHAPE_RECT)
+	return prefab
+}
 
-	// 
-	rect = prefab.renderer.Shape.(*shape.Rect)
-	rect.Width = 10
+func (prefab *SquarePrefab) GetPrefabName() string {
+	return prefab.Name
+}
+
+func (prefab *SquarePrefab) GetPrefabComponents() []ecs.Component {
+	return []ecs.Component{prefab.Renderer}
 }
