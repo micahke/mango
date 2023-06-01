@@ -1,6 +1,8 @@
 package util
 
-import "time"
+import (
+	"time"
+)
 
 
 
@@ -10,10 +12,8 @@ type Stopwatch struct {
 }
 
 
-func (stopwatch *Stopwatch) Start() *Stopwatch {
-  return &Stopwatch{
-    start: time.Now(),
-  }
+func (stopwatch *Stopwatch) Start() {
+    stopwatch.start = time.Now()
 }
 
 
