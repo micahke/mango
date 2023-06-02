@@ -17,3 +17,5 @@ func (component *SampleComponent) Update() {}
 func (component *SampleComponent) GetComponentName() string {
   return "Sample Component"
 }
+
+func (component *SampleComponent) MarkRender(){}

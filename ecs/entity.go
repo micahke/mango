@@ -50,7 +50,7 @@ func (entity *Entity) Update() {
       cmp := component.(Component)
 
       // If the component is renderable, mark it as such
-      if isRenderableComponent(cmp) {
+      if isRenderableComponent(component) {
         entity.Renderable = true
       }
 

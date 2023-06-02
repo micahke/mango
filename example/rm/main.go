@@ -8,7 +8,6 @@ import (
 	"github.com/micahke/mango/components/shape"
 	"github.com/micahke/mango/core"
 	"github.com/micahke/mango/core/settings"
-	"github.com/micahke/mango/ecs"
 )
 
 func main() {
@@ -33,7 +32,7 @@ func main() {
     Height: 100,
   }
   player.AddComponent(pr)
-  player.AddComponent(&ecs.TestComponent{})
+  // player.AddComponent(&ecs.TestComponent{})
 
   // p2 := scene.CreateEntity("player2")
   // p2.Tranform().Position.X = 400
