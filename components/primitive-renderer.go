@@ -214,3 +214,5 @@ func (component *PrimitiveRenderer) setShapeCircle() {
 func (component *PrimitiveRenderer) GetComponentName() string {
 	return "Primitive Renderer"
 }
+
+func (component *PrimitiveRenderer) MarkRender() {}

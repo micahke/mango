@@ -34,9 +34,10 @@ func (scene *Scene) CreateEntity(id string) *ecs.Entity {
 
 }
 
-func (scene *Scene) AddPrefab(prefab ecs.Prefab) {
+func (scene *Scene) AddPrefab(prefab ecs.Prefab) *ecs.Entity {
 	entity := scene.ecs.CreateEntity(prefab.GetPrefabName())
 	for _, component := range prefab.GetPrefabComponents() {
 		entity.AddComponent(component)
 	}
+  return entity
 }

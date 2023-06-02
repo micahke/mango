@@ -6,8 +6,6 @@ import (
 	"github.com/micahke/mango/ecs/prefabs"
 	// "github.com/micahke/mango/components"
 	// "github.com/micahke/mango/components/shape"
-	"github.com/micahke/mango/components"
-	"github.com/micahke/mango/components/shape"
 	"github.com/micahke/mango/core/settings"
 )
 
@@ -24,15 +22,15 @@ func main() {
 	scene := mango.CreateScene()
 	mango.SetScene(scene)
 
-	player := scene.CreateEntity("player")
-	player.Tranform().Position.X = 100
+	// player := scene.CreateEntity("player")
+	// player.Tranform().Position.X = 100
 
-  pr := &components.PrimitiveRenderer{}
-  pr.Shape = &shape.Rect{
-    Width: 100,
-    Height: 100,
-  }
-  player.AddComponent(pr)
+  // pr := &components.PrimitiveRenderer{}
+  // pr.Shape = &shape.Rect{
+  //   Width: 100,
+  //   Height: 100,
+  // }
+  // player.AddComponent(pr)
   // player.AddComponent(&ecs.TestComponent{})
 
 	// p2 := scene.CreateEntity("player2")
@@ -47,7 +45,8 @@ func main() {
 	// p2.AddComponent(&components.PrimitiveRenderer{})
 
 	circle := prefabs.NewCirclePrefab()
-	scene.AddPrefab(circle)
+  circleEntity := scene.AddPrefab(circle)
+  circleEntity.Tranform().Position.X = 300
 
 	rect := prefabs.NewSquarePrefab()
 	scene.AddPrefab(rect)
