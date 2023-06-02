@@ -29,6 +29,8 @@ func (entity *Entity) Update() {
     if _, ok := component.(Component); ok {
       cmp := component.(Component)
 
+      entity.checkAndSetEmbeddedValue(cmp)
+
       // Initializing component
       cmp.Init()
 
@@ -58,6 +60,25 @@ func (entity *Entity) Update() {
 
   }
 
+}
+
+func (entity *Entity) checkAndSetEmbeddedValue(component Component) error {
+  value := reflect.ValueOf(component)
+  if value.Kind() == reflect.Ptr {
+    value = value.Elem()
+  }
+  
+  if value.Kind() != reflect.Struct {
+    return fmt.Errorf("Underlying type not a struct")
+  }
+
+  for i := 0; i < value.NumField(); i++ {
+    field := value.Field(i)
+    if field.Type() == reflect.TypeOf(&Entity{}) {
+      field.Set(reflect.ValueOf(entity))
+    }
+  }
+  return nil
 }
 
 
