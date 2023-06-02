@@ -25,10 +25,10 @@ func InitImguiSandbox() *ImguiSandbox {
 
   imageLoader := loaders.NewImageLoader(loaders.PNG)
   img, err := imageLoader.LoadImage("quicktime.png")
-  imageLoader.FlipImageV()
   if err != nil {
     fmt.Println("Error loading sandbox image")
   }
+  imageLoader.FlipImageV()
 
   sandbox.sbImage = img
   data, ok := (*sandbox.sbImage).(*image.NRGBA)
