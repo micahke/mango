@@ -9,7 +9,13 @@ require (
 	github.com/go-gl/mathgl v1.0.0
 )
 
-require golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
+require (
+	github.com/yuin/goldmark v1.4.13 // indirect
+	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
+	golang.org/x/mod v0.10.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/tools v0.9.3 // indirect
+)
 
 require (
 	github.com/AllenDang/imgui-go v1.12.1-0.20221124025851-59b862ca5a0c

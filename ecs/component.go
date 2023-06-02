@@ -1,6 +1,8 @@
 package ecs
 
-import "github.com/micahke/mango/components"
+
+// "github.com/micahke/mango/components"
+// "github.com/micahke/mango/logging"
 
 
 type Component interface {
@@ -12,6 +14,10 @@ type Component interface {
   Update()
 
 
+}
+
+type RenderComponent interface {
+  MarkRender()
 }
 
 type NamedComponent interface {
@@ -27,19 +33,29 @@ type UIEditableComponent interface {
 
 
 // Checks whetehr a given component is renerable or not
-func isRenderableComponent(component Component) bool {
+func isRenderableComponent(component interface{}) bool {
+  
   // For testing, we're setting the sample component as something that
   // that can be rendered
-  _, sampleError := component.(*components.SampleComponent)
-  if !sampleError {
+  // _, sampleError := component.(*components.SampleComponent)
+  // if !sampleError {
+  //
+  //   return true
+  // }
+  //
+  //
+  //
+  // _, primitiveError := component.(*components.PrimitiveRenderer)
+  // if !primitiveError {
+  //   return true
+  // }
+
+  _, ok := component.(RenderComponent)
+  if ok  {
     return true
   }
 
 
-  _, primitiveError := component.(*components.PrimitiveRenderer)
-  if !primitiveError {
-    return true
-  }
 
   return false
 

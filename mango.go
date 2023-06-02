@@ -6,6 +6,7 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/micahke/mango/core"
+	"github.com/micahke/mango/core/settings"
 	"github.com/micahke/mango/im"
 	"github.com/micahke/mango/input"
 	"github.com/micahke/mango/logging"
@@ -22,6 +23,7 @@ type Mango struct {
 
 	SceneEditor *core.SceneEditor
   ShaderEditor *core.ShaderEditor
+  ImguiSandbox *core.ImguiSandbox
 
   SystemManager *core.SystemManager
 
@@ -65,6 +67,11 @@ func Init(renderMode core.RenderMode, args ...any) {
 		logging.DebugLogError("Failed to load shaders: ", error)
 	}
 
+  err := loaders.Init()
+  if err != nil  {
+    logging.DebugLogError(err)
+  }
+
 
   Engine.SystemManager = core.NewSystemManager()
 }
@@ -92,7 +99,7 @@ func CreateWindow(width, height int, title string, vsync bool) {
 	// Create logging panel
 	Engine.LogPanel = logging.InitLogPanel(width, height)
 	util.ImguiRegisterPanel("logPanel", Engine.LogPanel)
-	if core.Settings.CONSOLE_ON_STARTUP {
+	if settings.Settings.CONSOLE_ON_STARTUP {
 		util.ImguiActivatePanel("logPanel")
 	}
 
@@ -101,7 +108,7 @@ func CreateWindow(width, height int, title string, vsync bool) {
 	if Engine.RenderMode == core.RENDER_MODE_DEFAULT {
 		Engine.SceneEditor = core.NewSceneEditor(Engine.scene, width, height)
 		util.ImguiRegisterPanel("sceneEditor", Engine.SceneEditor)
-		if core.Settings.SCENE_EDITOR_STARTUP {
+		if settings.Settings.SCENE_EDITOR_STARTUP {
 			util.ImguiActivatePanel("sceneEditor")
 		}
     Engine.SystemManager.AddSystem(&system.RenderSystem{
@@ -112,10 +119,15 @@ func CreateWindow(width, height int, title string, vsync bool) {
   // NON_DEFAULT TOOLS
   Engine.ShaderEditor = core.NewShaderEditor()
   util.ImguiRegisterPanel("shaderEditor", Engine.ShaderEditor)
-  if core.Settings.SHADER_EDITOR_ON_STARTUP {
+  if settings.Settings.SHADER_EDITOR_ON_STARTUP {
     util.ImguiActivatePanel("shaderEditor")
   } 
     
+  Engine.ImguiSandbox = core.InitImguiSandbox()
+  util.ImguiRegisterPanel("imguiSandbox", Engine.ImguiSandbox)
+  if settings.Settings.IMGUI_SANDBOX_ON_STARTUP {
+    util.ImguiActivatePanel("imguiSandbox")
+  }
 
 
 }
