@@ -1,4 +1,4 @@
-package ecs
+package prefabs
 
 import (
 	"github.com/micahke/mango/components"

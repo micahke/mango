@@ -2,10 +2,9 @@ package main
 
 import (
 	"github.com/micahke/mango"
-	// "github.com/micahke/mango/components"
-	// "github.com/micahke/mango/components/shape"
+
 	"github.com/micahke/mango/core"
-	ecs "github.com/micahke/mango/ecs/prefabs"
+	"github.com/micahke/mango/ecs/prefabs"
 )
 
 func main() {
@@ -43,8 +42,11 @@ func main() {
 	// p2.AddComponent(p2Shape)
 	// p2.AddComponent(&components.PrimitiveRenderer{})
 
-	square := ecs.NewSquarePrefab()
-	scene.AddPrefab(square)
+	circle := prefabs.NewCirclePrefab()
+	scene.AddPrefab(circle)
+
+	rect := prefabs.NewSquarePrefab()
+	scene.AddPrefab(rect)
 
 	mango.CreateWindow(1300, 800, "Retained Mode Rendering", false)
 	mango.Start()
