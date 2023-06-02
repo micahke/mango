@@ -7,9 +7,9 @@ import (
 	"os"
 	"sync"
 
+	"github.com/micahke/mango/core/settings"
 	"github.com/micahke/mango/logging"
 	"github.com/micahke/mango/util"
-	"github.com/micahke/mango/core/settings"
 )
 
 var byte_cache map[string][]byte
@@ -83,6 +83,14 @@ func readAndSetFile(assetsFolder string, file fs.DirEntry, buffer chan<- *file_d
  //  logging.DebugLog(file.Name())
 	// byte_cache[file.Name()] = data
 	// cache_mutex.Unlock()
+}
+
+func GetFilesList() []string {
+  keyList := []string{}
+  for key := range byte_cache {
+    keyList = append(keyList, key)
+  }
+  return keyList
 }
 
 

@@ -59,6 +59,14 @@ func (loader *ImageLoader) LoadImage(name string) (*image.Image, error) {
 
 }
 
+func (loader *ImageLoader) ToNRGBA() (*image.NRGBA, error) {
+  data, ok := (*loader.Image).(*image.NRGBA)
+  if !ok {
+    return nil, fmt.Errorf("Error converting image to NRGBA")
+  }
+  return data, nil
+}
+
 
 func (loader *ImageLoader) FlipImageV() {
   data := imaging.FlipV(*loader.Image)

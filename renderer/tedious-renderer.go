@@ -2,7 +2,6 @@ package renderer
 
 import (
 	"fmt"
-	"image"
 	"reflect"
 
 	"github.com/go-gl/gl/v3.3-core/gl"
@@ -13,7 +12,6 @@ import (
 	"github.com/micahke/mango/logging"
 	"github.com/micahke/mango/opengl"
 	"github.com/micahke/mango/util/color"
-	"github.com/micahke/mango/util/loaders"
 )
 
 // Basically a bad renderer that renders each entity with a draw call
@@ -27,8 +25,6 @@ type TediousRenderer struct {
 	quadVAO    *opengl.VertexArray
 	quadVBO    *opengl.VertexBuffer
 	quadIBO    *opengl.IndexBuffer
-
-	sampleTexture *opengl.Texture
 
 	circleShader *opengl.Shader
 }
@@ -56,16 +52,6 @@ func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
 	quadLayout.Pushf(2)
 	renderer.quadVAO.AddBuffer(*renderer.quadVBO, *quadLayout)
 
-	imageLoader := loaders.NewImageLoader(loaders.PNG)
-	img, err := imageLoader.LoadImage("quicktime.png")
-	if err != nil {
-		fmt.Println(err)
-	}
-	data, ok := (*img).(*image.NRGBA)
-	if !ok {
-		logging.DebugLogError("Error getting data from image")
-	}
-	renderer.sampleTexture = opengl.NewTextureFromData("quicktime.png", data, false)
 
 	renderer.initialized = true
 
@@ -96,16 +82,16 @@ func (renderer *TediousRenderer) handlePrimitiveRenderer(entity *ecs.Entity) {
 	switch prComponent.Shape.(type) {
 	case *shape.Rect:
 		quad := prComponent.Shape.(*shape.Rect)
-		renderer.drawQuad(transform, quad, color, renderer.quadShader)
+		renderer.drawQuad(transform, quad, color, renderer.quadShader, prComponent.Texture)
 	case *shape.Circle:
 		circle := prComponent.Shape.(*shape.Circle)
-		renderer.drawCircle(transform, circle, color, renderer.circleShader)
+		renderer.drawCircle(transform, circle, color, renderer.circleShader, prComponent.Texture)
 	default:
 	}
 }
 
 // Handles the drawing of a quad
-func (renderer *TediousRenderer) drawQuad(transform *components.TransformComponent, quad *shape.Rect, color color.Color, shader *opengl.Shader) {
+func (renderer *TediousRenderer) drawQuad(transform *components.TransformComponent, quad *shape.Rect, color color.Color, shader *opengl.Shader, texture *opengl.Texture) {
 
 	if !renderer.initialized {
 		logging.DebugLogError("Renderer not initialized")
@@ -137,7 +123,7 @@ func (renderer *TediousRenderer) drawQuad(transform *components.TransformCompone
 	shader.SetUniformMat4f("u_view", renderer.viewMatrix)
 	shader.SetUniformMat4f("u_projection", renderer.projectionMatrix)
 	// shader.SetUniform1i("uTexture", 0)
-  renderer.decideBindTexture(shader)
+  renderer.decideBindTexture(shader, texture)
 
 	renderer.quadVBO.Bind()
 	gl.BufferSubData(gl.ARRAY_BUFFER, 0, len(quadVerts)*4, gl.Ptr(&quadVerts[0]))
@@ -151,27 +137,26 @@ func (renderer *TediousRenderer) drawQuad(transform *components.TransformCompone
 
 }
 
-func (renderer *TediousRenderer) decideBindTexture(shader *opengl.Shader) {
-
-	if renderer.sampleTexture == nil {
+// Decides whether or not to bind a texture for a given entity based on
+// whether it has a valid texture in it's primitive renderer
+func (renderer *TediousRenderer) decideBindTexture(shader *opengl.Shader, texture *opengl.Texture) {
+	if texture == nil {
 		shader.SetUniform1i("isTextured", 1)
 		return
 	}
-
-  renderer.sampleTexture.Bind(0)
+  texture.Bind(0)
 	shader.SetUniform1i("isTextured", 0)
-
 }
 
 // Circle is just a rect with a bunch of color in a pattern just do that
 // Will need a new shader
-func (renderer *TediousRenderer) drawCircle(transform *components.TransformComponent, circle *shape.Circle, color color.Color, shader *opengl.Shader) {
+func (renderer *TediousRenderer) drawCircle(transform *components.TransformComponent, circle *shape.Circle, color color.Color, shader *opengl.Shader, texture *opengl.Texture) {
 	// Generate a quad with width and height of 2 * radius
 	quad := &shape.Rect{
 		Width:  circle.Radius * 2,
 		Height: circle.Radius * 2,
 	}
 
-	renderer.drawQuad(transform, quad, color, shader)
+	renderer.drawQuad(transform, quad, color, shader, texture)
 
 }

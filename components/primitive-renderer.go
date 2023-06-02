@@ -1,17 +1,23 @@
 package components
 
 import (
+	"sort"
+	"strings"
+
 	"github.com/AllenDang/imgui-go"
 	glm "github.com/go-gl/mathgl/mgl32"
 	"github.com/micahke/mango/components/shape"
 	"github.com/micahke/mango/logging"
+	"github.com/micahke/mango/opengl"
 	"github.com/micahke/mango/util"
 	"github.com/micahke/mango/util/color"
+	"github.com/micahke/mango/util/loaders"
 )
 
 type PrimitiveRenderer struct {
 	Color color.Color
 	Shape shape.IShape
+  Texture *opengl.Texture
 
 	selectedIndex int
 }
@@ -62,16 +68,67 @@ func (component *PrimitiveRenderer) RenderControlPanel() {
 		imgui.EndCombo()
 	}
 
+
 	imgui.Spacing()
 
 	component.drawControls()
 
 	imgui.Spacing()
 
+  component.drawTextureSelection()
+
+  imgui.Spacing()
+
 	// Draw the color field which works for any primitive
 	component.drawColorField()
 
+
 }
+
+func (component *PrimitiveRenderer) drawTextureSelection() {
+
+  selectedName := ""
+  files := loaders.GetFilesList()
+  sort.Strings(files)
+
+  if component.Texture == nil  {
+    selectedName = "None"
+  } else {
+    selectedName = component.Texture.GetPath()
+  }
+	if imgui.BeginCombo("Select Texture", selectedName) {
+		for index, textureName := range(files)  {
+
+			if imgui.Selectable(textureName) {
+        logging.DebugLog(index)
+        component.buildAndSetTexture(textureName)
+			}
+
+		}
+		imgui.EndCombo()
+	}
+}
+
+func (component *PrimitiveRenderer) SetTexture(textureName string) {
+  component.buildAndSetTexture(textureName)
+}
+
+func (component *PrimitiveRenderer) buildAndSetTexture(textureName string) {
+  var imageLoader *loaders.ImageLoader
+  textureLowercase := strings.ToLower(textureName)
+  if strings.Contains(textureLowercase, "png") {
+    imageLoader = loaders.NewImageLoader(loaders.PNG)
+  } else if strings.Contains(textureLowercase, "jpg") || strings.Contains(textureLowercase, "jpeg") {
+    imageLoader = loaders.NewImageLoader(loaders.JPEG)
+  } else {
+    return
+  }
+
+  imageLoader.LoadImage(textureName)
+  nrgbaData, _ := imageLoader.ToNRGBA()
+  component.Texture = opengl.NewTextureFromData(textureName, nrgbaData, false)
+}
+
 
 func (component *PrimitiveRenderer) SetShape(shape Shape2D) {
 	switch shape {

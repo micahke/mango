@@ -109,6 +109,10 @@ func (texture *Texture) Unbind() {
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 }
 
+func (texture *Texture) GetPath() string {
+  return texture.m_FilePath
+}
+
 func (texture *Texture) GetWidth() int32 {
 	return texture.m_Width
 }
