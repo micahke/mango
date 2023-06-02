@@ -13,7 +13,7 @@ func main() {
 	mango.Init(core.RENDER_MODE_DEFAULT)
 
 	settings.Settings.SCENE_EDITOR_STARTUP = true
-	settings.Settings.IMGUI_SANDBOX_ON_STARTUP = true
+	// settings.Settings.IMGUI_SANDBOX_ON_STARTUP = true
 	// core.Settings.CONSOLE_ON_STARTUP = true
 	// core.Settings.SHADER_EDITOR_ON_STARTUP = true
 
