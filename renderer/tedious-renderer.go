@@ -1,7 +1,6 @@
 package renderer
 
 import (
-	"fmt"
 	"reflect"
 
 	"github.com/go-gl/gl/v3.3-core/gl"
@@ -39,8 +38,6 @@ func (renderer *TediousRenderer) Init(windowWidth, windowHeight int) {
 	// Initialize shaders
 	renderer.quadShader = opengl.NewShader("RMQuadVertex.glsl", "RMQuadFragment.glsl")
 	renderer.circleShader = opengl.NewShader("RMCircleVertex.glsl", "RMCircleFragment.glsl")
-
-	fmt.Println("Valid shader found")
 
 	// Initialize vertex arrays
 	renderer.quadVAO = opengl.NewVertexArray()
